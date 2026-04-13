@@ -1,0 +1,16 @@
+{
+  "name": "martina-nutritionist",
+  "version": "1.0.0",
+  "description": "Personal AI nutritionist bot for Martina via Telegram",
+  "main": "3. Scripts/bot.js",
+  "scripts": {
+    "start": "node \"3. Scripts/bot.js\""
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0",
+    "@google/generative-ai": "^0.21.0",
+    "firebase-admin": "^12.0.0",
+    "dotenv": "^16.4.5",
+    "axios": "^1.7.0"
+  }
+}

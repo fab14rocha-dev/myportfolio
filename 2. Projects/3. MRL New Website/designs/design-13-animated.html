@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Martina Rocha Luz — Calligrapher &amp; Engraver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Pinyon+Script&family=Jost:wght@100;200;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #FDFAF6;
+      --warm:  #F5EFE5;
+      --warm2: #EDE5D8;
+      --ink:   #1A1714;
+      --mid:   #7A7268;
+      --dim:   #AAA49C;
+      --gold:  #A8844A;
+      --teal:  #2E5048;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--ink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s, height 0.25s, background 0.25s, opacity 0.25s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 38px; height: 38px;
+      border: 1px solid rgba(26,23,20,0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: multiply;
+    }
+    body.hovering .cursor { width: 14px; height: 14px; background: var(--gold); }
+    body.hovering .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); opacity: 0.5; }
+
+    /* ── PRELOADER ── */
+    .preloader {
+      position: fixed; inset: 0;
+      background: var(--paper);
+      z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 28px;
+    }
+    .preloader-flourish {
+      width: 260px; height: 90px;
+    }
+    .preloader-flourish path {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 800;
+      stroke-dashoffset: 800;
+      animation: drawPath 2s cubic-bezier(0.4,0,0.2,1) forwards 0.4s;
+    }
+    .preloader-name {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 1.6rem;
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 1.8s;
+    }
+    .preloader-sub {
+      font-size: 0.52rem; letter-spacing: 0.38em; text-transform: uppercase;
+      color: var(--mid);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 2s;
+    }
+    @keyframes drawPath {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .preloader.out {
+      animation: preloaderOut 0.7s ease forwards;
+    }
+    @keyframes preloaderOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 56px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.5s, border-color 0.5s, backdrop-filter 0.5s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(253,250,246,0.95);
+      backdrop-filter: blur(10px);
+      border-color: var(--warm2);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 56px;
+      height: 70px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo {
+      font-family: 'Pinyon Script', cursive; font-size: 2rem;
+      color: #fff; transition: color 0.4s;
+    }
+    nav.scrolled .logo { color: var(--ink); }
+    .nav-mid { display: flex; gap: 36px; }
+    .nav-mid a {
+      font-size: 0.67rem; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none; font-weight: 300;
+      transition: color 0.3s;
+    }
+    .nav-mid a:hover { color: #fff; }
+    nav.scrolled .nav-mid a { color: var(--mid); }
+    nav.scrolled .nav-mid a:hover { color: var(--ink); }
+    .nav-right a {
+      font-size: 0.64rem; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none; font-weight: 300;
+      border-bottom: 1px solid rgba(255,255,255,0.35); padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    nav.scrolled .nav-right a { color: var(--teal); border-color: var(--teal); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; height: 100vh;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(26,23,20,0.75) 0%,
+        rgba(26,23,20,0.35) 55%,
+        rgba(26,23,20,0.08) 100%
+      );
+    }
+    /* warm gold vignette at bottom */
+    .hero-vignette {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 260px;
+      background: linear-gradient(to top, rgba(168,132,74,0.12), transparent);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1100px; width: 100%;
+      margin: 0 auto;
+      padding: 0 56px 88px;
+    }
+    .hero-tag {
+      display: block;
+      font-size: 0.59rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 22px;
+      opacity: 0; transform: translateY(10px);
+    }
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      font-style: italic; font-weight: 400;
+      color: #fff; line-height: 1.1;
+      max-width: 700px; margin-bottom: 28px;
+    }
+    .hero-line { overflow: hidden; display: block; }
+    .hero-line-inner { display: block; transform: translateY(105%); opacity: 0; }
+    .hero-p {
+      font-size: 0.88rem; line-height: 1.95;
+      color: rgba(255,255,255,0.6);
+      max-width: 400px; margin-bottom: 40px;
+      opacity: 0; transform: translateY(12px);
+    }
+    .hero-btns {
+      display: flex; gap: 14px;
+      opacity: 0; transform: translateY(12px);
+    }
+    .btn-primary {
+      padding: 14px 38px;
+      background: linear-gradient(to right, var(--gold) 50%, var(--teal) 50%);
+      background-size: 200%; background-position: right;
+      color: #fff;
+      font-size: 0.64rem; letter-spacing: 0.16em;
+      text-decoration: none; font-weight: 300;
+      transition: background-position 0.42s ease, transform 0.25s ease;
+    }
+    .btn-primary:hover { background-position: left; }
+    .btn-secondary {
+      padding: 14px 38px;
+      border: 1px solid rgba(255,255,255,0.28); color: rgba(255,255,255,0.75);
+      font-size: 0.64rem; letter-spacing: 0.16em;
+      text-decoration: none; font-weight: 300;
+      transition: border-color 0.3s, color 0.3s, transform 0.25s ease;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.65); color: #fff; }
+
+    /* scroll indicator */
+    .hero-scroll {
+      position: absolute; bottom: 36px; right: 56px; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0;
+    }
+    .hero-scroll-label {
+      font-size: 0.5rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); writing-mode: vertical-rl;
+    }
+    .scroll-track {
+      width: 1px; height: 52px;
+      background: rgba(255,255,255,0.12); position: relative; overflow: hidden;
+    }
+    .scroll-track::after {
+      content: '';
+      position: absolute; top: -100%; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255,255,255,0.6);
+      animation: trackPulse 2s ease-in-out infinite 2.5s;
+    }
+    @keyframes trackPulse {
+      0%   { top: -100%; }
+      100% { top:  100%; }
+    }
+
+    /* ── STATS ── */
+    .stats-strip { border-top: 1px solid var(--warm2); border-bottom: 1px solid var(--warm2); }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 56px;
+      display: flex;
+    }
+    .stat-item {
+      flex: 1; padding: 40px 0;
+      display: flex; align-items: center; gap: 18px;
+      border-right: 1px solid var(--warm2);
+    }
+    .stat-item:last-child { border-right: none; padding-left: 44px; }
+    .stat-item:not(:first-child) { padding-left: 44px; }
+    .stat-num-wrap {
+      display: flex; align-items: baseline; gap: 2px;
+    }
+    .stat-n {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-style: italic; font-weight: 400; line-height: 1;
+    }
+    .stat-plus {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-style: italic; color: var(--gold);
+    }
+    .stat-label { font-size: 0.6rem; letter-spacing: 0.14em; color: var(--dim); line-height: 1.55; }
+
+    /* ── BRANDS MARQUEE ── */
+    .brands { background: var(--ink); overflow: hidden; }
+    .brands-inner {
+      display: flex; align-items: center;
+      padding: 30px 0;
+    }
+    .brands-label {
+      font-size: 0.54rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); white-space: nowrap;
+      padding: 0 40px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .marquee-track { flex: 1; overflow: hidden; }
+    .marquee-inner {
+      display: flex; align-items: center;
+      gap: 60px;
+      padding-left: 40px;
+      animation: marqueeScroll 22s linear infinite;
+      width: max-content;
+    }
+    .marquee-inner:hover { animation-play-state: paused; }
+    .marquee-inner img {
+      height: 21px; width: auto; object-fit: contain; flex-shrink: 0;
+      filter: brightness(0) invert(1); opacity: 0.22;
+      transition: opacity 0.3s;
+    }
+    .marquee-inner img:hover { opacity: 0.65; }
+    @keyframes marqueeScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── SERVICES ── */
+    .services { padding: 120px 0; border-bottom: 1px solid var(--warm2); }
+    .sec-header { margin-bottom: 64px; }
+    .sec-eyebrow {
+      font-size: 0.59rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-style: italic; font-weight: 400;
+    }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+    .svc {
+      position: relative; overflow: hidden;
+      aspect-ratio: 2/3;
+    }
+    .svc-bg { position: absolute; inset: 0; transition: transform 0.65s ease; }
+    .svc-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .svc:hover .svc-bg { transform: scale(1.06); }
+    .svc-base {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,23,20,0.88) 0%, rgba(26,23,20,0.25) 55%, transparent 100%);
+      padding: 28px 26px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      transition: opacity 0.4s;
+    }
+    .svc:hover .svc-base { opacity: 0; }
+    .svc-hover {
+      position: absolute; inset: 0;
+      background: var(--teal);
+      padding: 36px 32px;
+      display: flex; flex-direction: column; justify-content: center;
+      transform: translateY(100%);
+      transition: transform 0.48s cubic-bezier(0.4,0,0.2,1);
+    }
+    .svc:hover .svc-hover { transform: translateY(0); }
+    .svc-n { font-size: 0.5rem; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 14px; }
+    .svc-base h3, .svc-hover h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-style: italic; color: #fff; margin-bottom: 10px;
+    }
+    .svc-hover p { font-size: 0.81rem; line-height: 1.85; color: rgba(255,255,255,0.65); margin-bottom: 14px; }
+    .svc-price { font-size: 0.57rem; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 22px; }
+    .svc-hover a {
+      display: inline-block; font-size: 0.6rem; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.8); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .svc-hover a:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+
+    /* ── ABOUT ── */
+    .about { padding: 130px 0; border-bottom: 1px solid var(--warm2); }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+    .about-eyebrow {
+      font-size: 0.59rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 2.8vw, 2.1rem); font-style: italic; font-weight: 400;
+      line-height: 1.35; margin-bottom: 28px;
+    }
+    .about-text p { font-size: 0.88rem; line-height: 1.95; color: var(--mid); margin-bottom: 14px; }
+    .about-link {
+      display: inline-block; margin-top: 22px;
+      font-size: 0.62rem; letter-spacing: 0.14em;
+      color: var(--teal); text-decoration: none;
+      border-bottom: 1px solid var(--teal); padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .about-link:hover { color: var(--gold); border-color: var(--gold); }
+    .about-img-wrap {
+      overflow: hidden; aspect-ratio: 4/5; position: relative;
+    }
+    .about-img-wrap img {
+      width: 100%; height: 115%;
+      object-fit: cover; object-position: top center;
+      display: block; will-change: transform;
+    }
+
+    /* ── PORTFOLIO ── */
+    .portfolio { padding: 120px 0; border-bottom: 1px solid var(--warm2); }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 40px;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-style: italic;
+    }
+    .section-header a {
+      font-size: 0.62rem; letter-spacing: 0.12em; color: var(--mid);
+      text-decoration: none; transition: color 0.3s;
+    }
+    .section-header a:hover { color: var(--ink); }
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 250px 200px;
+      gap: 4px;
+    }
+    .p-cell { overflow: hidden; position: relative; }
+    .p-cell img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.55s ease;
+    }
+    .p-cell:hover img { transform: scale(1.07); }
+    .p-overlay {
+      position: absolute; inset: 0;
+      background: rgba(46,80,72,0.72);
+      opacity: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.38s;
+    }
+    .p-cell:hover .p-overlay { opacity: 1; }
+    .p-overlay span {
+      font-size: 0.54rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+    .p-cell.r2 { grid-row: span 2; }
+    .p-cell.c2 { grid-column: span 2; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial {
+      background: var(--ink); padding: 120px 0;
+      position: relative; overflow: hidden;
+    }
+    .testimonial-deco {
+      font-family: 'Playfair Display', serif;
+      font-size: 32rem; line-height: 0.85;
+      color: rgba(255,255,255,0.025);
+      position: absolute; top: -40px; left: -24px;
+      pointer-events: none; user-select: none;
+      font-style: italic;
+    }
+    .testimonial-inner { max-width: 740px; position: relative; z-index: 1; }
+    .t-tag {
+      font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.22); margin-bottom: 28px;
+    }
+    blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+      font-style: italic; color: #fff; line-height: 1.82; margin-bottom: 36px;
+    }
+    .t-author { display: flex; align-items: center; gap: 16px; }
+    .t-line { width: 32px; height: 1px; background: rgba(255,255,255,0.18); }
+    .t-author span { font-size: 0.59rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.38); }
+
+    /* ── FOOTER ── */
+    .footer-band { border-top: 1px solid var(--warm2); }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto; padding: 80px 56px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    }
+    .press-col h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.86rem; font-style: italic; color: var(--dim); margin-bottom: 22px;
+    }
+    .press-names { display: flex; flex-direction: column; gap: 10px; }
+    .press-names span { font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm2); }
+    .cta-col h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+      font-style: italic; margin-bottom: 14px; line-height: 1.3;
+    }
+    .cta-col p { font-size: 0.85rem; line-height: 1.9; color: var(--mid); margin-bottom: 30px; }
+    .btn-cta {
+      display: inline-block; padding: 14px 40px;
+      background: linear-gradient(to right, var(--gold) 50%, var(--teal) 50%);
+      background-size: 200%; background-position: right;
+      color: #fff; font-size: 0.62rem; letter-spacing: 0.16em;
+      text-decoration: none; font-weight: 300;
+      transition: background-position 0.42s ease;
+    }
+    .btn-cta:hover { background-position: left; }
+    .footer-bottom {
+      text-align: center; padding: 20px;
+      border-top: 1px solid var(--warm2);
+      font-size: 0.56rem; letter-spacing: 0.14em; color: var(--dim);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader">
+    <svg class="preloader-flourish" viewBox="0 0 260 90">
+      <!-- calligraphic flourish: a flowing signature-like stroke -->
+      <path d="
+        M 15,70
+        C 25,70 30,30 55,45
+        C 70,55 68,20 90,30
+        C 108,38 105,65 125,55
+        C 142,46 138,15 162,25
+        C 180,33 177,68 200,58
+        C 215,51 212,30 235,38
+        C 245,42 248,55 245,65
+        C 242,74 235,72 228,74
+        C 215,77 210,65 220,60
+      "/>
+    </svg>
+    <span class="preloader-name">Martina Rocha Luz</span>
+    <span class="preloader-sub">Calligrapher &amp; Engraver</span>
+  </div>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <div class="logo">Martina Rocha Luz</div>
+      <div class="nav-mid">
+        <a href="#">Services</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Blog</a>
+        <a href="#">About</a>
+      </div>
+      <div class="nav-right">
+        <a href="#">Get In Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="../assets/hero-martina.jpg">
+      <source src="../assets/hero-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+      <span class="hero-tag" id="h-tag">Calligrapher &amp; Engraver — Leeds, UK</span>
+      <h1 class="hero-h1">
+        <span class="hero-line"><span class="hero-line-inner" id="h-l1">Crafting refined</span></span>
+        <span class="hero-line"><span class="hero-line-inner" id="h-l2">beauty, one letter</span></span>
+        <span class="hero-line"><span class="hero-line-inner" id="h-l3">at a time.</span></span>
+      </h1>
+      <p class="hero-p" id="h-p">I work with luxury brands to provide calligraphy and engraving services for brand activations, live events, and special occasions. My style is elegant and minimalistic.</p>
+      <div class="hero-btns" id="h-btns">
+        <a href="#" class="btn-primary" data-magnetic>Let's Work Together</a>
+        <a href="#" class="btn-secondary" data-magnetic>View Portfolio</a>
+      </div>
+    </div>
+    <div class="hero-scroll" id="h-scroll">
+      <span class="hero-scroll-label">Scroll</span>
+      <div class="scroll-track"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item reveal">
+        <div class="stat-num-wrap">
+          <span class="stat-n" data-count="4">0</span><span class="stat-plus">+</span>
+        </div>
+        <span class="stat-label">Years in<br>Business</span>
+      </div>
+      <div class="stat-item reveal d1">
+        <div class="stat-num-wrap">
+          <span class="stat-n" data-count="10">0</span><span class="stat-plus">+</span>
+        </div>
+        <span class="stat-label">Luxury<br>Brands</span>
+      </div>
+      <div class="stat-item reveal d2">
+        <div class="stat-num-wrap">
+          <span class="stat-n" style="font-size:1.5rem;font-style:italic;">Leeds</span>
+        </div>
+        <span class="stat-label">Yorkshire<br>&amp; Beyond</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRANDS -->
+  <div class="brands">
+    <div class="brands-inner">
+      <span class="brands-label">Trusted By</span>
+      <div class="marquee-track">
+        <div class="marquee-inner">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+          <!-- duplicate for seamless loop -->
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services">
+    <div class="wrap">
+      <div class="sec-header reveal">
+        <p class="sec-eyebrow">What I Do</p>
+        <h2 class="sec-title">Services</h2>
+      </div>
+      <div class="svc-grid">
+        <div class="svc reveal">
+          <div class="svc-bg"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg" alt="Live Engraving"/></div>
+          <div class="svc-base">
+            <div class="svc-n">01 / 03</div>
+            <h3>Live Engraving</h3>
+          </div>
+          <div class="svc-hover">
+            <div class="svc-n">01 / 03</div>
+            <h3>Live Engraving</h3>
+            <p>On-site personalisation for fragrances, beauty, wine and spirits. For brand activations, corporate and private events — and in-studio too.</p>
+            <p class="svc-price">From £90/hr &nbsp;·&nbsp; 2hr minimum &nbsp;·&nbsp; travel may apply</p>
+            <a href="#">Enquire →</a>
+          </div>
+        </div>
+        <div class="svc reveal d1">
+          <div class="svc-bg"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Calligraphy-Name-Card.jpg" alt="Live Calligraphy"/></div>
+          <div class="svc-base">
+            <div class="svc-n">02 / 03</div>
+            <h3>Live Calligraphy</h3>
+          </div>
+          <div class="svc-hover">
+            <div class="svc-n">02 / 03</div>
+            <h3>Live Calligraphy</h3>
+            <p>A bespoke calligrapher at your event. On paper, branded cards, or directly on products. Captivating to watch, shareable, and personal.</p>
+            <p class="svc-price">Available on-site &amp; in-studio</p>
+            <a href="#">Enquire →</a>
+          </div>
+        </div>
+        <div class="svc reveal d2">
+          <div class="svc-bg"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Personalised-Bride-Gift.jpg" alt="Wedding Calligraphy"/></div>
+          <div class="svc-base">
+            <div class="svc-n">03 / 03</div>
+            <h3>Wedding &amp; Events</h3>
+          </div>
+          <div class="svc-hover">
+            <div class="svc-n">03 / 03</div>
+            <h3>Wedding &amp; Events</h3>
+            <p>Place cards, envelopes, table plans, and bespoke stationery crafted with care. I only take on a limited number of wedding clients per year.</p>
+            <p class="svc-price">Limited availability</p>
+            <a href="#">Enquire →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="wrap">
+      <div class="about-inner">
+        <div class="about-text reveal">
+          <p class="about-eyebrow">About Martina</p>
+          <h2>Professional calligrapher and engraver based in Leeds.</h2>
+          <p>I opened my calligraphy studio in 2022. Over time, I realised I wanted to offer fewer services, of outstanding quality, and that's when I started to specialise in traditional calligraphy and engraving.</p>
+          <p>I've had the privilege of working with amazing world-renowned brands such as Dior, Vacheron Constantin, Channel 4, and Maison Francis Kurkdjian.</p>
+          <p>My style is elegant and minimalistic — I believe less is more. My business is my greatest passion.</p>
+          <a href="#" class="about-link">My Full Story →</a>
+        </div>
+        <div class="about-img-wrap reveal d2">
+          <img id="parallax-img" src="https://martinarochaluz.com/wp-content/uploads/2023/09/photo_2023-09-15_14-07-39-jpg.webp" alt="Martina at a brand event"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio">
+    <div class="wrap">
+      <div class="section-header reveal">
+        <h2>Portfolio</h2>
+        <a href="#">View All Work →</a>
+      </div>
+      <div class="port-grid">
+        <div class="p-cell r2 reveal">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2024/04/17.png" alt="Portfolio"/>
+          <div class="p-overlay"><span>Engraving</span></div>
+        </div>
+        <div class="p-cell reveal d1">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2024/04/2.png" alt="Portfolio"/>
+          <div class="p-overlay"><span>Calligraphy</span></div>
+        </div>
+        <div class="p-cell reveal d2">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2024/04/24.png" alt="Portfolio"/>
+          <div class="p-overlay"><span>Events</span></div>
+        </div>
+        <div class="p-cell c2 reveal d1">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg" alt="Portfolio"/>
+          <div class="p-overlay"><span>Brand Activation</span></div>
+        </div>
+        <div class="p-cell reveal d3">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2024/04/1.png" alt="Portfolio"/>
+          <div class="p-overlay"><span>Wedding</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <span class="testimonial-deco">&ldquo;</span>
+    <div class="wrap">
+      <div class="testimonial-inner reveal">
+        <p class="t-tag">Client Testimonial</p>
+        <blockquote>"Martina has worked on several creative projects now for Vacheron Constantin and Berry's Jewellers, writing in her beautiful calligraphy style on Christmas cards, invitations and table name settings. She always goes above and beyond. When doing live events in the boutique, Martina is so polite and professional and always looks impeccable. I couldn't recommend her enough."</blockquote>
+        <div class="t-author">
+          <div class="t-line"></div>
+          <span>Fiona M. &nbsp;·&nbsp; Vacheron Constantin</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer-band">
+    <div class="footer-inner">
+      <div class="press-col reveal">
+        <h3>As seen in...</h3>
+        <div class="press-names">
+          <span>Save The Date</span>
+          <span>Rock My Wedding</span>
+          <span>Yorkshire Guide</span>
+        </div>
+      </div>
+      <div class="cta-col reveal d2">
+        <h3>Ready to create something beautiful?</h3>
+        <p>Whether you're a luxury brand planning your next activation, or a couple planning your perfect day — I'd love to hear from you.</p>
+        <a href="#" class="btn-cta">Get In Touch</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 Martina Rocha Luz &nbsp;·&nbsp; All Rights Reserved</div>
+
+  <script>
+    // ── PRELOADER ──────────────────────────────────────────────
+    const preloader = document.getElementById('preloader');
+    let heroReady = false;
+
+    function triggerHeroReveal() {
+      if (heroReady) return;
+      heroReady = true;
+
+      const ease = 'cubic-bezier(0.4, 0, 0.2, 1)';
+      const tag  = document.getElementById('h-tag');
+      const l1   = document.getElementById('h-l1');
+      const l2   = document.getElementById('h-l2');
+      const l3   = document.getElementById('h-l3');
+      const p    = document.getElementById('h-p');
+      const btns = document.getElementById('h-btns');
+      const scroll = document.getElementById('h-scroll');
+
+      const anim = (el, delay, props) => {
+        setTimeout(() => {
+          Object.assign(el.style, {
+            transition: `opacity 0.72s ${ease}, transform 0.72s ${ease}`,
+            ...props
+          });
+        }, delay);
+      };
+
+      anim(tag,  80,  { opacity: '1', transform: 'translateY(0)' });
+      anim(l1,   260, { opacity: '1', transform: 'translateY(0)' });
+      anim(l2,   400, { opacity: '1', transform: 'translateY(0)' });
+      anim(l3,   540, { opacity: '1', transform: 'translateY(0)' });
+      anim(p,    700, { opacity: '1', transform: 'translateY(0)' });
+      anim(btns, 860, { opacity: '1', transform: 'translateY(0)' });
+
+      setTimeout(() => {
+        scroll.style.transition = 'opacity 0.8s ease';
+        scroll.style.opacity = '1';
+      }, 1200);
+    }
+
+    // dismiss preloader after flourish + small pause
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('out');
+        setTimeout(() => {
+          preloader.style.display = 'none';
+          triggerHeroReveal();
+        }, 700);
+      }, 2600);
+    });
+
+    // ── CUSTOM CURSOR ──────────────────────────────────────────
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.10;
+      ry += (my - ry) * 0.10;
+      cursorRing.style.left = rx + 'px';
+      cursorRing.style.top  = ry + 'px';
+      cursorRing.style.transition = 'width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button, [data-magnetic]').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    // ── NAV SCROLL ─────────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+    // ── SCROLL REVEAL ──────────────────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── COUNTER ANIMATION ──────────────────────────────────────
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'));
+        const start = performance.now();
+        const dur = 1500;
+
+        (function tick(now) {
+          const t = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(eased * target);
+          if (t < 1) requestAnimationFrame(tick);
+        })(start);
+
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+    // ── PARALLAX — ABOUT IMAGE ─────────────────────────────────
+    const pImg   = document.getElementById('parallax-img');
+    const pWrap  = pImg ? pImg.closest('.about-img-wrap') : null;
+
+    window.addEventListener('scroll', () => {
+      if (!pWrap) return;
+      const rect = pWrap.getBoundingClientRect();
+      const wh   = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > wh) return;
+      const progress = (wh - rect.top) / (wh + rect.height);
+      const shift = (progress - 0.5) * 50;
+      pImg.style.transform = `translateY(${shift}px)`;
+    }, { passive: true });
+
+    // ── MAGNETIC BUTTONS ───────────────────────────────────────
+    document.querySelectorAll('[data-magnetic]').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width  / 2) * 0.18;
+        const y = (e.clientY - r.top  - r.height / 2) * 0.28;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.2,1), background-position 0.42s ease';
+        btn.style.transform  = 'translate(0, 0)';
+      });
+      btn.addEventListener('mouseenter', () => {
+        btn.style.transition = 'transform 0.1s ease, background-position 0.42s ease';
+      });
+    });
+  </script>
+</body>
+</html>

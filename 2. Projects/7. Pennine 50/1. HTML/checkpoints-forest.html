@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Race Checkpoints – Forest</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a1a0d;
+      font-family: 'Georgia', serif;
+      width: 393px;
+      height: 852px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 0 18px 16px;
+    }
+
+    .clock-spacer { height: 235px; flex-shrink: 0; }
+
+    .checkpoints { display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+
+    .row { display: flex; align-items: center; gap: 10px; }
+
+    .timeline {
+      display: flex; flex-direction: column; align-items: center;
+      width: 16px; align-self: stretch; flex-shrink: 0;
+    }
+
+    .dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #86efac; box-shadow: 0 0 7px #86efac88; flex-shrink: 0;
+    }
+    .dot.start  { background: #d9f99d; box-shadow: 0 0 7px #d9f99d88; }
+    .dot.finish { background: #fde68a; box-shadow: 0 0 7px #fde68a88; width: 13px; height: 13px; }
+
+    .line { flex: 1; width: 2px; background: #1a3320; margin: 2px 0; }
+
+    .card {
+      flex: 1;
+      background: #0f2214;
+      border: 1px solid #1e3d26;
+      border-left: 3px solid #4ade80;
+      border-radius: 4px 11px 11px 4px;
+      padding: 7px 10px;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .card.is-start  { border-left-color: #d9f99d; background: #0d1f10; }
+    .card.is-finish { border-left-color: #fde68a; background: #131e0e; }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+    .cp-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4ade80; margin-bottom: 1px; font-family: -apple-system, sans-serif; }
+    .cp-label.start  { color: #d9f99d; }
+    .cp-label.finish { color: #fde68a; }
+
+    .cp-name { font-size: 13px; font-weight: 700; color: #dcfce7; line-height: 1.2; font-style: italic; }
+
+    .times { display: flex; gap: 10px; align-items: flex-start; }
+    .time-block { display: flex; flex-direction: column; align-items: flex-end; }
+    .time-lbl { font-size: 8px; color: #2d5a37; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1px; font-family: -apple-system, sans-serif; }
+    .time-val { font-size: 15px; font-weight: 800; line-height: 1; color: #dcfce7; font-family: -apple-system, sans-serif; }
+    .time-val.target { color: #86efac; }
+    .time-val.start  { color: #d9f99d; }
+    .time-val.finish { color: #fde68a; }
+    .time-val.muted  { color: #1e3d26; }
+    .times-divider { width: 1px; height: 28px; background: #1e3d26; align-self: center; }
+
+    .card-stats { display: flex; border-top: 1px solid #1e3d26; padding-top: 4px; font-family: -apple-system, sans-serif; }
+    .stat { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .stat + .stat { border-left: 1px solid #1e3d26; }
+    .stat-lbl { font-size: 7.5px; color: #2d5a37; text-transform: uppercase; letter-spacing: 0.07em; }
+    .stat-val { font-size: 11px; font-weight: 700; color: #4a7a55; line-height: 1.1; }
+    .stat-val.hi    { color: #86efac; }
+    .stat-val.cyan  { color: #d9f99d; }
+    .stat-val.climb { color: #fde68a; }
+    .stat-unit { font-size: 8px; font-weight: 400; color: #2d5a37; }
+
+    .footer { text-align: center; margin-top: 8px; font-size: 10px; color: #1e3d26; letter-spacing: 0.08em; font-style: italic; }
+  </style>
+</head>
+<body>
+  <div class="clock-spacer"></div>
+  <div class="checkpoints">
+
+    <div class="row">
+      <div class="timeline"><div class="dot start"></div><div class="line"></div></div>
+      <div class="card is-start">
+        <div class="card-top">
+          <div><div class="cp-label start">Start</div><div class="cp-name">Event HQ</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Start time</div><div class="time-val start">06:00</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val cyan">0.0 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val cyan">18.9 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val cyan">2h 42m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+567 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="timeline"><div class="dot"></div><div class="line"></div></div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="cp-label">CP 1</div><div class="cp-name">Silverdale Road</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Target</div><div class="time-val target">08:42</div></div>
+            <div class="times-divider"></div>
+            <div class="time-block"><div class="time-lbl">Cutoff</div><div class="time-val muted">10:19</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val">18.9 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val hi">14.2 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val hi">1h 58m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+356 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="timeline"><div class="dot"></div><div class="line"></div></div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="cp-label">CP 2</div><div class="cp-name">Ribblehead Viaduct</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Target</div><div class="time-val target">10:40</div></div>
+            <div class="times-divider"></div>
+            <div class="time-block"><div class="time-lbl">Cutoff</div><div class="time-val muted">13:33</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val">33.1 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val hi">10.4 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val hi">1h 36m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+432 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="timeline"><div class="dot"></div><div class="line"></div></div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="cp-label">CP 3</div><div class="cp-name">Philpin Farm</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Target</div><div class="time-val target">12:16</div></div>
+            <div class="times-divider"></div>
+            <div class="time-block"><div class="time-lbl">Cutoff</div><div class="time-val muted">15:43</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val">43.5 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val hi">11.7 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val hi">1h 56m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+442 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="timeline"><div class="dot"></div><div class="line"></div></div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="cp-label">CP 4</div><div class="cp-name">Horton-in-Ribblesdale</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Target</div><div class="time-val target">14:12</div></div>
+            <div class="times-divider"></div>
+            <div class="time-block"><div class="time-lbl">Cutoff</div><div class="time-val muted">18:25</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val">55.2 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val hi">5.6 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val hi">1h 02m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+307 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="timeline"><div class="dot finish"></div></div>
+      <div class="card is-finish">
+        <div class="card-top">
+          <div><div class="cp-label finish">CP 5</div><div class="cp-name">Silverdale Return</div></div>
+          <div class="times">
+            <div class="time-block"><div class="time-lbl">Target</div><div class="time-val finish">15:13</div></div>
+            <div class="times-divider"></div>
+            <div class="time-block"><div class="time-lbl">Cutoff</div><div class="time-val muted">19:40</div></div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-lbl">Total</div><div class="stat-val">60.8 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">To Next</div><div class="stat-val hi">18.2 <span class="stat-unit">km</span></div></div>
+          <div class="stat"><div class="stat-lbl">Leg Time</div><div class="stat-val hi">2h 47m</div></div>
+          <div class="stat"><div class="stat-lbl">Leg Climb</div><div class="stat-val climb">+352 <span class="stat-unit">m</span></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="footer">Good luck, Fabricio &nbsp;·&nbsp; You've got this.</div>
+</body>
+</html>

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Martina Rocha Luz — Calligrapher &amp; Engraver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Pinyon+Script&family=Jost:wght@100;200;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --paper: #FDFAF6;
+      --warm:  #F5EFE5;
+      --warm2: #EDE5D8;
+      --ink:   #1A1714;
+      --ink2:  #221E1A;
+      --mid:   #7A7268;
+      --dim:   #AAA49C;
+      --gold:  #A8844A;
+      --gold2: #C9A96E;
+      --teal:  #2E5048;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: #fff;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 6px; height: 6px;
+      background: var(--gold2); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: screen;
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid rgba(201,169,110,.3); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .3s, height .3s, border-color .3s;
+    }
+    body.hovering .cursor { width: 16px; height: 16px; }
+    body.hovering .cursor-ring { width: 48px; height: 48px; border-color: rgba(201,169,110,.55); }
+
+    /* ── PRELOADER ── */
+    .preloader {
+      position: fixed; inset: 0; background: #0E0C0A; z-index: 10000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    }
+    .pl-svg { width: 300px; height: 70px; }
+    .pl-svg path {
+      fill: none; stroke: var(--gold); stroke-width: 1.1;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 840; stroke-dashoffset: 840;
+      animation: draw 2.3s cubic-bezier(.4,0,.2,1) forwards .2s;
+    }
+    .pl-name { font-family:'Pinyon Script',cursive; font-size:2rem; color:#fff; opacity:0; animation:fup .6s ease forwards 2.1s; }
+    .pl-loc  { font-size:.48rem; letter-spacing:.42em; text-transform:uppercase; color:rgba(255,255,255,.25); opacity:0; animation:fup .6s ease forwards 2.3s; }
+    @keyframes draw { to { stroke-dashoffset:0; } }
+    @keyframes fup  { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+    .preloader.out { animation:plOut .9s ease forwards; }
+    @keyframes plOut { to{opacity:0;pointer-events:none} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:200;
+      border-bottom: 1px solid transparent;
+      transition: background .5s, border-color .5s;
+    }
+    nav.scrolled { background:rgba(14,12,10,.92); backdrop-filter:blur(14px); border-color:rgba(255,255,255,.06); }
+    .nav-inner { padding:0 72px; height:70px; display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-family:'Pinyon Script',cursive; font-size:2rem; color:#fff; }
+    .nav-mid { display:flex; gap:36px; }
+    .nav-mid a {
+      font-size:.63rem; letter-spacing:.16em;
+      color:rgba(255,255,255,.4); text-decoration:none; font-weight:300;
+      transition:color .3s, letter-spacing .35s;
+    }
+    .nav-mid a:hover { color:rgba(255,255,255,.85); letter-spacing:.24em; }
+    .nav-cta {
+      font-size:.61rem; letter-spacing:.14em;
+      color:rgba(255,255,255,.55); text-decoration:none;
+      border-bottom:1px solid rgba(255,255,255,.15); padding-bottom:2px;
+      transition:color .3s, border-color .3s;
+    }
+    .nav-cta:hover { color:var(--gold2); border-color:var(--gold2); }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh; position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    /* noise grain texture */
+    .hero::before {
+      content:''; position:absolute; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:1;
+    }
+    /* vignette */
+    .hero::after {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.7) 100%);
+      pointer-events:none; z-index:1;
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; max-width: 900px; padding: 0 48px;
+    }
+    .hero-name-wrap { overflow: hidden; margin-bottom: 4px; }
+    .hero-name {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(6rem, 14vw, 14rem);
+      color: #fff; line-height: 1.05;
+      display: block; transform: translateY(110%); opacity: 0;
+    }
+    .hero-surname-wrap { overflow: hidden; margin-bottom: 32px; }
+    .hero-surname {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(4rem, 9vw, 9rem);
+      color: rgba(255,255,255,.55); line-height: 1.05;
+      display: block; transform: translateY(110%); opacity: 0;
+    }
+    .hero-rule {
+      width: 0; height: 1px; background: var(--gold); margin-bottom: 24px;
+      transition: width 1s ease;
+    }
+    .hero-rule.show { width: 120px; }
+    .hero-tag {
+      font-size: .58rem; letter-spacing: .36em; text-transform: uppercase;
+      color: rgba(255,255,255,.4); margin-bottom: 36px;
+      opacity: 0; transform: translateY(8px);
+    }
+    .hero-btns { display: flex; gap: 14px; opacity: 0; transform: translateY(10px); }
+    .btn-outline {
+      padding: 13px 38px;
+      border: 1px solid rgba(201,169,110,.35); color: var(--gold2);
+      font-size: .62rem; letter-spacing: .18em; text-decoration: none; font-weight: 300;
+      transition: background .3s, border-color .3s, color .3s;
+    }
+    .btn-outline:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .btn-text {
+      padding: 13px 20px; color: rgba(255,255,255,.4);
+      font-size: .62rem; letter-spacing: .14em; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.12); padding-bottom: 2px; margin-top: 11px;
+      transition: color .3s, border-color .3s;
+    }
+    .btn-text:hover { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.4); }
+    /* hero scroll */
+    .h-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      z-index: 3; opacity: 0;
+    }
+    .h-scroll-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.25); }
+    .h-scroll span { font-size: .46rem; letter-spacing: .36em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+
+    /* ── TICKER ── */
+    .ticker { background: var(--gold); height: 42px; overflow: hidden; display: flex; align-items: center; }
+    .ticker-inner { display: flex; animation: tick 22s linear infinite; white-space: nowrap; }
+    .ti { font-size: .54rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.88); padding: 0 28px; flex-shrink: 0; }
+    .ts { color: rgba(255,255,255,.4); flex-shrink: 0; font-size: .65rem; }
+    @keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ── BRANDS CONSTELLATION ── */
+    .brands-galaxy {
+      background: var(--ink2);
+      position: relative; height: 340px;
+      border-top: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      overflow: hidden;
+    }
+    .galaxy-label {
+      position: absolute; top: 50%; left: 72px;
+      transform: translateY(-50%);
+      font-size: .52rem; letter-spacing: .34em; text-transform: uppercase;
+      color: rgba(255,255,255,.18);
+      writing-mode: horizontal-tb;
+    }
+    .galaxy-img {
+      position: absolute;
+      filter: brightness(0) invert(1);
+      transition: opacity .35s, transform .35s;
+    }
+    .galaxy-img:hover { transform: scale(1.15) !important; }
+    /* dual marquee */
+    .brands-dual { background: var(--ink2); border-top: 1px solid rgba(255,255,255,.05); overflow: hidden; }
+    .mq-row { display: flex; padding: 20px 0; overflow: hidden; }
+    .mq-row-inner {
+      display: flex; align-items: center; gap: 60px;
+      width: max-content; flex-shrink: 0;
+    }
+    .mq-row:first-child .mq-row-inner { animation: mqL 22s linear infinite; }
+    .mq-row:last-child  .mq-row-inner { animation: mqR 22s linear infinite; }
+    .mq-row-inner:hover { animation-play-state: paused; }
+    .mq-row-inner img {
+      height: 18px; object-fit: contain; flex-shrink: 0;
+      filter: brightness(0) invert(1); opacity: .18;
+      transition: opacity .3s;
+    }
+    .mq-row-inner img:hover { opacity: .65; }
+    @keyframes mqL { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    @keyframes mqR { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)} }
+    .mq-row + .mq-row { border-top: 1px solid rgba(255,255,255,.04); }
+
+    /* ── SERVICES ACCORDION ── */
+    .services { border-top: 1px solid rgba(255,255,255,.06); }
+    .svc-head-row {
+      padding: 80px 72px 56px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .svc-head-row h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem,4vw,3.2rem); font-style: italic; color: #fff;
+    }
+    .svc-head-row p { font-size: .84rem; line-height: 1.85; color: rgba(255,255,255,.32); max-width: 320px; }
+
+    .svc-item {
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      overflow: hidden;
+      max-height: 88px;
+      transition: max-height .7s cubic-bezier(.4,0,.2,1);
+      cursor: default;
+    }
+    .svc-item:hover { max-height: 560px; }
+    .svc-top {
+      display: flex; align-items: center; gap: 0;
+      padding: 0 72px; height: 88px;
+    }
+    .svc-num-sm {
+      font-size: .54rem; letter-spacing: .28em; color: rgba(255,255,255,.2);
+      width: 80px; flex-shrink: 0;
+    }
+    .svc-title-acc {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem,2.5vw,2rem); font-style: italic; color: #fff;
+      flex: 1;
+      transition: color .4s, transform .4s;
+    }
+    .svc-item:hover .svc-title-acc { color: var(--gold2); transform: translateX(8px); }
+    .svc-arrow {
+      font-size: .7rem; color: rgba(255,255,255,.2);
+      transition: transform .4s, color .4s;
+    }
+    .svc-item:hover .svc-arrow { transform: rotate(90deg); color: var(--gold); }
+    .svc-body-acc {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      padding: 0 72px 56px;
+    }
+    .svc-body-img { overflow: hidden; aspect-ratio: 16/9; }
+    .svc-body-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s; }
+    .svc-item:hover .svc-body-img img { transform: scale(1.04); }
+    .svc-body-txt { padding: 0 0 0 60px; display: flex; flex-direction: column; justify-content: center; }
+    .svc-body-txt p { font-size: .86rem; line-height: 1.9; color: rgba(255,255,255,.48); margin-bottom: 14px; }
+    .svc-price-acc { font-size: .58rem; letter-spacing: .14em; color: var(--gold); margin-bottom: 24px; }
+    .svc-enquire {
+      display: inline-block; font-size: .6rem; letter-spacing: .18em;
+      color: rgba(255,255,255,.45); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.15); padding-bottom: 2px;
+      transition: color .3s, border-color .3s;
+    }
+    .svc-enquire:hover { color: var(--gold2); border-color: var(--gold2); }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--paper);
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 85vh;
+    }
+    .about-img-col { overflow: hidden; position: relative; }
+    .about-img-col img { width:100%; height:115%; object-fit:cover; object-position:top center; display:block; will-change:transform; }
+    .about-txt-col {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 100px 88px;
+      background: var(--paper);
+    }
+    .a-eyebrow { font-size:.55rem; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+    .about-txt-col h2 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.7rem,3vw,2.6rem); font-style:italic; color:var(--ink);
+      line-height:1.32; margin-bottom:28px;
+    }
+    .about-txt-col p { font-size:.88rem; line-height:1.95; color:var(--mid); margin-bottom:12px; }
+    .a-link {
+      display:inline-block; margin-top:24px; font-size:.61rem; letter-spacing:.14em;
+      color:var(--teal); text-decoration:none;
+      border-bottom:1px solid var(--teal); padding-bottom:2px;
+      transition:color .3s, border-color .3s;
+    }
+    .a-link:hover { color:var(--gold); border-color:var(--gold); }
+
+    /* ── PORTFOLIO: CURSOR-FOLLOW IMAGE ── */
+    .portfolio { background: var(--ink); padding: 0; border-top: 1px solid rgba(255,255,255,.06); }
+    /* floating image that follows cursor */
+    .port-cursor-img {
+      position: fixed; top: 0; left: 0;
+      width: 400px; height: 300px;
+      pointer-events: none; z-index: 400;
+      overflow: hidden;
+      opacity: 0; transition: opacity .35s ease;
+      transform: translate(-50%, -60%);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .port-cursor-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    .port-cursor-img.show { opacity: 1; }
+
+    .port-inner { padding: 88px 72px; }
+    .port-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; }
+    .port-header h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-style:italic; }
+    .port-header a { font-size:.61rem; letter-spacing:.14em; color:rgba(255,255,255,.3); text-decoration:none; transition:color .3s; }
+    .port-header a:hover { color:var(--gold2); }
+    .port-list { }
+    .port-list-item {
+      display: flex; align-items: center; gap: 40px;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      transition: border-color .3s;
+    }
+    .port-list-item:first-child { border-top: 1px solid rgba(255,255,255,.06); }
+    .port-list-item:hover { border-color: rgba(168,132,74,.25); }
+    .pli-num { font-size:.52rem; letter-spacing:.3em; color:rgba(255,255,255,.22); flex-shrink:0; width:56px; }
+    .pli-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.8rem,3vw,2.8rem); font-style:italic; color:#fff;
+      flex:1; transition:transform .4s ease, color .3s;
+    }
+    .port-list-item:hover .pli-title { transform:translateX(16px); color:var(--gold2); }
+    .pli-tag { font-size:.52rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,255,255,.2); flex-shrink:0; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial {
+      background: var(--ink2); padding: 160px 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .test-inner { max-width: 1000px; margin:0 auto; padding:0 72px; }
+    .test-eye { display:block; font-size:.54rem; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); margin-bottom:40px; }
+    .testimonial blockquote {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.5rem,3vw,2.4rem); font-style:italic; font-weight:400;
+      color:#fff; line-height:1.65; margin-bottom:48px;
+    }
+    .test-attr { display:flex; align-items:center; gap:20px; }
+    .test-line { width:40px; height:1px; background:rgba(255,255,255,.12); }
+    .test-attr span { font-size:.6rem; letter-spacing:.14em; color:rgba(255,255,255,.3); }
+
+    /* ── FOOTER SECTION ── */
+    .footer-main {
+      background: var(--paper);
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 55vh;
+    }
+    .f-stats {
+      background: var(--ink); padding: 88px 72px;
+      display: flex; flex-direction: column; justify-content: center; gap: 0;
+      border-right: 1px solid rgba(255,255,255,.05);
+    }
+    .f-stat { padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .f-stat:last-child { border-bottom: none; }
+    .f-sn {
+      font-family:'Playfair Display',serif;
+      font-size:3.5rem; font-style:italic; color:#fff; line-height:1;
+      display:flex; align-items:baseline; gap:4px;
+    }
+    .f-sp { font-size:2.5rem; color:var(--gold); }
+    .f-sl { font-size:.58rem; letter-spacing:.18em; color:rgba(255,255,255,.25); margin-top:6px; text-transform:uppercase; }
+    .f-cta {
+      padding: 88px 88px;
+      display: flex; flex-direction: column; justify-content: center;
+      background: var(--paper);
+    }
+    .f-press-eye { font-size:.52rem; letter-spacing:.3em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; }
+    .f-press { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:52px; }
+    .f-press span { font-size:.63rem; letter-spacing:.14em; color:var(--warm2); }
+    .f-cta h3 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.4rem,2.5vw,2rem); font-style:italic; color:var(--ink);
+      margin-bottom:14px; line-height:1.3;
+    }
+    .f-cta p { font-size:.84rem; line-height:1.9; color:var(--mid); margin-bottom:32px; }
+    .btn-teal {
+      display:inline-block; padding:14px 44px;
+      background:var(--teal); color:#fff;
+      font-size:.62rem; letter-spacing:.18em; text-decoration:none;
+      transition:background .3s;
+    }
+    .btn-teal:hover { background:var(--gold); }
+    .footer-btm {
+      text-align:center; padding:22px;
+      background:var(--ink); border-top:1px solid rgba(255,255,255,.05);
+      font-size:.52rem; letter-spacing:.16em; color:rgba(255,255,255,.14);
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .85s ease, transform .85s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.12s} .d2{transition-delay:.24s} .d3{transition-delay:.36s}
+
+    /* clip reveal for about image */
+    .clip-reveal { clip-path:inset(0 100% 0 0); transition:clip-path 1.1s cubic-bezier(.4,0,.2,1); }
+    .clip-reveal.in { clip-path:inset(0 0% 0 0); }
+  </style>
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader">
+    <svg class="pl-svg" viewBox="0 0 300 70">
+      <path d="M8,55 C22,55 32,14 62,32 C82,44 80,8 108,18 C130,26 128,52 152,42 C170,33 168,7 194,17 C212,25 210,56 236,46 C250,41 247,20 272,28 C282,32 287,46 283,56 C280,64 271,62 263,64"/>
+    </svg>
+    <span class="pl-name">Martina Rocha Luz</span>
+    <span class="pl-loc">Leeds, United Kingdom</span>
+  </div>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <div class="logo">MRL</div>
+      <div class="nav-mid">
+        <a href="#">Services</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Blog</a>
+        <a href="#">About</a>
+      </div>
+      <a href="#" class="nav-cta">Get In Touch</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-name-wrap">
+        <span class="hero-name" id="h-name">Martina</span>
+      </div>
+      <div class="hero-surname-wrap">
+        <span class="hero-surname" id="h-surname">Rocha Luz</span>
+      </div>
+      <div class="hero-rule" id="h-rule"></div>
+      <span class="hero-tag" id="h-tag">Calligrapher &amp; Engraver — Leeds, UK</span>
+      <div class="hero-btns" id="h-btns">
+        <a href="#" class="btn-outline" data-mag>Let's Work Together</a>
+        <a href="#" class="btn-text">View Portfolio</a>
+      </div>
+    </div>
+    <div class="h-scroll" id="h-scroll">
+      <span>Scroll</span>
+      <div class="h-scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ti">Calligraphy</span><span class="ts">·</span>
+      <span class="ti">Live Engraving</span><span class="ts">·</span>
+      <span class="ti">Brand Activations</span><span class="ts">·</span>
+      <span class="ti">Leeds, UK</span><span class="ts">·</span>
+      <span class="ti">Wedding Stationery</span><span class="ts">·</span>
+      <span class="ti">Luxury Brands</span><span class="ts">·</span>
+      <span class="ti">Private Events</span><span class="ts">·</span>
+      <span class="ti">Calligraphy</span><span class="ts">·</span>
+      <span class="ti">Live Engraving</span><span class="ts">·</span>
+      <span class="ti">Brand Activations</span><span class="ts">·</span>
+      <span class="ti">Leeds, UK</span><span class="ts">·</span>
+      <span class="ti">Wedding Stationery</span><span class="ts">·</span>
+      <span class="ti">Luxury Brands</span><span class="ts">·</span>
+      <span class="ti">Private Events</span><span class="ts">·</span>
+    </div>
+  </div>
+
+  <!-- BRANDS: DUAL MARQUEE -->
+  <div class="brands-dual">
+    <div class="mq-row">
+      <div class="mq-row-inner">
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+        <!-- duplicate -->
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+      </div>
+    </div>
+    <div class="mq-row">
+      <div class="mq-row-inner">
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+        <!-- duplicate -->
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES ACCORDION -->
+  <section class="services reveal">
+    <div class="svc-head-row">
+      <h2>Services</h2>
+      <p>Every engagement is handled personally, with precision and care.</p>
+    </div>
+
+    <div class="svc-item">
+      <div class="svc-top">
+        <span class="svc-num-sm">01</span>
+        <span class="svc-title-acc">Live Engraving</span>
+        <span class="svc-arrow">↓</span>
+      </div>
+      <div class="svc-body-acc">
+        <div class="svc-body-img">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg" alt="Live Engraving"/>
+        </div>
+        <div class="svc-body-txt">
+          <p>On-site personalisation for fragrances, beauty, wine and spirits. For brand activations, corporate and private events — and in-studio too.</p>
+          <p class="svc-price-acc">From £90/hr &nbsp;·&nbsp; 2hr minimum &nbsp;·&nbsp; travel may apply</p>
+          <a href="#" class="svc-enquire">Enquire →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc-item">
+      <div class="svc-top">
+        <span class="svc-num-sm">02</span>
+        <span class="svc-title-acc">Live Calligraphy</span>
+        <span class="svc-arrow">↓</span>
+      </div>
+      <div class="svc-body-acc">
+        <div class="svc-body-img">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Calligraphy-Name-Card.jpg" alt="Live Calligraphy"/>
+        </div>
+        <div class="svc-body-txt">
+          <p>A bespoke calligrapher at your event. On paper, branded cards, or directly on products. Captivating to watch, shareable, and deeply personal.</p>
+          <p class="svc-price-acc">Available on-site &amp; in-studio</p>
+          <a href="#" class="svc-enquire">Enquire →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc-item">
+      <div class="svc-top">
+        <span class="svc-num-sm">03</span>
+        <span class="svc-title-acc">Wedding &amp; Events</span>
+        <span class="svc-arrow">↓</span>
+      </div>
+      <div class="svc-body-acc">
+        <div class="svc-body-img">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Personalised-Bride-Gift.jpg" alt="Wedding Calligraphy"/>
+        </div>
+        <div class="svc-body-txt">
+          <p>Place cards, envelopes, table plans, and bespoke stationery crafted with care. I only take on a limited number of wedding clients per year.</p>
+          <p class="svc-price-acc">Limited availability — enquire early</p>
+          <a href="#" class="svc-enquire">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <div class="about">
+    <div class="about-img-col clip-reveal">
+      <img id="pimg" src="https://martinarochaluz.com/wp-content/uploads/2023/09/photo_2023-09-15_14-07-39-jpg.webp" alt="Martina"/>
+    </div>
+    <div class="about-txt-col reveal d1">
+      <span class="a-eyebrow">About Martina</span>
+      <h2>Professional calligrapher and engraver based in Leeds.</h2>
+      <p>I opened my calligraphy studio in 2022, specialising in traditional calligraphy and engraving for luxury brands and private clients.</p>
+      <p>I've had the privilege of working with Dior, Vacheron Constantin, Channel 4, Maison Francis Kurkdjian, and many others.</p>
+      <p>My style is elegant and minimalistic — I believe less is more.</p>
+      <a href="#" class="a-link">My Full Story →</a>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO: CURSOR FOLLOW -->
+  <section class="portfolio">
+    <!-- image that follows cursor -->
+    <div class="port-cursor-img" id="portCursorImg">
+      <img id="portCursorImgEl" src="" alt=""/>
+    </div>
+    <div class="port-inner">
+      <div class="port-header reveal">
+        <h2>Portfolio</h2>
+        <a href="#">View All Work →</a>
+      </div>
+      <div class="port-list reveal d1">
+        <div class="port-list-item" data-img="https://martinarochaluz.com/wp-content/uploads/2024/04/17.png">
+          <span class="pli-num">01</span>
+          <span class="pli-title">Engraving</span>
+          <span class="pli-tag">Brand Activations</span>
+        </div>
+        <div class="port-list-item" data-img="https://martinarochaluz.com/wp-content/uploads/2025/01/Calligraphy-Name-Card.jpg">
+          <span class="pli-num">02</span>
+          <span class="pli-title">Calligraphy</span>
+          <span class="pli-tag">Live Events</span>
+        </div>
+        <div class="port-list-item" data-img="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg">
+          <span class="pli-num">03</span>
+          <span class="pli-title">Brand Activation</span>
+          <span class="pli-tag">Luxury Brands</span>
+        </div>
+        <div class="port-list-item" data-img="https://martinarochaluz.com/wp-content/uploads/2024/04/24.png">
+          <span class="pli-num">04</span>
+          <span class="pli-title">Bespoke Stationery</span>
+          <span class="pli-tag">Weddings</span>
+        </div>
+        <div class="port-list-item" data-img="https://martinarochaluz.com/wp-content/uploads/2024/04/1.png">
+          <span class="pli-num">05</span>
+          <span class="pli-title">Name Cards</span>
+          <span class="pli-tag">Private Events</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <div class="test-inner reveal">
+      <span class="test-eye">What clients say</span>
+      <blockquote>"Martina has worked on several creative projects now for Vacheron Constantin and Berry's Jewellers. She always goes above and beyond. When doing live events in the boutique, Martina is so polite and professional and always looks impeccable. I couldn't recommend her enough."</blockquote>
+      <div class="test-attr">
+        <div class="test-line"></div>
+        <span>Fiona M. &nbsp;·&nbsp; Vacheron Constantin</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer-main">
+    <div class="f-stats reveal">
+      <div class="f-stat">
+        <div class="f-sn"><span data-count="4">0</span><span class="f-sp">+</span></div>
+        <div class="f-sl">Years in Business</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-sn"><span data-count="10">0</span><span class="f-sp">+</span></div>
+        <div class="f-sl">Luxury Brand Partnerships</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-sn" style="font-size:2.1rem;">Leeds</div>
+        <div class="f-sl">Yorkshire &amp; Beyond</div>
+      </div>
+    </div>
+    <div class="f-cta reveal d2">
+      <p class="f-press-eye">As Seen In</p>
+      <div class="f-press">
+        <span>Save The Date</span>
+        <span>Rock My Wedding</span>
+        <span>Yorkshire Guide</span>
+      </div>
+      <h3>Ready to create something beautiful together?</h3>
+      <p>Whether you're a luxury brand planning your next activation or a couple planning their perfect day — I'd love to hear from you.</p>
+      <a href="#" class="btn-teal">Get In Touch</a>
+    </div>
+  </div>
+  <div class="footer-btm">© 2025 Martina Rocha Luz &nbsp;·&nbsp; All Rights Reserved &nbsp;·&nbsp; Leeds, UK</div>
+
+  <script>
+    // ── PRELOADER ──────────────────────────────────────────────
+    const preloader = document.getElementById('preloader');
+    let heroFired = false;
+
+    function fireHero() {
+      if (heroFired) return; heroFired = true;
+      const ease = 'cubic-bezier(.4,0,.2,1)';
+
+      // Name slides up
+      const name = document.getElementById('h-name');
+      setTimeout(() => {
+        name.style.transition = `opacity .9s ${ease}, transform .9s ${ease}`;
+        name.style.opacity = '1'; name.style.transform = 'translateY(0)';
+      }, 80);
+
+      // Surname slides up with delay
+      const surname = document.getElementById('h-surname');
+      setTimeout(() => {
+        surname.style.transition = `opacity .9s ${ease}, transform .9s ${ease}`;
+        surname.style.opacity = '1'; surname.style.transform = 'translateY(0)';
+      }, 300);
+
+      // Rule expands
+      setTimeout(() => document.getElementById('h-rule').classList.add('show'), 600);
+
+      // Tag fades in
+      const tag = document.getElementById('h-tag');
+      setTimeout(() => {
+        tag.style.transition = `opacity .7s ease, transform .7s ease`;
+        tag.style.opacity = '1'; tag.style.transform = 'translateY(0)';
+      }, 900);
+
+      // Buttons
+      const btns = document.getElementById('h-btns');
+      setTimeout(() => {
+        btns.style.transition = `opacity .7s ease, transform .7s ease`;
+        btns.style.opacity = '1'; btns.style.transform = 'translateY(0)';
+      }, 1060);
+
+      // Scroll indicator
+      setTimeout(() => {
+        const s = document.getElementById('h-scroll');
+        s.style.transition = 'opacity .8s ease';
+        s.style.opacity = '1';
+      }, 1400);
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('out');
+        setTimeout(() => { preloader.style.display = 'none'; fireHero(); }, 900);
+      }, 3000);
+    });
+
+    // ── CURSOR ─────────────────────────────────────────────────
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    (function ring() {
+      rx += (mx - rx) * .09; ry += (my - ry) * .09;
+      cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+      requestAnimationFrame(ring);
+    })();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    // ── NAV ────────────────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+    // ── SCROLL REVEAL ──────────────────────────────────────────
+    const ro = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+      { threshold: .1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal, .clip-reveal').forEach(el => ro.observe(el));
+
+    // ── COUNTERS ───────────────────────────────────────────────
+    const co = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target, target = +el.getAttribute('data-count');
+        const t0 = performance.now(), dur = 1600;
+        (function tick(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          el.textContent = Math.round((1 - Math.pow(1-p, 3)) * target);
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+        co.unobserve(el);
+      });
+    }, { threshold: .7 });
+    document.querySelectorAll('[data-count]').forEach(el => co.observe(el));
+
+    // ── PARALLAX ABOUT ─────────────────────────────────────────
+    const pimg  = document.getElementById('pimg');
+    const pwrap = pimg && pimg.closest('.about-img-col');
+    window.addEventListener('scroll', () => {
+      if (!pwrap) return;
+      const r = pwrap.getBoundingClientRect(), wh = window.innerHeight;
+      if (r.bottom < 0 || r.top > wh) return;
+      pimg.style.transform = `translateY(${((wh - r.top)/(wh+r.height) - .5) * 60}px)`;
+    }, { passive: true });
+
+    // ── PORTFOLIO CURSOR-FOLLOW IMAGE ──────────────────────────
+    const portCursorBox = document.getElementById('portCursorImg');
+    const portCursorEl  = document.getElementById('portCursorImgEl');
+    let pcx = 0, pcy = 0, ptx = 0, pty = 0;
+    let portActive = false;
+
+    document.querySelectorAll('.port-list-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        portCursorEl.src = item.getAttribute('data-img');
+        portCursorBox.classList.add('show');
+        portActive = true;
+      });
+      item.addEventListener('mouseleave', () => {
+        portCursorBox.classList.remove('show');
+        portActive = false;
+      });
+    });
+
+    document.addEventListener('mousemove', e => { ptx = e.clientX; pty = e.clientY; });
+
+    (function animPC() {
+      pcx += (ptx - pcx) * .1; pcy += (pty - pcy) * .1;
+      portCursorBox.style.left = pcx + 'px';
+      portCursorBox.style.top  = pcy + 'px';
+      requestAnimationFrame(animPC);
+    })();
+
+    // ── MAGNETIC BUTTONS ───────────────────────────────────────
+    document.querySelectorAll('[data-mag]').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.transition = 'transform .1s ease';
+        btn.style.transform  = `translate(${(e.clientX-r.left-r.width/2)*.2}px,${(e.clientY-r.top-r.height/2)*.28}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transition = 'transform .45s cubic-bezier(.4,0,.2,1)';
+        btn.style.transform  = 'translate(0,0)';
+      });
+    });
+  </script>
+</body>
+</html>

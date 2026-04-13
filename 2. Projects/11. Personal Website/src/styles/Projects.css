@@ -1,0 +1,20 @@
+.projects {
+  padding: 8rem 2rem 3rem;
+  background: var(--bg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 3rem;
+  letter-spacing: -0.02em;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}

@@ -1,0 +1,38 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent: #00c46a;
+  --accent-dim: rgba(0, 196, 106, 0.12);
+  --accent-border: rgba(0, 196, 106, 0.25);
+  --bg: #070e09;
+  --bg-card: #0c1810;
+  --bg-card-hover: #0f1e13;
+  --border: #172214;
+  --border-light: #1f2e22;
+  --text: #fff;
+  --text-muted: #6b8a72;
+  --text-dim: #4a6451;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+}

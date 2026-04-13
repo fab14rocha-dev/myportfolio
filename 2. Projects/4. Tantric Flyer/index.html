@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tantric Moments — Flyer (Dark Burgundy)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .flyer {
+      width: 210mm;
+      height: 297mm;
+      background: #0d0d0d;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .flyer::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #8B3A3A, #c9a96e, #8B3A3A, transparent);
+    }
+
+    .flyer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://www.tantricmoments.pt/img/cache/massagens/sensual-massage-nuru-massage_w1500_h650.jpg?20250922093218');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .footer-img {
+      width: 68px; height: 68px;
+      object-fit: cover; object-position: center;
+      border-radius: 2px; flex-shrink: 0; opacity: 0.85;
+    }
+
+    .header {
+      padding: 24px 44px 16px;
+      text-align: center;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid rgba(139,58,58,0.3);
+    }
+
+    .logo-text { text-align: center; }
+    .logo-text-main {
+      font-family: 'Cinzel', serif;
+      font-size: 1.9rem; font-weight: 400;
+      color: #f0e8d8;
+      letter-spacing: 0.06em; line-height: 1;
+      font-variant: small-caps;
+    }
+    .logo-text-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem; font-weight: 400;
+      color: #8B3A3A;
+      letter-spacing: 0.5em; text-transform: uppercase; margin-top: 4px;
+    }
+
+    .tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.58rem; font-weight: 300;
+      color: #6a5848;
+      letter-spacing: 0.35em; text-transform: uppercase; margin-top: 12px;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 44px; margin: 10px 0;
+      position: relative; z-index: 1;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; }
+    .divider::before { background: linear-gradient(90deg, transparent, rgba(139,58,58,0.5)); }
+    .divider::after  { background: linear-gradient(90deg, rgba(139,58,58,0.5), transparent); }
+    .divider-icon { font-size: 0.65rem; color: #8B3A3A; }
+
+    .intro {
+      padding: 0 56px; text-align: center;
+      position: relative; z-index: 1; margin-bottom: 12px;
+    }
+    .intro p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem; font-weight: 300;
+      color: #6a5848; line-height: 1.9; letter-spacing: 0.04em;
+    }
+
+    .services-section {
+      padding: 0 44px; position: relative; z-index: 1; flex: 1;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem; font-weight: 600;
+      color: #8B3A3A; letter-spacing: 0.4em;
+      text-transform: uppercase; text-align: center; margin-bottom: 10px;
+    }
+
+    .service-card {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(139,58,58,0.12);
+    }
+
+    .lang-sep {
+      margin: 10px 44px;
+      display: flex; align-items: center; gap: 14px;
+      position: relative; z-index: 1;
+    }
+    .lang-sep::before, .lang-sep::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(139,58,58,0.25);
+    }
+    .lang-sep-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem; font-weight: 600;
+      color: #8B3A3A; letter-spacing: 0.3em; text-transform: uppercase;
+      background: #0d0d0d;
+      padding: 3px 10px;
+      border: 1px solid rgba(139,58,58,0.35);
+    }
+
+    .service-card:last-child { border-bottom: none; }
+    .service-info { flex: 1; }
+
+    .service-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem; font-weight: 600;
+      color: #f0e8d8; letter-spacing: 0.06em; margin-bottom: 4px;
+    }
+
+    .service-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.58rem; font-weight: 300;
+      color: #5a4838; line-height: 1.6;
+    }
+
+    .service-price { text-align: right; flex-shrink: 0; }
+
+    .price-line {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.62rem; font-weight: 400;
+      color: #c9a96e; line-height: 1.8; white-space: nowrap;
+    }
+
+    .price-duration { font-size: 0.52rem; color: #4a3828; font-weight: 300; }
+
+    .footer {
+      padding: 14px 44px 20px;
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(139,58,58,0.3);
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 20px;
+    }
+
+    .contact-block { flex: 1; }
+
+    .contact-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.53rem; font-weight: 600;
+      color: #8B3A3A; letter-spacing: 0.35em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+
+    .contact-item {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem; font-weight: 300;
+      color: #6a5848; line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    .contact-item strong { color: #f0e8d8; font-weight: 400; }
+
+    .qr-block { text-align: center; flex-shrink: 0; }
+
+    .qr-box {
+      width: 72px; height: 72px; background: #f0e8d8;
+      border-radius: 4px; display: flex;
+      align-items: center; justify-content: center;
+      margin: 0 auto 5px;
+    }
+
+    .qr-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.48rem; font-weight: 300;
+      color: #6a5848; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    .bottom-bar {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #8B3A3A, #c9a96e, #8B3A3A, transparent);
+      position: relative; z-index: 1;
+    }
+
+    @media print {
+      body { background: none; padding: 0; }
+      .flyer { width: 210mm; height: 297mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="flyer">
+
+    <header class="header">
+      <div class="logo-text">
+        <div class="logo-text-main">Tantric Moments</div>
+        <div class="logo-text-sub">Massage Center</div>
+      </div>
+      <div class="tagline">Albufeira, Portugal &nbsp;·&nbsp; Available Daily</div>
+    </header>
+
+    <div class="divider"><span class="divider-icon">✦</span></div>
+
+    <div class="lang-sep"><span class="lang-sep-label">English</span></div>
+
+    <div class="intro">
+      <p>An intimate and refined experience, tailored to your desires.<br>
+      All sessions are conducted by skilled therapists in a private, luxurious setting.</p>
+    </div>
+
+    <div class="services-section">
+      <div class="section-title">Our Experiences</div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Tantric Ritual Massage</div><div class="service-desc">A complete tantric experience combining ancient techniques to harmonize body and mind, promoting deep relaxation and sensual awakening.</div></div><div class="service-price"><div class="price-line">€160</div><div class="price-duration">1 hour</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Sensual Nuru Massage</div><div class="service-desc">An intimate, flowing massage that awakens the senses and promotes deep relaxation and sensual pleasure.</div></div><div class="service-price"><div class="price-line">€200</div><div class="price-duration">1 hour</div><div class="price-line" style="margin-top:4px;">€140</div><div class="price-duration">30 min</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Sensitive Moments Massage</div><div class="service-desc">A gentle, highly personalised session designed to awaken sensitivity and bring deep, lasting comfort.</div></div><div class="service-price"><div class="price-line">€130</div><div class="price-duration">1 hour</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Mystery Erotic Massage</div><div class="service-desc">An exclusive and immersive experience — a unique journey of sensation and pleasure, unlike anything else.</div></div><div class="service-price"><div class="price-line">€260</div><div class="price-duration">1 hour</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Tantric Moments Couples</div><div class="service-desc">Share intimacy and deep relaxation together, strengthening connection through synchronised tantric techniques.</div></div><div class="service-price"><div class="price-line">€280</div><div class="price-duration">1 hour</div></div></div>
+    </div>
+
+    <div class="lang-sep"><span class="lang-sep-label">Português</span></div>
+
+    <div class="intro">
+      <p>Uma experiência íntima e refinada, adaptada aos seus desejos.<br>
+      Todas as sessões são realizadas por terapeutas qualificados num ambiente privado e luxuoso.</p>
+    </div>
+
+    <div class="services-section" style="flex:none;">
+      <div class="section-title">As Nossas Experiências</div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Massagem Ritual Tântrica</div><div class="service-desc">Uma experiência tântrica completa que combina técnicas ancestrais para harmonizar corpo e mente, promovendo relaxamento profundo e despertar sensual.</div></div><div class="service-price"><div class="price-line">€160</div><div class="price-duration">1 hora</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Massagem Sensual Nuru</div><div class="service-desc">Uma massagem íntima e fluida que desperta os sentidos e promove relaxamento profundo e prazer sensual.</div></div><div class="service-price"><div class="price-line">€200</div><div class="price-duration">1 hora</div><div class="price-line" style="margin-top:4px;">€140</div><div class="price-duration">30 min</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Massagem Momentos Sensíveis</div><div class="service-desc">Uma sessão gentil e personalizada, concebida para despertar a sensibilidade e proporcionar um conforto duradouro.</div></div><div class="service-price"><div class="price-line">€130</div><div class="price-duration">1 hora</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Massagem Erótica Mistério</div><div class="service-desc">Uma experiência exclusiva e imersiva — uma jornada única de sensação e prazer, como nenhuma outra.</div></div><div class="service-price"><div class="price-line">€260</div><div class="price-duration">1 hora</div></div></div>
+      <div class="service-card"><div class="service-info"><div class="service-name">Massagem de Casal Tantric Moments</div><div class="service-desc">Partilhe intimidade e relaxamento profundo a dois, fortalecendo a ligação através de técnicas tântricas sincronizadas.</div></div><div class="service-price"><div class="price-line">€280</div><div class="price-duration">1 hora</div></div></div>
+    </div>
+
+    <div class="divider"><span class="divider-icon">✦</span></div>
+
+    <footer class="footer">
+      <div class="contact-block">
+        <div class="contact-label">Book a Session</div>
+        <div class="contact-item"><strong>Phone</strong> &nbsp;+351 916 553 583</div>
+        <div class="contact-item"><strong>Email</strong> &nbsp;albufeira@tantricmoments.pt</div>
+        <div class="contact-item"><strong>Web</strong> &nbsp;www.tantricmoments.pt</div>
+      </div>
+      
+      <div class="qr-block">
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://www.tantricmoments.pt/en&color=8B3A3A&bgcolor=f0e8d8" width="64" height="64" alt="QR code"/>
+        </div>
+        
+      </div>
+    </footer>
+
+    <div class="bottom-bar"></div>
+  </div>
+</body>
+</html>

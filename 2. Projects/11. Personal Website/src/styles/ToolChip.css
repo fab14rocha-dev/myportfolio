@@ -1,0 +1,48 @@
+.tool-chip {
+  position: relative;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  cursor: default;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.tool-chip:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.tool-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f1e13;
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 196, 106, 0.1);
+  width: 260px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Arrow */
+.tool-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--accent-border);
+}

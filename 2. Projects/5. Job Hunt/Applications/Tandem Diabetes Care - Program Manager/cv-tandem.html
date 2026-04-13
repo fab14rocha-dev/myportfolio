@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Fabricio da Rocha da Luz CV</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0f1f3d;
+      --accent: #2a7ab8;
+      --text: #1a1a1a;
+      --muted: #666;
+      --light: #f5f7fa;
+      --border: #dde3ec;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 9pt;
+      color: var(--text);
+      background: #ccc;
+      line-height: 1.45;
+    }
+
+    /* A4 page wrapper */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      padding: 10mm 14mm 10mm 14mm;
+    }
+
+    /* ---- HEADER ---- */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .header .role {
+      font-size: 10pt;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .contact {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .contact a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ---- SECTION ---- */
+    .section {
+      margin-bottom: 10px;
+    }
+
+    .section h2 {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--navy);
+      background: var(--light);
+      padding: 4px 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--accent);
+    }
+
+    /* ---- PROFILE ---- */
+    .profile p {
+      font-size: 9pt;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    /* ---- JOB ---- */
+    .job {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 16px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .job:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .job-title {
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .job-company {
+      font-size: 8.5pt;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .job-dates {
+      font-size: 8pt;
+      color: var(--muted);
+      white-space: nowrap;
+      text-align: right;
+      padding-top: 2px;
+    }
+
+    .job-desc {
+      grid-column: 1 / -1;
+      font-size: 8.5pt;
+      color: #333;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* ---- TWO COLUMNS (skills, tools, langs) ---- */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .col-block h3 {
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .col-block p, .col-block li {
+      font-size: 8.5pt;
+      color: var(--text);
+      list-style: none;
+      line-height: 1.8;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tag {
+      background: var(--light);
+      border: 1px solid var(--border);
+      color: var(--navy);
+      font-size: 7.5pt;
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    /* ---- PRINT ---- */
+    @media print {
+      body { background: none; }
+      .page { margin: 0; width: 210mm; min-height: 297mm; padding: 12mm 14mm; }
+      @page { size: A4; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Fabrício da Rocha da Luz</h1>
+      <div class="role">Localisation Program Manager</div>
+    </div>
+    <div class="contact">
+      fab14rocha@gmail.com<br/>
+      07481 599705<br/>
+      Leeds, United Kingdom<br/>
+      <a href="https://www.linkedin.com/in/fabriciodarocha/">linkedin.com/in/fabriciodarocha</a>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section profile">
+    <h2>Profile</h2>
+    <p>I am a localisation professional with close to a decade of experience working on the LSP side of the industry, specialising in medical and pharmaceutical accounts. Throughout my career I have managed localisation programmes for some of the world's leading organisations in the sector, including <strong>Pfizer</strong>, <strong>Novartis</strong>, <strong>Merck</strong>, <strong>Merz</strong>, and <strong>Demant</strong>, handling multiple markets and languages simultaneously and making sure every delivery meets the regulatory requirements of each market.</p>
+    <p style="margin-top:7px;">Having spent 8 years inside leading LSPs, I understand how the industry works from the inside out: the processes, the pressures, and what it actually takes to deliver quality at scale. My experience spans the full range of translation service levels, from raw machine translation and AI post-editing through to transcreation and creative adaptation, which means I can advise clients on the right approach based on their budget, timeline, and quality requirements.</p>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <h2>Experience</h2>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Language Services Director</div>
+        <div class="job-company">Publicis Production EMEA (Publicis Groupe) · London, UK · Remote</div>
+      </div>
+      <div class="job-dates">May 2025 – Present</div>
+      <div class="job-desc">As Language Services Director, I oversee a £2m+ annual portfolio of localisation programmes, working exclusively with life sciences accounts across medical devices, pharma, and clinical research, including the management of the <strong>Pfizer</strong> account which I brought into the portfolio at this level. Programmes regularly span 20+ languages, adapting global assets across multiple markets simultaneously. My role centres on building and maintaining long-term client partnerships, driving contract renewals, and identifying opportunities to grow accounts through tailored multilingual solutions. I work closely with cross-functional teams across creative, production, and operations to ensure delivery is on time and aligned with each client's brand strategy. I also lead external and internal pitches and work directly with C-suite teams to show how localisation fits into their global strategy.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Account Director</div>
+        <div class="job-company">translate plus (Publicis Groupe) · London, UK · Remote</div>
+      </div>
+      <div class="job-dates">May 2024 – Apr 2025</div>
+      <div class="job-desc">As Account Director, I managed a £1m+ portfolio of localisation accounts serving major clients in the medical devices, pharma, and robotics sectors, including <strong>Novartis</strong>, <strong>Merck</strong>, <strong>Merz</strong>, and <strong>Demant</strong>. Content across these accounts spanned IFUs, product labelling, and marketing materials, with delivery across multiple European markets and strict compliance requirements for each territory. I was responsible for the day-to-day health of each client relationship, running quarterly business reviews with performance metrics and working closely with internal teams across production, creative, and operations to keep projects on track and clients satisfied. A big part of the role involved understanding each client's business well enough to spot opportunities for growth while making sure nothing slipped on delivery.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Team Manager</div>
+        <div class="job-company">translate plus (Publicis Groupe) · London, UK · Remote</div>
+      </div>
+      <div class="job-dates">Jul 2023 – Apr 2024</div>
+      <div class="job-desc">I led a team of seven across multiple time zones, responsible for their day-to-day workload, performance, and development. I ran regular one-to-ones and put together individual development plans to help each person grow in their role while keeping project delivery on track. I also acted as the main escalation point for client issues, stepping in to resolve problems quickly and making sure they never reached a point where the client relationship was at risk.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Assistant Team Manager</div>
+        <div class="job-company">translate plus (Publicis Groupe) · London, UK · Remote</div>
+      </div>
+      <div class="job-dates">Sep 2022 – Jun 2023</div>
+      <div class="job-desc">I supported the Team Manager in the day-to-day running of the operations team, with a focus on developing junior team members. I delivered hands-on training in localisation best practices and quality processes, which helped reduce errors and raise the overall standard of the team's output.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Senior Project Manager</div>
+        <div class="job-company">translate plus (Publicis Groupe) · London, UK · Remote</div>
+      </div>
+      <div class="job-dates">Nov 2021 – Aug 2022</div>
+      <div class="job-desc">Lead PM for major global client accounts including <strong>Merz</strong>, <strong>Demant</strong>, and <strong>CooperSurgical</strong>, managing hundreds of concurrent localisation projects regularly spanning 25+ languages, content types, and internal teams. My focus was on keeping every project on time and within budget while coordinating between clients, vendors, and internal stakeholders.</div>
+    </div>
+
+    <div class="job" style="page-break-before: always; padding-top: 12mm;">
+      <div>
+        <div class="job-title">Senior Project Manager</div>
+        <div class="job-company">thebigword · Leeds, UK · On-site</div>
+      </div>
+      <div class="job-dates">Nov 2019 – Oct 2021</div>
+      <div class="job-desc">Lead Senior Project Manager for a major global account, managing between 5 and 10 concurrent localisation projects at any given time, coordinating across languages, vendors, and internal teams to keep every delivery on track and within budget.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Project Manager</div>
+        <div class="job-company">thebigword · Leeds, UK · On-site</div>
+      </div>
+      <div class="job-dates">May 2018 – Oct 2019</div>
+      <div class="job-desc">Managed a varied portfolio of localisation projects from brief to delivery, working closely with translators, reviewers, and clients to ensure accuracy and timeliness across multiple language pairs and content types.</div>
+    </div>
+
+    <div class="job">
+      <div>
+        <div class="job-title">Face to Face Interpreting Coordinator</div>
+        <div class="job-company">thebigword · Leeds, UK · On-site</div>
+      </div>
+      <div class="job-dates">Nov 2017 – Apr 2018</div>
+      <div class="job-desc">Lead coordinator for the Ministry of Justice contract, responsible for sourcing and scheduling qualified interpreters for court and legal proceedings across the UK, managing a large network of freelance professionals under strict compliance requirements.</div>
+    </div>
+
+  </div>
+
+  <!-- SKILLS & INFO -->
+  <div class="section">
+    <h2>Skills &amp; Tools</h2>
+    <div class="two-col">
+
+      <div class="col-block">
+        <h3>Core Skills</h3>
+        <ul>
+          <li>Localisation programme management</li>
+          <li>LSP vendor management</li>
+<li>ISO 13485 compliant workflows</li>
+          <li>QMS processes &amp; quality management</li>
+          <li>Regulatory compliance (MDR, CE marking)</li>
+          <li>Translation memory &amp; glossary management</li>
+        </ul>
+      </div>
+
+      <div class="col-block">
+        <h3>Tools</h3>
+        <div class="tag-list">
+          <span class="tag">TMS (Phrase, SDL Trados, memoQ)</span>
+          <span class="tag">QA Distiller</span>
+          <span class="tag">Xbench</span>
+          <span class="tag">Jira</span>
+          <span class="tag">MS Project</span>
+          <span class="tag">Power BI</span>
+          <span class="tag">SharePoint</span>
+          <span class="tag">MS Excel</span>
+          <span class="tag">MS PowerPoint</span>
+        </div>
+      </div>
+
+      <div class="col-block">
+        <h3>Languages</h3>
+        <ul>
+          <li>Portuguese: Native</li>
+          <li>English: Fluent</li>
+          <li>Italian: Basic</li>
+          <li>Spanish: Basic</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <h2>Education &amp; Development</h2>
+    <p style="font-size:9pt; line-height:1.65; color:#333;">My formal education is in IT, completed in Portugal in 2009. Since then my learning has been entirely hands-on, built over 8 years working across localisation project management, team leadership, and director-level account management within ISO-certified organisations. I have supplemented this with professional development through LinkedIn Learning and continue to develop skills in data analysis and technology outside of work.</p>
+    <p style="font-size:8.5pt; color:#666; margin-top:8px;">Escola Secundaria de Albufeira · IT Technician · 2006–2009 &nbsp;|&nbsp; Agile Foundations · LinkedIn Learning · 2022 &nbsp;|&nbsp; Managing Virtual Teams · LinkedIn Learning · 2024 &nbsp;|&nbsp; Strategic Thinking · LinkedIn Learning · 2025 &nbsp;|&nbsp; Excel Essential Training (Microsoft 365) · LinkedIn Learning · 2025 &nbsp;|&nbsp; Key Account Management · LinkedIn Learning · 2024 &nbsp;|&nbsp; Generative AI for Business Analysts · LinkedIn Learning · 2025 &nbsp;|&nbsp; Manager's Guide to Building a Data Dashboard with ChatGPT · LinkedIn Learning · 2025</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Blob container */
+.hero-blobs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+
+.blob-1 {
+  width: 600px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 196, 106, 0.5) 0%, transparent 70%);
+  top: -10%;
+  left: 20%;
+  animation: drift1 5s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(0, 140, 80, 0.45) 0%, transparent 70%);
+  bottom: 5%;
+  right: 10%;
+  animation: drift2 7s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(0, 230, 120, 0.4) 0%, transparent 70%);
+  top: 40%;
+  left: 55%;
+  animation: drift3 4s ease-in-out infinite alternate;
+}
+
+@keyframes drift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(120px, 80px) scale(1.12); }
+  66%  { transform: translate(-80px, 130px) scale(0.92); }
+  100% { transform: translate(60px, -100px) scale(1.08); }
+}
+
+@keyframes drift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  40%  { transform: translate(-130px, -100px) scale(1.15); }
+  70%  { transform: translate(80px, -60px) scale(0.9); }
+  100% { transform: translate(-60px, 110px) scale(1.1); }
+}
+
+@keyframes drift3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-100px, 80px) scale(1.2); }
+  100% { transform: translate(100px, -80px) scale(0.88); }
+}
+
+/* Content */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-heading {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem;
+}
+
+.highlight {
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 0.85rem 2.5rem;
+  background: var(--accent);
+  color: #020f05;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.hero-cta:hover {
+  opacity: 0.88;
+  transform: scale(1.04);
+}

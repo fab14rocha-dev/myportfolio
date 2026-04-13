@@ -1,0 +1,44 @@
+.contact {
+  padding: 2rem 2rem 4rem;
+  background: var(--bg);
+  text-align: center;
+}
+
+.contact .section-heading {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 2.5rem;
+  letter-spacing: -0.02em;
+}
+
+.contact-text {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin: -1rem 0 2.5rem;
+  line-height: 1.7;
+}
+
+.contact-links {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: inline-block;
+  padding: 0.8rem 2.25rem;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

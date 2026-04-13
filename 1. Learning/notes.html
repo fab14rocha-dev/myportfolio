@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fabricio's Learning Notes</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #e8eef5;
+      --bg2:       #ffffff;
+      --bg3:       #f1f5f9;
+      --border:    #e2e8f0;
+      --border2:   #cbd5e1;
+      --gold:      #2563eb;
+      --amber:     #ea580c;
+      --cyan:      #0ea5e9;
+      --green:     #16a34a;
+      --purple:    #7c3aed;
+      --text:      #1e293b;
+      --text2:     #475569;
+      --text3:     #94a3b8;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border2);
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+    }
+
+    .logo {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    .logo span {
+      color: var(--text2);
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ── View toggle (Notes / FAQ) ── */
+    .view-toggle {
+      display: flex;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .view-btn {
+      padding: 5px 16px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .view-btn.active {
+      background: var(--bg2);
+      color: var(--gold);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .search-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      color: var(--text);
+      font-size: 0.85rem;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box::placeholder { color: var(--text3); }
+    .search-box:focus { border-color: var(--gold); }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 40px 32px;
+    }
+
+    .hero h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero p {
+      color: var(--text2);
+      font-size: 0.95rem;
+      max-width: 520px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 80px;
+      cursor: default;
+    }
+
+    .stat-pill.clickable {
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .stat-pill.clickable:hover {
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .stat-pill.clickable.open {
+      border-color: var(--gold);
+      background: #eff6ff;
+    }
+
+    .stat-pill .num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-pill .lbl {
+      font-size: 0.72rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 3px;
+    }
+
+    /* ── Projects panel ── */
+    .projects-panel {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: none;
+    }
+
+    .projects-panel.open { display: block; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+      padding: 20px 0 28px;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .project-card:hover { border-color: var(--gold); }
+
+    .project-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .project-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .project-desc {
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .stack-tag {
+      background: var(--bg3);
+      border-radius: 20px;
+      padding: 2px 9px;
+      font-size: 0.7rem;
+      color: var(--text3);
+    }
+
+    /* ── Pills ── */
+    .tabs-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 40px 24px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab {
+      padding: 7px 16px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .tab:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tab.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    .tab .count {
+      display: inline-block;
+      background: rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-size: 0.7rem;
+      margin-left: 5px;
+    }
+
+    .tab.active .count { background: rgba(255,255,255,0.25); }
+
+    /* ── Notes grid ── */
+    .notes-area {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 40px 60px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text3);
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── Note card ── */
+    .note-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .note-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .note-card.expanded { grid-column: 1 / -1; }
+
+    .card-header {
+      padding: 16px 18px 12px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .topic-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-javascript { background: #dbeafe; color: #1d4ed8; }
+    .badge-firebase   { background: #ffedd5; color: #c2410c; }
+    .badge-html-css   { background: #e0f2fe; color: #0369a1; }
+    .badge-tools      { background: #dcfce7; color: #15803d; }
+    .badge-ai         { background: #ede9fe; color: #6d28d9; }
+    .badge-general    { background: #f1f5f9; color: var(--text2); }
+
+    .card-summary {
+      padding: 0 18px 14px;
+      font-size: 0.875rem;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .card-divider {
+      height: 1px;
+      background: var(--border2);
+      margin: 0 18px;
+    }
+
+    .card-body {
+      padding: 14px 18px;
+      display: none;
+    }
+
+    .note-card.expanded .card-body { display: block; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    .section-text {
+      font-size: 0.875rem;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    pre {
+      background: var(--bg3);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      padding: 14px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #334155;
+      overflow-x: auto;
+      line-height: 1.6;
+      margin-top: 6px;
+      white-space: pre;
+    }
+
+    .card-footer {
+      padding: 10px 18px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .source-tag {
+      font-size: 0.75rem;
+      color: var(--text3);
+    }
+
+    .expand-hint {
+      font-size: 0.75rem;
+      color: var(--text3);
+      transition: color 0.2s;
+    }
+
+    .note-card:hover .expand-hint { color: var(--gold); }
+    .note-card.expanded .expand-hint { color: var(--gold); }
+
+    /* ── FAQ section ── */
+    .faq-area {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px 60px;
+      display: none;
+    }
+
+    .faq-area.active { display: block; }
+
+    .faq-hero {
+      padding: 48px 0 32px;
+    }
+
+    .faq-hero h2 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .faq-hero h2 span { color: var(--gold); }
+
+    .faq-hero p {
+      color: var(--text2);
+      font-size: 0.95rem;
+      max-width: 520px;
+    }
+
+    .faq-pills-wrap {
+      padding: 0 0 28px;
+    }
+
+    .faq-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .faq-pill {
+      padding: 7px 16px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .faq-pill:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .faq-pill.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    .faq-pill .count {
+      display: inline-block;
+      background: rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-size: 0.7rem;
+      margin-left: 5px;
+    }
+
+    .faq-pill.active .count { background: rgba(255,255,255,0.25); }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .faq-card:hover { border-color: var(--gold); }
+    .faq-card.open  { border-color: var(--gold); }
+
+    .faq-question {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .faq-q-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .faq-tool-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-vscode      { background: #dbeafe; color: #1d4ed8; }
+    .badge-claudecode  { background: #ede9fe; color: #6d28d9; }
+    .badge-nodejs      { background: #dcfce7; color: #15803d; }
+    .badge-firebase2   { background: #ffedd5; color: #c2410c; }
+    .badge-htmlcss     { background: #e0f2fe; color: #0369a1; }
+    .badge-git         { background: #fef9c3; color: #854d0e; }
+    .badge-terminal    { background: #f1f5f9; color: var(--text2); }
+
+    .faq-chevron {
+      font-size: 0.8rem;
+      color: var(--text3);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .faq-card.open .faq-chevron { transform: rotate(180deg); color: var(--gold); }
+
+    .faq-answer {
+      display: none;
+      padding: 0 20px 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-card.open .faq-answer { display: block; }
+
+    .faq-answer p {
+      font-size: 0.875rem;
+      color: var(--text2);
+      line-height: 1.75;
+      margin-top: 14px;
+    }
+
+    .faq-answer p + p { margin-top: 10px; }
+
+    .faq-answer code {
+      background: #dbeafe;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82em;
+      color: #1d4ed8;
+    }
+
+    .faq-answer pre {
+      margin-top: 12px;
+    }
+
+    /* ── Notes view / FAQ view toggle ── */
+    .notes-view { display: block; }
+    .notes-view.hidden { display: none; }
+
+    @media (max-width: 600px) {
+      header, .hero, .tabs-wrap, .notes-area, .faq-area { padding-left: 20px; padding-right: 20px; }
+      .notes-grid { grid-template-columns: 1fr; }
+      .search-box { width: 120px; }
+      .view-btn { padding: 5px 10px; font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Fabricio <span>/ Learning Notes</span></div>
+    <div class="header-right">
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-notes" onclick="setView('notes')">Notes</button>
+        <button class="view-btn" id="btn-faq" onclick="setView('faq')">FAQ</button>
+      </div>
+      <input class="search-box" type="text" id="search" placeholder="Search notes..." />
+    </div>
+  </div>
+</header>
+
+<!-- ══ NOTES VIEW ══ -->
+<div class="notes-view" id="notes-view">
+
+  <div class="hero">
+    <h1>Everything I've <span>Learned</span></h1>
+    <p>Notes from projects, experiments, and courses. Each one is something that clicked — a concept, a bug fix, or a tool that changed how I work.</p>
+    <div class="stats-row" id="stats"></div>
+  </div>
+
+  <div class="projects-panel" id="projects-panel">
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs" id="tabs"></div>
+  </div>
+
+  <div class="notes-area">
+    <div class="empty-state" id="empty">No notes found for that search.</div>
+    <div class="notes-grid" id="grid"></div>
+  </div>
+
+</div>
+
+<!-- ══ FAQ VIEW ══ -->
+<div class="faq-area" id="faq-area">
+
+  <div class="faq-hero">
+    <h2>Quick <span>Answers</span></h2>
+    <p>Basic questions about every tool I use. Written in plain English — no jargon.</p>
+  </div>
+
+  <div class="faq-pills-wrap">
+    <div class="faq-pills" id="faq-pills"></div>
+  </div>
+
+  <div class="faq-list" id="faq-list"></div>
+
+</div>
+
+<script>
+const NOTES = [
+  {
+    title: "Firebase Auth",
+    topic: "Firebase",
+    summary: "A free Google service that handles user login — no need to build your own login system.",
+    learned: "`onAuthStateChanged` is the key function. It watches for login/logout and runs your code whenever the user's state changes. Always use this instead of checking auth once — the user's session can change at any time.\n\nYou can also check if the user verified their email with `user.emailVerified`, and send a verification email with `sendEmailVerification(user)`.",
+    example: `onAuthStateChanged(auth, (user) => {\n  if (user) {\n    // user is logged in\n    console.log(user.email);\n  } else {\n    // user is logged out — redirect to login\n    window.location.href = 'login.html';\n  }\n});`,
+    source: "IRL-Quests project — js/game.js, js/login.js"
+  },
+  {
+    title: "Firestore — Real-Time Data (onSnapshot)",
+    topic: "Firebase",
+    summary: "Firestore's `onSnapshot` updates your app automatically whenever the data changes — no page refresh needed.",
+    learned: "This is what makes the app feel live. Instead of asking 'give me the data once', you're saying 'keep watching this and tell me every time it changes'. Great for things like player progress that needs to stay in sync.",
+    example: `const userRef = doc(db, 'users', userId);\n\nonSnapshot(userRef, (snapshot) => {\n  const data = snapshot.data();\n  // runs every time this user's data changes\n  renderPlayerStats(data);\n});`,
+    source: "IRL-Quests project — js/game.js"
+  },
+  {
+    title: "Firestore Security Rules",
+    topic: "Firebase",
+    summary: "Rules that control who can read or write data in your database. Without these, anyone could read or delete all your data.",
+    learned: "Rules live in `firestore.rules` and get deployed to Firebase. The logic checks things like: is the user logged in? Is this their own document? Is this the admin email?\n\nAlways ask two things: what data needs to be protected, and who should be allowed to touch it?",
+    example: `// Only the user (or admin) can read their own document\nmatch /users/{userId} {\n  allow read: if request.auth != null &&\n    (request.auth.uid == userId ||\n     request.auth.token.email == 'admin@example.com');\n}`,
+    source: "IRL-Quests project — firestore.rules"
+  },
+  {
+    title: "CSS Variables (Custom Properties)",
+    topic: "HTML-CSS",
+    summary: "Store values like colors or sizes in one place and reuse them across your whole stylesheet. Change once, updates everywhere.",
+    learned: "You define variables inside `:root {}` at the top of your CSS using `--name: value`. Then use them anywhere with `var(--name)`. Makes it much easier to keep a consistent design and change things later.",
+    example: `:root {\n  --gold:   #f59e0b;\n  --bg:     #0a0a14;\n  --text:   #e2e8f0;\n}\n\nbody {\n  background: var(--bg);\n  color: var(--text);\n}\n\nh1 {\n  color: var(--gold);\n}`,
+    source: "IRL-Quests project — index.html styles"
+  },
+  {
+    title: "JS Modules (import / export)",
+    topic: "JavaScript",
+    summary: "Split your JavaScript across multiple files and share code between them instead of writing one giant file.",
+    learned: "You use `import` to bring in code from another file, and `export` to make code available to other files. The browser needs `type=\"module\"` on the script tag to allow this.",
+    example: `// firebase-config.js — exporting\nexport const auth = ...;\nexport const db = ...;\n\n// game.js — importing\nimport { auth, db } from './firebase-config.js';`,
+    source: "IRL-Quests project — js/game.js, js/firebase-config.js"
+  },
+  {
+    title: "Local Dev Server (Node.js)",
+    topic: "JavaScript",
+    summary: "A small program that runs on your computer and acts like a web server, so HTML files work the same way they would on the real internet.",
+    learned: "You need this because browsers block certain features (like JS modules) when you just double-click an HTML file. Running a local server fixes that. Node.js can do this with just built-in tools — no extra installs needed.",
+    example: `// server.js — the key part\nconst server = http.createServer((req, res) => {\n  const filePath = path.join(DIR,\n    req.url === '/' ? 'index.html' : req.url);\n  // reads the file and sends it to the browser\n});\n\nserver.listen(8080);\n// open: http://localhost:8080`,
+    source: "IRL-Quests project — server.js"
+  },
+  {
+    title: "VS Code — Workspace Customisation",
+    topic: "Tools",
+    summary: "VS Code lets you set up your workspace to match how you actually work — not just use the default layout.",
+    learned: "Different roles benefit from different setups. A learner benefits from note-taking and a clean, simple layout. CLAUDE.md files give AI assistants permanent context about your project so you don't repeat yourself every session.\n\nKeep one workspace folder per project. Use numbered folders to control sort order. Settings can be workspace-specific via `.vscode/settings.json`.",
+    example: `// .vscode/settings.json\n{\n  "editor.fontSize": 14,\n  "editor.tabSize": 2,\n  "files.autoSave": "onFocusChange"\n}`,
+    source: "Course lesson 2.2 — Customizing For Your Use Case"
+  },
+  {
+    title: "html2canvas — Font Garbling Fix",
+    topic: "Tools",
+    summary: "html2canvas misrenders system fonts (like Arial) on Windows — characters overlap, colons disappear, spaces vanish. Switching to a web font fixes it.",
+    learned: "html2canvas converts HTML to a canvas image by re-drawing it. It can't reliably access system fonts during that process on Windows, which causes garbled text. The fix: load a Google Font (Inter works well), wait for it to fully load before capturing, and use the `onclone` callback to strip `letter-spacing` from all elements in the clone (which is another common cause of overlapping characters).",
+    example: `// In <head>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">\n\n// Card CSS\nfont-family: 'Inter', Arial, sans-serif;\n\n// Before capturing\ndocument.fonts.load('700 12px Inter').then(() => {\n  return document.fonts.ready;\n}).then(() => {\n  html2canvas(card, {\n    useCORS: true,\n    allowTaint: true,\n    onclone: (_doc, el) => {\n      el.querySelectorAll('*').forEach(node => {\n        node.style.letterSpacing = 'normal';\n      });\n    }\n  });\n});`,
+    source: "MyRaceCard project — app.js downloadCard()"
+  },
+  {
+    title: "CSS transform: scale — Side Effects in Previews",
+    topic: "HTML-CSS",
+    summary: "When you scale an element down to fit a container, it gets narrower and exposes the background behind it — which can make the container's rounded corners visible as clipped edges.",
+    learned: "If you have a card inside a phone mockup (with overflow: hidden and border-radius), scaling the card down with transform: scale makes it narrower than the container. The container's background shows through on the sides, and the border-radius clips those corners — making it look like the frame corners are being cut. The fix: set the container's background to match the card's background colour, so the gaps are invisible.",
+    example: `// After scaling the card in JS\nconst bg = getComputedStyle(card).backgroundColor;\ndocument.querySelector('.phone-content').style.background = bg;\n\n// Then apply scale\ncard.style.transform = \`scale(\${scale})\`;\ncard.style.transformOrigin = 'top center';`,
+    source: "MyRaceCard project — app.js renderCard()"
+  }
+];
+
+const PROJECTS = [
+  {
+    num: 1, name: "IRL-Quests",
+    desc: "A free web app that turns starting a business into a game. Users follow quests across business areas, earn XP, level up, and graduate through phases.",
+    stack: ["Vanilla JS", "Firebase", "HTML/CSS", "Node.js"]
+  },
+  {
+    num: 2, name: "Finances Tracker",
+    desc: "A personal finances dashboard that reads an Excel spreadsheet and displays data visually. Upload your file, no server needed.",
+    stack: ["Vanilla JS", "SheetJS", "HTML/CSS"]
+  },
+  {
+    num: 3, name: "MRL New Website",
+    desc: "A redesigned luxury website for Martina Rocha Luz — professional calligrapher and engraver based in Leeds, UK. Targeting high-end brands and event planners.",
+    stack: ["HTML/CSS", "Vanilla JS"]
+  },
+  {
+    num: 4, name: "Tantric Flyer",
+    desc: "A single print flyer for Tantric Moments, a sensual massage business in Portugal. Designed for hotel placement with services, contact info, and QR code.",
+    stack: ["HTML/CSS", "Print Design"]
+  },
+  {
+    num: 5, name: "Job Hunt",
+    desc: "A personal job search dashboard for tracking applications, storing profile info, tailoring resumes to job descriptions, and exploring role options.",
+    stack: ["Vanilla JS", "HTML/CSS"]
+  },
+  {
+    num: 6, name: "Paperboy",
+    desc: "A 2D browser-based remake of the classic Paperboy arcade game. Ride a bicycle, throw newspapers at houses, dodge obstacles. Built as a learning project.",
+    stack: ["Vanilla JS", "HTML Canvas", "CSS"]
+  },
+  {
+    num: 7, name: "Pennine 50",
+    desc: "A phone wallpaper generator for the Pennine Barrier 50-mile ultramarathon. Shows checkpoint times, leg distances, elevation data, and target times calculated from a GPX file.",
+    stack: ["HTML/CSS", "Node.js", "Puppeteer", "GPX"]
+  }
+];
+
+const FAQ_DATA = [
+  // ── VS Code ──
+  {
+    tool: "VS Code",
+    badge: "badge-vscode",
+    q: "What is VS Code and why do I use it?",
+    a: `<p>VS Code (Visual Studio Code) is a free code editor made by Microsoft. Think of it like Word, but for writing code instead of documents.</p>
+<p>You use it because it understands code — it highlights different parts in different colors, warns you about mistakes, and has a built-in terminal so you can run commands without leaving the app.</p>`
+  },
+  {
+    tool: "VS Code",
+    badge: "badge-vscode",
+    q: "What is a workspace in VS Code?",
+    a: `<p>A workspace is just a folder you've opened in VS Code. When you open a folder, VS Code treats everything inside it as your project. It remembers your settings, open files, and layout for that folder.</p>
+<p>Your whole coding setup lives at <code>d:/5. Code & AI</code> — that's your workspace.</p>`
+  },
+  {
+    tool: "VS Code",
+    badge: "badge-vscode",
+    q: "What is the terminal inside VS Code?",
+    a: `<p>The terminal (also called the integrated terminal) is a text-based window where you type commands. It's the same as the Terminal or Command Prompt you'd open separately, but it lives right inside VS Code so you don't need to switch windows.</p>
+<p>You use it to run things like <code>node script.js</code> or <code>npm install</code>.</p>`
+  },
+  {
+    tool: "VS Code",
+    badge: "badge-vscode",
+    q: "What does CLAUDE.md do?",
+    a: `<p>It's a plain text file you put in a project folder. When Claude Code starts, it reads this file to understand your project — what it does, what tools you're using, and how you like to work.</p>
+<p>It's like a briefing note so Claude doesn't start from zero every session. You have one in the root of your workspace and one inside each project.</p>`
+  },
+  {
+    tool: "VS Code",
+    badge: "badge-vscode",
+    q: "What does it mean when VS Code asks me to approve something?",
+    a: `<p>When Claude Code is running inside VS Code, it sometimes wants to write files, run commands, or make other changes. VS Code shows you a pop-up asking whether you want to allow that specific action.</p>
+<p>This is a safety feature so Claude can't do things without you knowing. You can turn it off for common actions by enabling the "Allow Dangerously Skip Permissions" setting in the Claude extension, or by using <code>bypassPermissions</code> in your settings file.</p>`
+  },
+
+  // ── Claude Code ──
+  {
+    tool: "Claude Code",
+    badge: "badge-claudecode",
+    q: "What is Claude Code?",
+    a: `<p>Claude Code is an AI assistant (made by Anthropic) that runs inside your terminal or VS Code. Unlike a chat window, it can read your files, write code, run commands, and work directly inside your project.</p>
+<p>You're using it right now — it's what's building things and answering questions for you.</p>`
+  },
+  {
+    tool: "Claude Code",
+    badge: "badge-claudecode",
+    q: "What is a skill in Claude Code?",
+    a: `<p>A skill is a shortcut command you've set up in Claude Code. You type something like <code>/save-note</code> or <code>/screenshot</code>, and Claude follows a set of instructions you wrote in a file called <code>SKILL.md</code>.</p>
+<p>Think of it as teaching Claude a repeatable task once, so you don't need to explain it every time. Your skills live in <code>~/.claude/skills/</code>.</p>`
+  },
+  {
+    tool: "Claude Code",
+    badge: "badge-claudecode",
+    q: "What are permissions and why does Claude ask me to approve things?",
+    a: `<p>Claude Code can take real actions on your computer — like editing files or running terminal commands. Permissions are the system that decides which actions need your approval first.</p>
+<p>By default, anything that changes a file or runs a command will ask you first. This protects you from accidental changes. You can pre-approve certain actions so they happen without a prompt.</p>`
+  },
+  {
+    tool: "Claude Code",
+    badge: "badge-claudecode",
+    q: "What is bypassPermissions and when should I use it?",
+    a: `<p><code>bypassPermissions</code> is a setting in your Claude config that skips all approval prompts. Claude can read, write, and run commands freely without stopping to ask.</p>
+<p>It's safe to use when you trust what you're asking Claude to do and the work is low-risk (learning projects, personal files). You should be more careful with it on anything that touches money, real users, or things you can't undo.</p>`
+  },
+  {
+    tool: "Claude Code",
+    badge: "badge-claudecode",
+    q: "What is memory in Claude Code?",
+    a: `<p>Claude Code has a memory system — it saves notes about you, your preferences, and your projects in files on your computer. These are loaded at the start of each session so Claude already knows your context.</p>
+<p>Your memories live in <code>~/.claude/projects/.../memory/</code>. Things like "Fabricio prefers direct answers" or "this project uses Firebase" get saved there so you don't repeat yourself.</p>`
+  },
+
+  // ── Node.js ──
+  {
+    tool: "Node.js",
+    badge: "badge-nodejs",
+    q: "What is Node.js?",
+    a: `<p>Node.js lets you run JavaScript outside of a browser — on your own computer or a server. Normally JavaScript only runs inside web pages, but Node.js changed that.</p>
+<p>You use it when you need to do things JavaScript can't do in a browser, like reading files from your hard drive, running scripts, or building a local server.</p>`
+  },
+  {
+    tool: "Node.js",
+    badge: "badge-nodejs",
+    q: "What is npm?",
+    a: `<p>npm stands for Node Package Manager. It's a tool that comes with Node.js that lets you download and use code that other people have written — like Puppeteer for screenshots, or Firebase for databases.</p>
+<p>You use it by typing commands like <code>npm install puppeteer</code>. It downloads the package and makes it available in your project.</p>`
+  },
+  {
+    tool: "Node.js",
+    badge: "badge-nodejs",
+    q: "What is package.json?",
+    a: `<p>It's a file in your project folder that lists what packages your project depends on, plus some basic info about the project itself. Think of it as a shopping list — anyone who gets your project can run <code>npm install</code> and get everything on that list automatically.</p>
+<p>It also lets you define shortcuts with <code>"scripts"</code>, like <code>npm run screenshot</code>.</p>`
+  },
+  {
+    tool: "Node.js",
+    badge: "badge-nodejs",
+    q: "What is the node_modules folder?",
+    a: `<p>When you run <code>npm install</code>, Node downloads all the packages your project needs and puts them in a folder called <code>node_modules</code>. It can get very large (thousands of files).</p>
+<p>You never need to touch it manually, and you never commit it to Git — it's auto-generated from your <code>package.json</code>.</p>`
+  },
+  {
+    tool: "Node.js",
+    badge: "badge-nodejs",
+    q: "Why do I need a local server to open HTML files?",
+    a: `<p>When you double-click an HTML file and open it in a browser, it uses the <code>file://</code> protocol. Some browser features are blocked in this mode for security reasons — including JavaScript modules (the <code>import/export</code> syntax).</p>
+<p>A local server (like the one you have in <code>server.js</code>) runs at <code>http://localhost:8080</code>, which the browser treats more like a real website, so all features work properly.</p>`
+  },
+
+  // ── Firebase ──
+  {
+    tool: "Firebase",
+    badge: "badge-firebase2",
+    q: "What is Firebase?",
+    a: `<p>Firebase is a free service by Google that gives you a database, user login, and hosting — without needing to build a backend yourself. It's like renting the plumbing instead of building it from scratch.</p>
+<p>You use it in IRL-Quests to store user data and handle login. The free plan is generous enough for small personal projects.</p>`
+  },
+  {
+    tool: "Firebase",
+    badge: "badge-firebase2",
+    q: "What is Firestore?",
+    a: `<p>Firestore is Firebase's database. It stores data in documents (like JSON files) grouped into collections (like folders). Instead of rows and columns like a spreadsheet, you have flexible objects.</p>
+<p>Example: a <code>users</code> collection with a document for each user, containing their XP, level, and quest progress.</p>`
+  },
+  {
+    tool: "Firebase",
+    badge: "badge-firebase2",
+    q: "What's the difference between a document and a collection?",
+    a: `<p>A <strong>collection</strong> is like a folder — it groups related documents together. A <strong>document</strong> is like a single file — it holds the actual data for one thing (one user, one quest, etc.).</p>
+<p>In code: <code>collection("users")</code> gives you the folder. <code>doc(db, "users", userId)</code> gives you one specific user's document.</p>`
+  },
+  {
+    tool: "Firebase",
+    badge: "badge-firebase2",
+    q: "What are Security Rules?",
+    a: `<p>Security Rules are conditions you write in Firebase that control who can read or write data. Without rules, anyone who knows your database ID could read or delete everything.</p>
+<p>Rules let you say things like "only logged-in users can read their own document" or "only the admin email can write to this collection". They deploy separately from your code using the Firebase CLI.</p>`
+  },
+  {
+    tool: "Firebase",
+    badge: "badge-firebase2",
+    q: "What does onAuthStateChanged do?",
+    a: `<p>It's a function that watches whether a user is logged in or not — and calls your code whenever that status changes. You don't call it once and forget it; Firebase keeps it running in the background.</p>
+<p>Use this at the start of every page that needs a logged-in user. If the user isn't logged in, redirect them to the login page. If they are, show the app.</p>`
+  },
+
+  // ── HTML/CSS ──
+  {
+    tool: "HTML/CSS",
+    badge: "badge-htmlcss",
+    q: "What is the difference between HTML and CSS?",
+    a: `<p><strong>HTML</strong> is the structure — the content, the boxes, the words. It tells the browser what things are (a heading, a button, a paragraph).</p>
+<p><strong>CSS</strong> is the style — the colors, sizes, spacing, and layout. It tells the browser how things look. You can completely change how a page looks just by changing the CSS, without touching the HTML.</p>`
+  },
+  {
+    tool: "HTML/CSS",
+    badge: "badge-htmlcss",
+    q: "What is a CSS class vs an ID?",
+    a: `<p>A <strong>class</strong> (<code>.my-class</code>) can be applied to multiple elements. A <strong>ID</strong> (<code>#my-id</code>) should only be used on one element per page.</p>
+<p>Use classes for styling things (buttons, cards, labels). Use IDs when you need to find a specific unique element in JavaScript, like <code>document.getElementById('search')</code>.</p>`
+  },
+  {
+    tool: "HTML/CSS",
+    badge: "badge-htmlcss",
+    q: "What does display: none do?",
+    a: `<p>It hides an element completely — it's removed from the page as if it doesn't exist. No space is reserved for it.</p>
+<p>This is how you show/hide things with JavaScript. You add or remove the <code>display: none</code> style, or toggle a CSS class that sets it. The element is still in the HTML, just invisible and taking up no space.</p>`
+  },
+  {
+    tool: "HTML/CSS",
+    badge: "badge-htmlcss",
+    q: "What is flexbox?",
+    a: `<p>Flexbox is a CSS layout system that makes it easy to arrange elements in a row or column — and control how they're spaced and aligned.</p>
+<p>You use it constantly. <code>display: flex</code> on a container turns its children into flex items. Then <code>justify-content</code> controls horizontal spacing and <code>align-items</code> controls vertical alignment.</p>`
+  },
+  {
+    tool: "HTML/CSS",
+    badge: "badge-htmlcss",
+    q: "What is a CSS variable?",
+    a: `<p>A CSS variable (also called a custom property) stores a value — like a color or a size — so you can reuse it everywhere. You define it once at the top in <code>:root {}</code> and use it with <code>var(--name)</code> anywhere in your CSS.</p>
+<p>This is how you can change the entire color theme of a page by editing just a few lines. You use this in almost every project.</p>`
+  },
+
+  // ── Git ──
+  {
+    tool: "Git",
+    badge: "badge-git",
+    q: "What is Git?",
+    a: `<p>Git is a version control system — it tracks every change you make to your code. Think of it like the "history" feature in Google Docs, but for your whole project.</p>
+<p>If you break something, you can go back to an earlier version. If you want to try something risky, you can do it in a separate "branch" without touching your working code.</p>`
+  },
+  {
+    tool: "Git",
+    badge: "badge-git",
+    q: "What is the difference between Git and GitHub?",
+    a: `<p><strong>Git</strong> is the tool that runs on your computer and tracks changes. <strong>GitHub</strong> is a website where you can upload (push) your Git history so it's backed up online and shareable.</p>
+<p>Git is local. GitHub is the cloud backup. You can use Git without GitHub, but GitHub is useless without Git.</p>`
+  },
+  {
+    tool: "Git",
+    badge: "badge-git",
+    q: "What is a commit?",
+    a: `<p>A commit is a saved snapshot of your project at a specific moment. Each commit has a message explaining what changed. Think of it like pressing "save checkpoint" in a video game.</p>
+<p>Good commits are small and focused — one change, one commit. This makes it easy to find and undo specific things later.</p>`
+  },
+  {
+    tool: "Git",
+    badge: "badge-git",
+    q: "What does push and pull mean?",
+    a: `<p><strong>Push</strong> means sending your local commits up to GitHub. <strong>Pull</strong> means downloading changes from GitHub to your local machine.</p>
+<p>If you work on one machine and want to continue on another, you push from the first machine and pull on the second. Or if someone else made changes, you pull to get their updates.</p>`
+  },
+  {
+    tool: "Git",
+    badge: "badge-git",
+    q: "What is a branch?",
+    a: `<p>A branch is a separate copy of your project where you can make changes without affecting the main version. The default branch is usually called <code>main</code>.</p>
+<p>You create a branch to work on a new feature or try something experimental. When it's done and working, you merge it back into <code>main</code>.</p>`
+  },
+
+  // ── Terminal/Bash ──
+  {
+    tool: "Terminal",
+    badge: "badge-terminal",
+    q: "What is the terminal and what is bash?",
+    a: `<p>The <strong>terminal</strong> is the text-based window where you type commands. <strong>Bash</strong> is the language those commands are written in. It's like a very minimal programming language for controlling your computer.</p>
+<p>Most commands are just short words: <code>ls</code> to list files, <code>cd</code> to move between folders, <code>node</code> to run JavaScript files.</p>`
+  },
+  {
+    tool: "Terminal",
+    badge: "badge-terminal",
+    q: "What does cd do?",
+    a: `<p><code>cd</code> stands for "change directory" — it moves you into a different folder. Everything you do in the terminal happens relative to whatever folder you're currently in.</p>
+<p>Examples: <code>cd my-project</code> goes into a subfolder. <code>cd ..</code> goes up one level. <code>cd ~</code> goes to your home folder. <code>cd "d:/5. Code & AI"</code> goes to an exact path.</p>`
+  },
+  {
+    tool: "Terminal",
+    badge: "badge-terminal",
+    q: "What does node filename.js do?",
+    a: `<p>It tells Node.js to run a JavaScript file. Node reads the file and executes it — like pressing play. You use this for scripts, like <code>node calculate.js</code> to run your GPX distance calculator or <code>node screenshot.js</code> to generate PNG files.</p>
+<p>The file must be in the folder you're currently in (or you provide the full path).</p>`
+  },
+  {
+    tool: "Terminal",
+    badge: "badge-terminal",
+    q: "What does npm install do?",
+    a: `<p>It reads your <code>package.json</code> file and downloads every package listed in it into a <code>node_modules</code> folder. You run this once when you first get a project, or whenever someone adds a new package.</p>
+<p>To add a specific package: <code>npm install puppeteer</code>. This downloads it and adds it to your <code>package.json</code> automatically.</p>`
+  },
+  {
+    tool: "Terminal",
+    badge: "badge-terminal",
+    q: "What does the path mean? (d:/5. Code & AI/...)",
+    a: `<p>A path is the address of a file or folder on your computer. It tells the computer exactly where to find something by listing every folder from the top down, separated by slashes.</p>
+<p><code>d:/5. Code & AI/2. Projects/7. Pennine 50/3. Scripts/screenshot.js</code> means: on the D drive, inside "5. Code & AI", inside "2. Projects", etc. The last part is the file name.</p>`
+  }
+];
+
+const TOPIC_COLORS = {
+  "JavaScript": "badge-javascript",
+  "Firebase":   "badge-firebase",
+  "HTML-CSS":   "badge-html-css",
+  "Tools":      "badge-tools",
+  "AI":         "badge-ai",
+  "General":    "badge-general"
+};
+
+let activeTab = "All";
+let searchTerm = "";
+let activeFaqTool = "All";
+let currentView = "notes";
+
+function setView(view) {
+  currentView = view;
+  const notesView = document.getElementById('notes-view');
+  const faqArea   = document.getElementById('faq-area');
+  const searchBox = document.getElementById('search');
+  const btnNotes  = document.getElementById('btn-notes');
+  const btnFaq    = document.getElementById('btn-faq');
+
+  if (view === 'notes') {
+    notesView.classList.remove('hidden');
+    faqArea.classList.remove('active');
+    searchBox.style.display = '';
+    btnNotes.classList.add('active');
+    btnFaq.classList.remove('active');
+  } else {
+    notesView.classList.add('hidden');
+    faqArea.classList.add('active');
+    searchBox.style.display = 'none';
+    btnNotes.classList.remove('active');
+    btnFaq.classList.add('active');
+    buildFaqPills();
+    renderFaq();
+  }
+}
+
+// ── Notes ──
+
+function topicSlug(t) { return t.toLowerCase().replace(/[^a-z0-9]/g, '-'); }
+
+function buildTabs() {
+  const topics = ["All", ...new Set(NOTES.map(n => n.topic))];
+  const container = document.getElementById('tabs');
+  container.innerHTML = '';
+  topics.forEach(t => {
+    const count = t === "All" ? NOTES.length : NOTES.filter(n => n.topic === t).length;
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (t === activeTab ? ' active' : '');
+    btn.innerHTML = `${t}<span class="count">${count}</span>`;
+    btn.onclick = () => { activeTab = t; buildTabs(); renderNotes(); };
+    container.appendChild(btn);
+  });
+}
+
+function buildStats() {
+  const topics = new Set(NOTES.map(n => n.topic));
+  const container = document.getElementById('stats');
+
+  [
+    { num: NOTES.length, lbl: "Notes" },
+    { num: topics.size,  lbl: "Topics" }
+  ].forEach(i => {
+    const el = document.createElement('div');
+    el.className = 'stat-pill';
+    el.innerHTML = `<div class="num">${i.num}</div><div class="lbl">${i.lbl}</div>`;
+    container.appendChild(el);
+  });
+
+  const projectsPill = document.createElement('div');
+  projectsPill.className = 'stat-pill clickable';
+  projectsPill.innerHTML = `<div class="num">${PROJECTS.length}</div><div class="lbl">Projects ↓</div>`;
+  projectsPill.onclick = () => {
+    const panel = document.getElementById('projects-panel');
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    projectsPill.classList.toggle('open');
+    projectsPill.querySelector('.lbl').textContent = isOpen ? 'Projects ↓' : 'Projects ↑';
+    if (!isOpen) buildProjectsGrid();
+  };
+  container.appendChild(projectsPill);
+}
+
+function buildProjectsGrid() {
+  const grid = document.getElementById('projects-grid');
+  if (grid.children.length) return;
+  PROJECTS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.innerHTML = `
+      <div class="project-num">Project ${p.num}</div>
+      <div class="project-name">${p.name}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-stack">${p.stack.map(s => `<span class="stack-tag">${s}</span>`).join('')}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderNotes() {
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  grid.innerHTML = '';
+
+  const filtered = NOTES.filter(n => {
+    const matchTab = activeTab === "All" || n.topic === activeTab;
+    const matchSearch = !searchTerm ||
+      n.title.toLowerCase().includes(searchTerm) ||
+      n.summary.toLowerCase().includes(searchTerm) ||
+      n.learned.toLowerCase().includes(searchTerm) ||
+      n.topic.toLowerCase().includes(searchTerm);
+    return matchTab && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  filtered.forEach((note) => {
+    const card = document.createElement('div');
+    card.className = 'note-card';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">${note.title}</div>
+        <span class="topic-badge ${TOPIC_COLORS[note.topic] || 'badge-general'}">${note.topic}</span>
+      </div>
+      <div class="card-summary">${note.summary}</div>
+      <div class="card-footer">
+        <span class="source-tag">${note.source}</span>
+        <span class="expand-hint">Click to expand ↓</span>
+      </div>
+      <div class="card-body">
+        <div class="card-divider" style="margin:0 0 14px"></div>
+        <div class="section-label">What I Learned</div>
+        <div class="section-text">${note.learned.replace(/`([^`]+)`/g, '<code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:Courier New;font-size:0.82em;color:#1d4ed8">$1</code>').replace(/\n/g, '<br>')}</div>
+        <div class="section-label">Example</div>
+        <pre>${note.example}</pre>
+      </div>
+    `;
+    card.onclick = () => {
+      const isExpanded = card.classList.contains('expanded');
+      document.querySelectorAll('.note-card.expanded').forEach(c => {
+        c.classList.remove('expanded');
+        c.querySelector('.expand-hint').textContent = 'Click to expand ↓';
+      });
+      if (!isExpanded) {
+        card.classList.add('expanded');
+        card.querySelector('.expand-hint').textContent = 'Click to collapse ↑';
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  renderNotes();
+});
+
+// ── FAQ ──
+
+function buildFaqPills() {
+  const tools = ["All", ...new Set(FAQ_DATA.map(f => f.tool))];
+  const container = document.getElementById('faq-pills');
+  container.innerHTML = '';
+  tools.forEach(t => {
+    const count = t === "All" ? FAQ_DATA.length : FAQ_DATA.filter(f => f.tool === t).length;
+    const btn = document.createElement('button');
+    btn.className = 'faq-pill' + (t === activeFaqTool ? ' active' : '');
+    btn.innerHTML = `${t}<span class="count">${count}</span>`;
+    btn.onclick = () => { activeFaqTool = t; buildFaqPills(); renderFaq(); };
+    container.appendChild(btn);
+  });
+}
+
+function renderFaq() {
+  const list = document.getElementById('faq-list');
+  list.innerHTML = '';
+  const filtered = activeFaqTool === "All" ? FAQ_DATA : FAQ_DATA.filter(f => f.tool === activeFaqTool);
+
+  filtered.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'faq-card';
+    card.innerHTML = `
+      <div class="faq-question">
+        <div class="faq-q-text">${item.q}</div>
+        <span class="faq-tool-badge ${item.badge}">${item.tool}</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">${item.a}</div>
+    `;
+    card.onclick = () => {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.faq-card.open').forEach(c => c.classList.remove('open'));
+      if (!isOpen) card.classList.add('open');
+    };
+    list.appendChild(card);
+  });
+}
+
+buildStats();
+buildTabs();
+renderNotes();
+</script>
+
+</body>
+</html>
