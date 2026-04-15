@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Greenville — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { overflow: hidden; }
+
+    body {
+      background: #050e1f;
+      height: 100vh;
+      font-family: Georgia, serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* =====================
+       SCREENS
+    ===================== */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* =====================
+       STAGE (shared across curtain screens)
+    ===================== */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Spotlights */
+    .spotlight {
+      position: absolute;
+      top: -60px;
+      width: 280px;
+      height: 100vh;
+      border-radius: 0 0 50% 50%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease 0.8s;
+    }
+    .spotlight-left  { left: 4%;  background: radial-gradient(ellipse at top, rgba(100,160,255,0.14) 0%, transparent 70%); transform: rotate(-18deg); }
+    .spotlight-right { right: 4%; background: radial-gradient(ellipse at top, rgba(100,160,255,0.14) 0%, transparent 70%); transform: rotate(18deg); }
+    .spotlight-center { left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse at top, rgba(180,220,255,0.1) 0%, transparent 65%); }
+    .stage.open .spotlight { opacity: 1; }
+
+    /* Valance */
+    .valance {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 55px;
+      background: linear-gradient(to bottom, #071430, #0d2144);
+      z-index: 20;
+      border-bottom: 3px solid #c9a84c;
+    }
+
+    /* Curtains */
+    .curtain {
+      position: absolute;
+      top: 0; width: 50%; height: 100%;
+      z-index: 10;
+      transition: transform 1.5s cubic-bezier(0.77, 0, 0.18, 1);
+      overflow: hidden;
+    }
+    .curtain-left  { left: 0;  background: linear-gradient(to right,  #071430, #0d2e6b); transform-origin: left center; }
+    .curtain-right { right: 0; background: linear-gradient(to left, #071430, #0d2e6b); transform-origin: right center; }
+
+    /* Folds */
+    .curtain::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0) 20px, rgba(0,0,0,0.1) 40px);
+    }
+    /* Gold trim */
+    .curtain-left::after  { content: ''; position: absolute; top: 0; right: 0; width: 1px; height: 100%; background: #0d2144; }
+    .curtain-right::after { content: ''; position: absolute; top: 0; left: 0;  width: 1px; height: 100%; background: #0d2144; }
+
+    .stage.open .curtain-left  { transform: translateX(-90%); }
+    .stage.open .curtain-right { transform: translateX(90%); }
+
+    /* Stage content behind curtain */
+    .stage-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.97);
+      transition: opacity 0.9s ease 1.3s, transform 0.9s ease 1.3s;
+      padding: 20px;
+      max-width: 760px;
+      width: 100%;
+    }
+    .stage.open .stage-content { opacity: 1; transform: scale(1); }
+
+    /* =====================
+       SCREEN 1 — Welcome
+    ===================== */
+    #screen-welcome .tagline {
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 14px;
+    }
+    #screen-welcome h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 2.4vw, 1.9rem);
+      letter-spacing: 0.06em;
+      color: #e8f4ff;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    #screen-welcome .sub {
+      font-size: 0.95rem;
+      color: #7aabd4;
+      margin-bottom: 48px;
+      letter-spacing: 0.06em;
+    }
+    .occasions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+    .occasion-btn {
+      padding: 13px 28px;
+      border: 1px solid #3a6ab0;
+      background: transparent;
+      color: #c9d8f0;
+      font-family: Georgia, serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .occasion-btn:hover, .occasion-btn.selected {
+      background: #1a4a9e;
+      border-color: #c9a84c;
+      color: #f0d080;
+    }
+
+    /* Pre-curtain title — sits over the closed curtains */
+    .curtain-title {
+      position: absolute;
+      top: 22%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      width: 90%;
+    }
+    .curtain-title .pre-label {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.75rem, 1.4vw, 1rem);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #a8c8e8;
+      margin-bottom: 16px;
+      display: block;
+      text-shadow: none;
+    }
+    .curtain-title h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3.2vw, 2.4rem);
+      font-weight: 700;
+      color: #f0d080;
+      line-height: 1.4;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      letter-spacing: 0.04em;
+    }
+    .stage.open .curtain-title {
+      opacity: 0;
+    }
+
+    /* Enter button */
+    .enter-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 30;
+      padding: 22px 56px;
+      background: linear-gradient(135deg, #b8860b 0%, #f0d080 40%, #c9a84c 60%, #f0d080 80%, #b8860b 100%);
+      color: #050e1f;
+      border: none;
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.5s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(201,168,76,0.5), 0 0 60px rgba(201,168,76,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      animation: btnPulse 2.5s ease-in-out infinite;
+      /* Decorative double border */
+      outline: 1px solid #c9a84c;
+      outline-offset: 5px;
+      white-space: nowrap;
+    }
+    .enter-btn::before,
+    .enter-btn::after {
+      content: '✦';
+      margin: 0 14px;
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+    .enter-btn span {
+      display: inline-block;
+    }
+    @keyframes btnPulse {
+      0%,100% { box-shadow: 0 0 25px rgba(201,168,76,0.45), 0 0 55px rgba(201,168,76,0.15); }
+      50%      { box-shadow: 0 0 45px rgba(201,168,76,0.75), 0 0 90px rgba(201,168,76,0.3); }
+    }
+    .enter-btn:hover {
+      transform: translate(-50%, -50%) scale(1.04);
+      box-shadow: 0 0 55px rgba(201,168,76,0.8), 0 0 100px rgba(201,168,76,0.4);
+    }
+    .stage.open .enter-btn { opacity: 0; pointer-events: none; }
+
+    /* =====================
+       SCREEN 2 — Who is this for?
+    ===================== */
+    #screen-details {
+      background: #050e1f;
+      flex-direction: column;
+      gap: 0;
+    }
+    .details-inner {
+      max-width: 520px;
+      width: 100%;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .details-inner .occasion-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: #c9a84c;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .details-inner h2 {
+      font-size: 1.8rem;
+      color: #e8f4ff;
+      margin-bottom: 8px;
+    }
+    .details-inner p {
+      font-size: 0.9rem;
+      color: #7aabd4;
+      margin-bottom: 40px;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+    .form-field label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7aabd4;
+    }
+    .form-field input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #2a5090;
+      color: #e8f4ff;
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+      padding: 10px 4px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-field input:focus { border-bottom-color: #c9a84c; }
+    .form-field input::placeholder { color: #2a5090; font-size: 1rem; }
+    .next-btn {
+      padding: 14px 44px;
+      background: #1a4a9e;
+      color: #f0d080;
+      border: 1px solid #c9a84c;
+      font-family: Georgia, serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .next-btn:hover { background: #2259be; }
+
+    /* =====================
+       SCREEN 3 — Spotlight Sweep + Marquee
+    ===================== */
+    #screen-reveal {
+      background: #020810;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* The sweeping beam */
+    .sweep-beam {
+      position: absolute;
+      top: -10%;
+      left: -30%;
+      width: 60%;
+      height: 130%;
+      background: conic-gradient(
+        from 0deg at 30% 0%,
+        transparent 0deg,
+        rgba(120, 180, 255, 0.07) 10deg,
+        rgba(180, 220, 255, 0.18) 18deg,
+        rgba(120, 180, 255, 0.07) 26deg,
+        transparent 36deg
+      );
+      transform-origin: 30% 0%;
+      animation: sweepAcross 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes sweepAcross {
+      0%   { left: -30%; opacity: 1; }
+      70%  { left: 80%;  opacity: 1; }
+      85%  { left: 30%;  opacity: 0.9; }
+      100% { left: 30%;  opacity: 0; }
+    }
+
+    /* The final center spotlight that stays on */
+    .center-light {
+      position: absolute;
+      top: -5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 110%;
+      background: radial-gradient(ellipse 55% 100% at 50% 0%, rgba(140, 200, 255, 0.13) 0%, transparent 70%);
+      opacity: 0;
+      animation: lightSettle 0.5s ease 0.9s forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes lightSettle {
+      to { opacity: 1; }
+    }
+
+    /* Floor glow */
+    .floor-glow {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 500px; height: 80px;
+      background: radial-gradient(ellipse at center, rgba(100, 160, 255, 0.12) 0%, transparent 70%);
+      opacity: 0;
+      animation: lightSettle 0.5s ease 1.0s forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .reveal-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: contentRise 0.7s ease 1.1s forwards;
+    }
+
+    @keyframes contentRise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #screen-reveal .marquee-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .marquee-border {
+      border: 3px solid #c9a84c;
+      padding: 28px 48px 24px;
+      position: relative;
+      text-align: center;
+      min-width: 420px;
+    }
+    .marquee-border::before,
+    .marquee-border::after {
+      content: '★';
+      position: absolute;
+      color: #c9a84c;
+      font-size: 1.2rem;
+      top: 8px;
+    }
+    .marquee-border::before { left: 12px; }
+    .marquee-border::after  { right: 12px; }
+
+    .marquee-top {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #7aabd4;
+      margin-bottom: 10px;
+    }
+    .marquee-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+      color: #f0d080;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(240,208,128,0.4);
+    }
+    .marquee-date {
+      font-size: 1.1rem;
+      color: #c9a84c;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .marquee-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      background: #c9a84c;
+      border-radius: 50%;
+      animation: blink 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    .dot:nth-child(4) { animation-delay: 0.6s; }
+    .dot:nth-child(5) { animation-delay: 0.8s; }
+    @keyframes blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+    .countdown-wrap {
+      margin-top: 32px;
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .countdown-number {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: #e8f4ff;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .countdown-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7aabd4;
+    }
+    .countdown-sep {
+      font-size: 2.5rem;
+      color: #2a5090;
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+    .reveal-next {
+      margin-top: 44px;
+      padding: 13px 40px;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .reveal-next:hover { background: #c9a84c; color: #050e1f; }
+
+    /* =====================
+       SCREEN 4 — The Ticket
+    ===================== */
+    #screen-ticket {
+      background: #050e1f;
+      flex-direction: column;
+    }
+    .ticket-wrap {
+      display: flex;
+      align-items: stretch;
+      max-width: 680px;
+      width: 90%;
+      box-shadow: 0 0 60px rgba(26, 74, 158, 0.5), 0 0 120px rgba(201, 168, 76, 0.15);
+      animation: ticketGlow 3s ease-in-out infinite;
+    }
+    @keyframes ticketGlow {
+      0%,100% { box-shadow: 0 0 40px rgba(26,74,158,0.4), 0 0 80px rgba(201,168,76,0.1); }
+      50%      { box-shadow: 0 0 70px rgba(26,74,158,0.7), 0 0 140px rgba(201,168,76,0.25); }
+    }
+    .ticket-main {
+      flex: 1;
+      background: linear-gradient(135deg, #0d2144 0%, #071430 50%, #0a1a3a 100%);
+      border: 2px solid #c9a84c;
+      border-right: none;
+      padding: 30px 34px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Background watermark */
+    .ticket-main::before {
+      content: 'VIP';
+      position: absolute;
+      font-size: 11rem;
+      color: rgba(26, 74, 158, 0.12);
+      font-weight: bold;
+      right: -20px; top: 50%;
+      transform: translateY(-50%);
+      letter-spacing: -0.05em;
+      pointer-events: none;
+    }
+    .ticket-event {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: #c9a84c;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .ticket-title {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      color: #e8f4ff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .ticket-subtitle {
+      font-size: 0.8rem;
+      color: #7aabd4;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .ticket-divider {
+      border: none;
+      border-top: 1px dashed #2a5090;
+      margin: 20px 0;
+    }
+    .ticket-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .ticket-detail-item label {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: #3a6ab0;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .ticket-detail-item span {
+      font-size: 0.95rem;
+      color: #e8f4ff;
+      letter-spacing: 0.05em;
+    }
+    .ticket-stub {
+      width: 90px;
+      background: linear-gradient(135deg, #1a4a9e, #0d2e6b);
+      border: 2px solid #c9a84c;
+      border-left: 2px dashed #2a5090;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 12px;
+      gap: 12px;
+    }
+    .ticket-stub .stub-text {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: #c9a84c;
+      text-transform: uppercase;
+    }
+    .ticket-stub .stub-stars {
+      font-size: 0.9rem;
+      color: #c9a84c;
+      letter-spacing: 0.1em;
+    }
+    .ticket-next {
+      margin-top: 36px;
+      padding: 13px 40px;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .ticket-next:hover { background: #c9a84c; color: #050e1f; }
+
+    /* Screens that sit over a blurred backdrop */
+    #screen-details,
+    #screen-ticket {
+      background: rgba(5, 14, 31, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* =====================
+       SCREEN 5 — One question at a time
+    ===================== */
+    #screen-about {
+      background: rgba(5, 14, 31, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .about-inner {
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .about-progress {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #3a6ab0;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .about-progress span {
+      color: #c9a84c;
+    }
+    .about-question {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: #e8f4ff;
+      margin-bottom: 36px;
+      line-height: 1.4;
+      min-height: 2.8em;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .about-question.fade-out {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    .about-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #2a5090;
+      color: #e8f4ff;
+      font-family: Georgia, serif;
+      font-size: 1.3rem;
+      padding: 12px 4px;
+      outline: none;
+      width: 100%;
+      text-align: center;
+      transition: border-color 0.2s, opacity 0.25s ease;
+      margin-bottom: 44px;
+    }
+    .about-input:focus { border-bottom-color: #c9a84c; }
+    .about-input::placeholder { color: #1a3a6b; font-size: 1rem; }
+    .about-input.fade-out { opacity: 0; }
+    .about-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+    .about-back {
+      background: transparent;
+      border: none;
+      color: #3a6ab0;
+      font-family: Georgia, serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 10px 16px;
+      transition: color 0.2s;
+    }
+    .about-back:hover { color: #7aabd4; }
+    .about-next {
+      padding: 13px 40px;
+      background: #1a4a9e;
+      color: #f0d080;
+      border: 1px solid #c9a84c;
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .about-next:hover { background: #2259be; }
+    .about-skip {
+      background: transparent;
+      border: none;
+      color: #3a6ab0;
+      font-family: Georgia, serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 10px 16px;
+      transition: color 0.2s;
+    }
+    .about-skip:hover { color: #7aabd4; }
+    .submit-btn {
+      padding: 14px 44px;
+      background: #1a4a9e;
+      color: #f0d080;
+      border: 1px solid #c9a84c;
+      font-family: Georgia, serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .submit-btn:hover { background: #2259be; }
+
+    /* =====================
+       SCREEN 6 — Contact
+    ===================== */
+    #screen-contact {
+      background: rgba(5, 14, 31, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .contact-inner {
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+    }
+    .contact-inner .contact-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: #c9a84c;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .contact-inner h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: #e8f4ff;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .contact-inner p {
+      font-size: 0.85rem;
+      color: #7aabd4;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    .contact-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-bottom: 36px;
+      text-align: left;
+    }
+    .contact-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .contact-field label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #3a6ab0;
+    }
+    .contact-field input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #2a5090;
+      color: #e8f4ff;
+      font-family: Georgia, serif;
+      font-size: 1.1rem;
+      padding: 10px 4px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .contact-field input:focus { border-bottom-color: #c9a84c; }
+    .contact-field input::placeholder { color: #1a3a6b; }
+    .contact-field .optional {
+      font-size: 0.6rem;
+      color: #2a5090;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+
+    /* =====================
+       SCREEN 7 — Grand Finale
+    ===================== */
+    #screen-finale {
+      background: #020810;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .finale-inner {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      opacity: 0;
+      animation: finaleRise 1s ease 0.4s forwards;
+      padding: 20px;
+    }
+    @keyframes finaleRise {
+      to { opacity: 1; }
+    }
+    .finale-star-row {
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      color: #c9a84c;
+      margin-bottom: 20px;
+    }
+    .finale-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 4vw, 3rem);
+      color: #f0d080;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(240,208,128,0.5);
+    }
+    .finale-name {
+      color: #fff;
+    }
+    .finale-sub {
+      font-size: 0.85rem;
+      color: #7aabd4;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+    .finale-divider {
+      width: 60px;
+      height: 1px;
+      background: #c9a84c;
+      margin: 0 auto 28px;
+    }
+    .finale-msg {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+      color: #e8f4ff;
+      line-height: 1.8;
+    }
+    /* Confetti particle */
+    .confetti {
+      position: fixed;
+      width: 8px; height: 14px;
+      top: -20px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: confettiFall var(--dur) ease-in var(--delay) forwards;
+      opacity: 0;
+      border-radius: 2px;
+    }
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(var(--rot0)) translateX(0); }
+      100% { opacity: 0; transform: translateY(110vh) rotate(var(--rot1)) translateX(var(--tx)); }
+    }
+
+    /* =====================
+       STAR PARTICLES (background)
+    ===================== */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) infinite;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%,100%{opacity:0} 50%{opacity:var(--op)}
+    }
+
+    /* =====================
+       OCCASION BURST PARTICLES
+    ===================== */
+    .burst-particle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.4rem;
+      z-index: 9999;
+      animation: burstFloat var(--dur, 0.7s) ease-out forwards;
+      transform-origin: center;
+    }
+    @keyframes burstFloat {
+      0%   { opacity: 1;   transform: translate(0, 0) scale(1) rotate(var(--rot0)); }
+      100% { opacity: 0;   transform: translate(var(--tx), var(--ty)) scale(0.6) rotate(var(--rot1)); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Stars background -->
+  <div class="stars" id="stars"></div>
+
+  <!-- ===== SCREEN 1: Welcome + Curtain ===== -->
+  <div class="screen active" id="screen-welcome">
+    <div class="stage" id="stage1">
+      <div class="spotlight spotlight-left"></div>
+      <div class="spotlight spotlight-center"></div>
+      <div class="spotlight spotlight-right"></div>
+      <div class="valance"></div>
+      <div class="curtain curtain-left"></div>
+      <div class="curtain curtain-right"></div>
+
+      <!-- Title visible over the closed curtains -->
+      <div class="curtain-title">
+        <span class="pre-label">Greenville's</span>
+        <h1>Welcome to our<br>Award Winning<br>Experiences</h1>
+      </div>
+
+      <div class="stage-content">
+        <p class="tagline">Award Winning Experiences</p>
+        <h1>Welcome to<br>Experience Greenville</h1>
+        <p class="sub">As the curtain opens, choose yours</p>
+        <div class="occasions">
+          <button class="occasion-btn" onclick="selectOccasion('Birthday', this)">Birthday</button>
+          <button class="occasion-btn" onclick="selectOccasion('Anniversary', this)">Anniversary</button>
+          <button class="occasion-btn" onclick="selectOccasion('Wedding', this)">Wedding</button>
+          <button class="occasion-btn" onclick="selectOccasion('Date Night', this)">Date Night</button>
+          <button class="occasion-btn" onclick="selectOccasion('Family', this)">Family</button>
+          <button class="occasion-btn" onclick="selectOccasion('Other', this)">Other</button>
+        </div>
+      </div>
+
+      <button class="enter-btn" onclick="openCurtain('stage1')"><span>Enter the Experience</span></button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 2: Name + Date ===== -->
+  <div class="screen" id="screen-details">
+    <div class="details-inner">
+      <p class="occasion-label" id="occasion-label">Birthday</p>
+      <h2>Tell us who to celebrate</h2>
+      <p id="details-prompt">We'll build something unforgettable around them.</p>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Their first name</label>
+          <input type="text" id="input-name" placeholder="e.g. Joseph" autocomplete="off">
+        </div>
+        <div class="form-field">
+          <label id="date-label">Date of birthday</label>
+          <input type="date" id="input-date">
+        </div>
+      </div>
+      <button class="next-btn" onclick="goToReveal()">Continue</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 3: Spotlight Sweep + Marquee ===== -->
+  <div class="screen" id="screen-reveal">
+
+    <!-- Sweep beam (re-injected by JS each time so animation replays) -->
+    <div id="sweep-container"></div>
+
+    <!-- Permanent center light once beam settles -->
+    <div class="center-light"></div>
+    <div class="floor-glow"></div>
+
+    <div class="reveal-content">
+      <div class="marquee-wrap">
+        <div class="marquee-border">
+          <p class="marquee-top">Experience Greenville Welcomes</p>
+          <div class="marquee-name" id="marquee-name">Joseph</div>
+          <div class="marquee-date" id="marquee-date">June 17th</div>
+          <div class="marquee-dots">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div>
+          </div>
+        </div>
+
+        <div class="countdown-wrap">
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-days">00</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-hours">00</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-mins">00</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-secs">00</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        </div>
+
+        <button class="reveal-next" onclick="goToTicket()">See Your Experience &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SCREEN 4: The Ticket ===== -->
+  <div class="screen" id="screen-ticket">
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <p style="font-size:0.7rem;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;margin-bottom:24px;">Your Experience Package</p>
+      <div class="ticket-wrap">
+        <div class="ticket-main">
+          <div class="ticket-event">Experience Greenville — Official Package</div>
+          <div class="ticket-title" id="ticket-title">VIP Birthday Experience</div>
+          <div class="ticket-subtitle">Row 1 &nbsp;|&nbsp; Front Stage &nbsp;|&nbsp; All Access</div>
+          <hr class="ticket-divider">
+          <div class="ticket-details">
+            <div class="ticket-detail-item">
+              <label>Guest of Honor</label>
+              <span id="ticket-name">Joseph</span>
+            </div>
+            <div class="ticket-detail-item">
+              <label>Date</label>
+              <span id="ticket-date">June 17th</span>
+            </div>
+            <div class="ticket-detail-item">
+              <label>Tier</label>
+              <span>Row 1 VIP</span>
+            </div>
+            <div class="ticket-detail-item">
+              <label>Package</label>
+              <span id="ticket-package">On Court Experience</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-stub">
+          <div class="stub-stars">★ ★ ★</div>
+          <div class="stub-text" id="stub-name">Joseph</div>
+          <div class="stub-text">VIP</div>
+          <div class="stub-stars">★ ★ ★</div>
+        </div>
+      </div>
+      <button class="ticket-next" onclick="goToAbout()">Tell Us More About Them &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 5: One question at a time ===== -->
+  <div class="screen" id="screen-about">
+    <div class="about-inner">
+      <div class="about-progress"><span id="q-num">1</span> of <span id="q-total">8</span></div>
+      <div class="about-question" id="about-question">What is <span id="about-name">Joseph</span>'s favorite song?</div>
+      <input class="about-input" id="about-input" type="text" placeholder="" autocomplete="off">
+      <div class="about-actions">
+        <button class="about-back" id="about-back-btn" onclick="questionBack()">&#8592; Back</button>
+        <button class="about-next" id="about-next-btn" onclick="questionNext()">Next</button>
+        <button class="about-skip" onclick="questionSkip()">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 6: Contact Info ===== -->
+  <div class="screen" id="screen-contact">
+    <div class="contact-inner">
+      <span class="contact-label">Almost done</span>
+      <h2>How do we reach you?</h2>
+      <p>We'll be in touch to confirm the details and make sure everything is perfect.</p>
+      <div class="contact-fields">
+        <div class="contact-field">
+          <label>Your name</label>
+          <input type="text" id="contact-name" placeholder="e.g. Maria" autocomplete="off">
+        </div>
+        <div class="contact-field">
+          <label>Email</label>
+          <input type="email" id="contact-email" placeholder="e.g. maria@email.com" autocomplete="off">
+        </div>
+        <div class="contact-field">
+          <label>Phone</label>
+          <input type="tel" id="contact-phone" placeholder="e.g. +1 555 000 0000" autocomplete="off">
+          <span class="optional">Optional</span>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="goToFinale()">Submit &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 7: Grand Finale ===== -->
+  <div class="screen" id="screen-finale">
+    <div class="finale-inner">
+      <div class="finale-star-row">★ &nbsp; ★ &nbsp; ★</div>
+      <div class="finale-title">Get Ready,<br><span class="finale-name" id="finale-name">Joseph</span></div>
+      <div class="finale-sub">Your experience is being crafted</div>
+      <div class="finale-divider"></div>
+      <div class="finale-msg">
+        We have everything we need.<br>
+        Someone from our team will reach out to you shortly<br>
+        to confirm every detail.<br><br>
+        <span style="color:#c9a84c;">The best is yet to come.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Stars ---
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2 + 1;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        top:${Math.random()*100}%;
+        --dur:${(Math.random()*4+2).toFixed(1)}s;
+        --op:${(Math.random()*0.5+0.2).toFixed(2)};
+        animation-delay:${(Math.random()*5).toFixed(1)}s;
+      `;
+      starsEl.appendChild(s);
+    }
+
+    // --- State ---
+    let guestName = 'Joseph';
+    let guestDate = null;
+    let selectedOccasion = 'Birthday';
+    let countdownInterval = null;
+    let prevScreenId = null;
+
+    // --- Screen transitions ---
+    function showScreen(id, keepPrev = false) {
+      const backdropId = keepPrev ? prevScreenId : null;
+
+      document.querySelectorAll('.screen').forEach(s => {
+        if (s.id === id) return;          // target — handled below
+        if (s.id === backdropId) return;  // backdrop — handled below
+        // All other screens: fully hide
+        s.classList.remove('active');
+        s.style.cssText = 'pointer-events:none;';
+      });
+
+      // Backdrop screen: stays visible, blurred, non-interactive
+      if (backdropId) {
+        const prev = document.getElementById(backdropId);
+        if (prev) {
+          prev.classList.remove('active');
+          prev.style.cssText = 'opacity:1; filter:blur(5px); pointer-events:none; transition:none;';
+        }
+      }
+
+      prevScreenId = id;
+      const target = document.getElementById(id);
+      target.style.cssText = '';
+      target.classList.add('active');
+    }
+
+    // --- Curtain open ---
+    function openCurtain(stageId) {
+      document.getElementById(stageId).classList.add('open');
+    }
+
+    // --- Occasion burst particles ---
+    const burstEmojis = {
+      'Birthday':    ['🎈','🎉','🎂','🎈','🎊'],
+      'Anniversary': ['❤️','✨','💫','❤️','🌹'],
+      'Wedding':     ['🌸','💍','🌸','✨','💐'],
+      'Date Night':  ['✨','⭐','💫','🌙','✨'],
+      'Family':      ['⭐','🌟','💛','⭐','🌟'],
+      'Other':       ['✨','💫','⭐','✨','💫']
+    };
+
+    function spawnBurst(btn, name) {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const emojis = burstEmojis[name] || burstEmojis['Other'];
+
+      emojis.forEach((emoji, i) => {
+        const el = document.createElement('div');
+        el.className = 'burst-particle';
+        el.textContent = emoji;
+
+        const angle = (i / emojis.length) * 360 + Math.random() * 30;
+        const dist  = 55 + Math.random() * 40;
+        const tx = Math.cos(angle * Math.PI / 180) * dist;
+        const ty = Math.sin(angle * Math.PI / 180) * dist - 30;
+        const rot0 = (Math.random() * 20 - 10) + 'deg';
+        const rot1 = (Math.random() * 60 - 30) + 'deg';
+        const dur  = (0.55 + Math.random() * 0.2).toFixed(2) + 's';
+
+        el.style.cssText = `
+          left: ${cx}px; top: ${cy}px;
+          --tx: ${tx}px; --ty: ${ty}px;
+          --rot0: ${rot0}; --rot1: ${rot1};
+          --dur: ${dur};
+          animation-delay: ${(i * 0.04).toFixed(2)}s;
+        `;
+
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 900);
+      });
+    }
+
+    // --- Screen 1: Occasion select ---
+    function selectOccasion(name, btn) {
+      spawnBurst(btn, name);
+      selectedOccasion = name;
+      document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      setTimeout(() => {
+        document.getElementById('occasion-label').textContent = name;
+
+        const prompts = {
+          'Birthday':    'Tell us who the birthday star is — we\'ll do the rest.',
+          'Anniversary': 'Tell us who you want to celebrate — we\'ll build something unforgettable.',
+          'Wedding':     'Tell us about the couple — we\'ll make the day even more special.',
+          'Date Night':  'Tell us who this night is for.',
+          'Family':      'Tell us a little about your family — we\'ll take care of the rest.',
+          'Other':       'Tell us who this experience is for.'
+        };
+        document.getElementById('details-prompt').textContent = prompts[name] || prompts['Other'];
+
+        const dateLabels = {
+          'Birthday': 'Date of birthday',
+          'Anniversary': 'Anniversary date',
+          'Wedding': 'Wedding date',
+          'Date Night': 'Date of the experience',
+          'Family': 'Date of the event',
+          'Other': 'Date of the event'
+        };
+        document.getElementById('date-label').textContent = dateLabels[name] || 'Date of event';
+
+        // Set min date to today so past dates can't be picked
+        document.getElementById('input-date').min = new Date().toISOString().split('T')[0];
+        showScreen('screen-details', true);
+      }, 300);
+    }
+
+    // --- Screen 2 -> 3 ---
+    function goToReveal() {
+      const nameInput = document.getElementById('input-name').value.trim();
+      const dateInput = document.getElementById('input-date').value;
+      if (!nameInput) { document.getElementById('input-name').focus(); return; }
+
+      if (dateInput) {
+        const picked = new Date(dateInput + 'T00:00:00');
+        const today  = new Date(); today.setHours(0,0,0,0);
+        if (picked < today) {
+          const field = document.getElementById('input-date');
+          field.style.borderBottomColor = '#e05555';
+          field.focus();
+          setTimeout(() => field.style.borderBottomColor = '', 1500);
+          return;
+        }
+      }
+
+      guestName = nameInput;
+      guestDate = dateInput ? new Date(dateInput + 'T00:00:00') : null;
+
+      document.getElementById('marquee-name').textContent = guestName.toUpperCase();
+      document.getElementById('ticket-name').textContent = guestName;
+      document.getElementById('stub-name').textContent = guestName;
+      document.getElementById('about-name').textContent = guestName;
+
+      const titles = {
+        'Birthday': 'VIP Birthday Experience',
+        'Anniversary': 'VIP Anniversary Experience',
+        'Wedding': 'VIP Wedding Experience',
+        'Date Night': 'VIP Date Night Experience',
+        'Family': 'VIP Family Experience',
+        'Other': 'VIP Exclusive Experience'
+      };
+      document.getElementById('ticket-title').textContent = titles[selectedOccasion] || titles['Other'];
+
+      if (guestDate) {
+        document.getElementById('marquee-date').textContent = formatDate(guestDate);
+        document.getElementById('ticket-date').textContent = formatDate(guestDate);
+        startCountdown(guestDate);
+      } else {
+        document.getElementById('marquee-date').textContent = selectedOccasion;
+        document.getElementById('ticket-date').textContent = 'TBD';
+      }
+
+      showScreen('screen-reveal');
+
+      // Reset and replay the sweep beam animation
+      const container = document.getElementById('sweep-container');
+      container.innerHTML = '';
+      const beam = document.createElement('div');
+      beam.className = 'sweep-beam';
+      container.appendChild(beam);
+
+      // Reset the content + lights so they animate in fresh
+      const rc = document.querySelector('.reveal-content');
+      const cl = document.querySelector('.center-light');
+      const fg = document.querySelector('.floor-glow');
+      [rc, cl, fg].forEach(el => { el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; });
+    }
+
+    function formatDate(d) {
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const day = d.getDate();
+      const suffix = ['th','st','nd','rd'][(day%100>10&&day%100<14)?0:(day%10<4?day%10:0)] || 'th';
+      return months[d.getMonth()] + ' ' + day + suffix;
+    }
+
+    function startCountdown(targetDate) {
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      function update() {
+        const now = new Date();
+        let target = new Date(targetDate);
+        // If date has passed this year, aim for next year
+        if (target < now) { target.setFullYear(now.getFullYear() + 1); }
+        if (target < now) { target.setFullYear(now.getFullYear() + 1); }
+
+        const diff = target - now;
+        const days  = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins  = Math.floor((diff % 3600000)  / 60000);
+        const secs  = Math.floor((diff % 60000)    / 1000);
+
+        document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+        document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+        document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+      }
+      update();
+      countdownInterval = setInterval(update, 1000);
+    }
+
+    // --- Screen 3 -> 4 ---
+    function goToTicket() {
+      document.querySelector('.ticket-next').textContent = 'Tell Us More About ' + guestName + ' \u2192';
+      showScreen('screen-ticket', true);
+    }
+
+    // --- Screen 4 -> 5 ---
+    function goToAbout() {
+      currentQ = 0;
+      favAnswers = new Array(favQuestions.length).fill('');
+      renderQuestion();
+      showScreen('screen-about', true);
+    }
+
+    // --- One question at a time ---
+    const favQuestions = [
+      { q: name => `What is ${name}'s favorite song?`,    ph: 'e.g. My Way' },
+      { q: name => `What is ${name}'s favorite food?`,    ph: 'e.g. Steak' },
+      { q: name => `What does ${name} love to drink?`,    ph: 'e.g. Old Fashioned' },
+      { q: name => `What sport does ${name} love?`,       ph: 'e.g. Basketball' },
+      { q: name => `What is ${name}'s favorite team?`,    ph: 'e.g. NY Knicks' },
+      { q: name => `Who is ${name}'s favorite athlete?`,  ph: 'e.g. LeBron James' },
+      { q: name => `What is ${name}'s dream job?`,        ph: 'e.g. Pro basketball player' },
+      { q: name => `What would make this the best day of ${name}'s life?`, ph: 'Tell us anything...' }
+    ];
+
+    let currentQ = 0;
+    let favAnswers = new Array(favQuestions.length).fill('');
+
+    function renderQuestion(direction = 1) {
+      const qEl  = document.getElementById('about-question');
+      const inp  = document.getElementById('about-input');
+      const back = document.getElementById('about-back-btn');
+      const next = document.getElementById('about-next-btn');
+      const total = favQuestions.length;
+
+      document.getElementById('q-num').textContent   = currentQ + 1;
+      document.getElementById('q-total').textContent = total;
+
+      qEl.classList.add('fade-out');
+      inp.classList.add('fade-out');
+
+      setTimeout(() => {
+        qEl.innerHTML = favQuestions[currentQ].q(guestName);
+        inp.value       = favAnswers[currentQ] || '';
+        inp.placeholder = favQuestions[currentQ].ph;
+        next.textContent = currentQ === total - 1 ? 'Submit' : 'Next';
+        back.style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+        qEl.classList.remove('fade-out');
+        inp.classList.remove('fade-out');
+        inp.focus();
+      }, 250);
+    }
+
+    function questionNext() {
+      favAnswers[currentQ] = document.getElementById('about-input').value.trim();
+      if (currentQ < favQuestions.length - 1) {
+        currentQ++;
+        renderQuestion(1);
+      } else {
+        showScreen('screen-contact', true);
+      }
+    }
+
+    function questionSkip() {
+      favAnswers[currentQ] = '';
+      if (currentQ < favQuestions.length - 1) {
+        currentQ++;
+        renderQuestion(1);
+      } else {
+        showScreen('screen-contact', true);
+      }
+    }
+
+    function questionBack() {
+      favAnswers[currentQ] = document.getElementById('about-input').value.trim();
+      if (currentQ > 0) {
+        currentQ--;
+        renderQuestion(-1);
+      }
+    }
+
+    // Allow pressing Enter to go next
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.getElementById('screen-about').classList.contains('active')) {
+        questionNext();
+      }
+    });
+
+    // --- Screen 6 -> 7: Contact -> Finale ---
+    function goToFinale() {
+      const email = document.getElementById('contact-email').value.trim();
+      const name  = document.getElementById('contact-name').value.trim();
+      if (!name)  { document.getElementById('contact-name').focus();  return; }
+      if (!email) { document.getElementById('contact-email').focus(); return; }
+
+      document.getElementById('finale-name').textContent = guestName;
+      showScreen('screen-finale');
+      spawnConfetti();
+    }
+
+    function spawnConfetti() {
+      const colors = ['#f0d080','#c9a84c','#ffffff','#7aabd4','#1a4a9e','#e8f4ff','#c9a84c'];
+      for (let i = 0; i < 90; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const tx    = (Math.random() * 120 - 60) + 'px';
+        const rot0  = (Math.random() * 360) + 'deg';
+        const rot1  = (Math.random() * 720 - 360) + 'deg';
+        const dur   = (1.8 + Math.random() * 1.4).toFixed(2) + 's';
+        const delay = (Math.random() * 1.2).toFixed(2) + 's';
+        el.style.cssText = `
+          left: ${Math.random() * 100}%;
+          background: ${color};
+          --tx: ${tx}; --rot0: ${rot0}; --rot1: ${rot1};
+          --dur: ${dur}; --delay: ${delay};
+          animation-delay: ${delay};
+          transform: rotate(${rot0});
+        `;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }
+    }
+  </script>
+
+</body>
+</html>
