@@ -1,5 +1,5 @@
 .contact {
-  padding: 2rem 2rem 4rem;
+  padding: 8rem 2rem 4rem;
   background: var(--bg);
   text-align: center;
 }
@@ -40,5 +40,21 @@
 
 .contact-link:hover {
   border-color: var(--accent);
+  color: var(--accent);
+}
+
+.contact-link--primary {
+  display: inline-block;
+  padding: 1rem 2.75rem;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.contact-link--primary:hover {
+  background: transparent;
   color: var(--accent);
 }

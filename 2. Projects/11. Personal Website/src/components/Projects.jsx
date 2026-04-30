@@ -62,6 +62,9 @@ export default function Projects() {
             />
           ))}
         </div>
+        <a href="#contact" className="scroll-hint scroll-hint--inline" aria-label="Scroll to contact">
+          <span className="scroll-hint-arrow" />
+        </a>
       </section>
 
       {phase === "shattering" && cardRect && (

@@ -42,7 +42,10 @@ export default function ProjectCard({ project, onSelect, hidden }) {
     >
       <div ref={flashRef} className="card-flash" />
       <div className="card-inner">
-        <div className="card-status">{project.status}</div>
+        <div className="card-header">
+          <div className="card-status">{project.status}</div>
+          <div className="card-number">#{project.number}</div>
+        </div>
         <h3 className="card-title">{project.title}</h3>
         <p className="card-tagline">{project.tagline}</p>
         <div className="card-tags">

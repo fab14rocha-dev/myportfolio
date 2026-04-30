@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.pexels.com)",
+      "WebFetch(domain:pixabay.com)",
+      "Bash(ls \"d:/5. Code & AI/2. Projects/5. Job Hunt/1. Reference files/\")",
+      "Bash(mkdir -p \"d:/5. Code & AI/2. Projects/6. Paperboy/css\")",
+      "Bash(mkdir -p \"d:/5. Code & AI/2. Projects/6. Paperboy/js\")",
+      "Bash(mkdir -p \"d:/5. Code & AI/2. Projects/6. Paperboy/assets\")",
+      "Bash(mkdir -p \"d:/5. Code & AI/2. Projects/6. Paperboy/1. Reference files\")"
+    ]
+  }
+}

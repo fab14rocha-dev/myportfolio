@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MRL Site Review Checklist</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 40px 24px 80px;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: #2a2a2a;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #4caf72;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: 0.82rem;
+      color: #aaa;
+      white-space: nowrap;
+      min-width: 80px;
+      text-align: right;
+    }
+    .progress-label span { color: #4caf72; font-weight: 600; }
+
+    /* Reset button */
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 28px;
+    }
+    .btn-reset {
+      font-size: 0.75rem;
+      color: #666;
+      background: none;
+      border: 1px solid #333;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { color: #e0e0e0; border-color: #555; }
+
+    /* Section */
+    .section {
+      margin-bottom: 32px;
+      background: #222;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 14px 20px;
+      background: #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid #333;
+    }
+    .section-header:hover { background: #2f2f2f; }
+
+    .section-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .section-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-count {
+      font-size: 0.75rem;
+      color: #666;
+    }
+    .section-count.done { color: #4caf72; }
+
+    .section-arrow {
+      color: #555;
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+    .section.collapsed .section-arrow { transform: rotate(-90deg); }
+
+    .section-body {
+      padding: 8px 0;
+    }
+    .section.collapsed .section-body { display: none; }
+
+    /* Checklist item */
+    .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 9px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 4px;
+    }
+    .item:hover { background: #282828; }
+
+    .item input[type="checkbox"] { display: none; }
+
+    .checkmark {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border: 1.5px solid #444;
+      border-radius: 4px;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      background: transparent;
+    }
+    .item.checked .checkmark {
+      background: #4caf72;
+      border-color: #4caf72;
+    }
+    .item.checked .checkmark::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+      display: block;
+    }
+
+    .item-text {
+      color: #ccc;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .item.checked .item-text {
+      color: #555;
+      text-decoration: line-through;
+    }
+
+    /* Note items (not checkable) */
+    .note {
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>MRL Site Review Checklist</h1>
+  <p class="subtitle">Tick each item as you go. Progress saves automatically in your browser.</p>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label"><span id="progressDone">0</span> / <span id="progressTotal">0</span> done</div>
+  </div>
+
+  <div class="top-actions">
+    <button class="btn-reset" onclick="resetAll()">Reset all</button>
+  </div>
+
+
+  <!-- GENERAL -->
+  <div class="section" id="s-general">
+    <div class="section-header" onclick="toggleSection('s-general')">
+      <span class="section-title">General — every page</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-general"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Nav links all open the correct page</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Services dropdown appears on hover with 3 links (Engraving, Calligraphy, Corporate Events)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"Get In Touch" button in nav goes to contact page</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Logo links back to homepage</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads and shows the right part of the photo (not cropped badly)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">No broken images (blank boxes or broken icon)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Footer links all work</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Copyright shows © 2026</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">No placeholder text visible (Lorem ipsum, wrong names, old content)</span></div>
+    </div>
+  </div>
+
+  <!-- HOMEPAGE -->
+  <div class="section" id="s-home">
+    <div class="section-header" onclick="toggleSection('s-home')">
+      <span class="section-title">index.html — Homepage</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-home"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero video plays and loops</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">3 service cards link to engraving, calligraphy, and corporate events pages</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Brand logo ticker scrolls and logos are in colour (not grey)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Case studies: Carmex links to case-study-carmex.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Case studies: Vacheron and LSEG circles link to case-studies.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Portfolio filter buttons work (All / Engraving / Calligraphy / Corporate)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Portfolio images open in lightbox when clicked</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Testimonial carousel arrows and auto-advance work</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Blog section shows 3 real posts with correct images and titles</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"View All →" links point to the correct pages</span></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="section" id="s-services">
+    <div class="section-header" onclick="toggleSection('s-services')">
+      <span class="section-title">services.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-services"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Page loads without errors</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">All images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Links to the 3 sub-service pages work</span></div>
+    </div>
+  </div>
+
+  <!-- ENGRAVING -->
+  <div class="section" id="s-engraving">
+    <div class="section-header" onclick="toggleSection('s-engraving')">
+      <span class="section-title">engraving.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-engraving"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image looks good (landscape, not portrait — engraving action visible)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Brand logo ticker in colour</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Gallery: all 9 images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Pricing section readable and correct</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">FAQ items open and close on click</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">CTA button goes to contact page</span></div>
+    </div>
+  </div>
+
+  <!-- CALLIGRAPHY -->
+  <div class="section" id="s-calligraphy">
+    <div class="section-header" onclick="toggleSection('s-calligraphy')">
+      <span class="section-title">calligraphy.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-calligraphy"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads and looks good</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Gallery: all 9 images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">CTA button goes to contact page</span></div>
+    </div>
+  </div>
+
+  <!-- CORPORATE EVENTS -->
+  <div class="section" id="s-corporate">
+    <div class="section-header" onclick="toggleSection('s-corporate')">
+      <span class="section-title">corporate-events.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-corporate"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image looks good</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Brand logo ticker in colour</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Gallery: all 9 images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">FAQ items open and close on click</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">CTA button goes to contact page</span></div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div class="section" id="s-portfolio">
+    <div class="section-header" onclick="toggleSection('s-portfolio')">
+      <span class="section-title">portfolio.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-portfolio"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">All images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Lightbox opens when clicking an image</span></div>
+    </div>
+  </div>
+
+  <!-- CASE STUDIES -->
+  <div class="section" id="s-casestudies">
+    <div class="section-header" onclick="toggleSection('s-casestudies')">
+      <span class="section-title">case-studies.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-casestudies"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Carmex card is clickable and goes to case-study-carmex.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Carmex image loads (real photo, not placeholder engraving image)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Vacheron card shows "Coming Soon" badge and is not clickable</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">LSEG card shows "Coming Soon" badge and is not clickable</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Vacheron and LSEG images load</span></div>
+    </div>
+  </div>
+
+  <!-- CASE STUDY CARMEX -->
+  <div class="section" id="s-carmex">
+    <div class="section-header" onclick="toggleSection('s-carmex')">
+      <span class="section-title">case-study-carmex.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-carmex"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads (carmex 1.jpg)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Inline body images load (carmex 2 and carmex 4)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Content reads correctly — Somerset House, lip tins, #WithMyCarmex</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"← Back to Case Studies" goes to case-studies.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related post images and links work</span></div>
+    </div>
+  </div>
+
+  <!-- BLOG -->
+  <div class="section" id="s-blog">
+    <div class="section-header" onclick="toggleSection('s-blog')">
+      <span class="section-title">blog.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-blog"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">No featured strip at the top (just the header + grid)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">3 blog cards show with the real post images (not old engraving placeholders)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Each card links to the correct blog post</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Coming Soon box is visible as the 4th item</span></div>
+    </div>
+  </div>
+
+  <!-- BLOG VACHERON -->
+  <div class="section" id="s-bvacheron">
+    <div class="section-header" onclick="toggleSection('s-bvacheron')">
+      <span class="section-title">blog-vacheron.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-bvacheron"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads (Vacheron post photo, not old IMG_8495)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Inline image in the body loads</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Content reads correctly — Louis Roederer champagne boxes, Leeds boutique, gold ink</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"← Back to Blog" goes to blog.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related posts: Why Engraving + Engraving Guide (not old Carmex blog link)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related post images load</span></div>
+    </div>
+  </div>
+
+  <!-- BLOG WHY ENGRAVING -->
+  <div class="section" id="s-bwhy">
+    <div class="section-header" onclick="toggleSection('s-bwhy')">
+      <span class="section-title">blog-why-engraving.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-bwhy"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads (real post photo)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">2 inline body images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Content reads correctly — 5 reasons, mentions Dior, Ted Baker, MFK, Bacardi</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"← Back to Blog" goes to blog.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related posts: Engraving Guide + Vacheron</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related post images load</span></div>
+    </div>
+  </div>
+
+  <!-- BLOG ENGRAVING GUIDE -->
+  <div class="section" id="s-bguide">
+    <div class="section-header" onclick="toggleSection('s-bguide')">
+      <span class="section-title">blog-engraving-guide.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-bguide"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Hero image loads (real post photo)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Inline body image loads</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Content reads correctly — What is engraving, event types, FAQ</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">"← Back to Blog" goes to blog.html</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related posts: Why Engraving + Vacheron</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Related post images load</span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section" id="s-about">
+    <div class="section-header" onclick="toggleSection('s-about')">
+      <span class="section-title">about.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-about"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Page loads without errors</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Images load</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Text reads correctly, no odd formatting or cut-off content</span></div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" id="s-contact">
+    <div class="section-header" onclick="toggleSection('s-contact')">
+      <span class="section-title">contact.html</span>
+      <div class="section-meta">
+        <span class="section-count" id="count-s-contact"></span>
+        <span class="section-arrow">▼</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="item"><span class="checkmark"></span><span class="item-text">Form fields all visible and labelled correctly</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">Submit button works (or shows an expected response)</span></div>
+      <div class="item"><span class="checkmark"></span><span class="item-text">No broken layout</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'mrl-checklist-v1';
+
+  function getSectionId(item) {
+    return item.closest('.section').id;
+  }
+
+  function getItemIndex(item) {
+    const items = Array.from(item.closest('.section-body').querySelectorAll('.item'));
+    return items.indexOf(item);
+  }
+
+  function saveState() {
+    const state = {};
+    document.querySelectorAll('.section').forEach(section => {
+      const id = section.id;
+      const collapsed = section.classList.contains('collapsed');
+      const checks = Array.from(section.querySelectorAll('.item')).map(item => item.classList.contains('checked'));
+      state[id] = { collapsed, checks };
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function loadState() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    document.querySelectorAll('.section').forEach(section => {
+      const id = section.id;
+      if (!state[id]) return;
+      if (state[id].collapsed) section.classList.add('collapsed');
+      const items = section.querySelectorAll('.item');
+      state[id].checks.forEach((checked, i) => {
+        if (checked && items[i]) items[i].classList.add('checked');
+      });
+    });
+  }
+
+  function updateProgress() {
+    const allItems = document.querySelectorAll('.item');
+    const doneItems = document.querySelectorAll('.item.checked');
+    const total = allItems.length;
+    const done = doneItems.length;
+    const pct = total ? (done / total) * 100 : 0;
+
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressDone').textContent = done;
+    document.getElementById('progressTotal').textContent = total;
+
+    // Per-section counts
+    document.querySelectorAll('.section').forEach(section => {
+      const total = section.querySelectorAll('.item').length;
+      const done = section.querySelectorAll('.item.checked').length;
+      const el = document.getElementById('count-' + section.id);
+      if (el) {
+        el.textContent = done + ' / ' + total;
+        el.className = 'section-count' + (done === total && total > 0 ? ' done' : '');
+      }
+    });
+  }
+
+  function toggleSection(id) {
+    const section = document.getElementById(id);
+    section.classList.toggle('collapsed');
+    saveState();
+  }
+
+  function resetAll() {
+    if (!confirm('Reset all ticks?')) return;
+    document.querySelectorAll('.item').forEach(item => item.classList.remove('checked'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('collapsed'));
+    localStorage.removeItem(STORAGE_KEY);
+    updateProgress();
+  }
+
+  // Attach checkbox behaviour
+  document.querySelectorAll('.item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      saveState();
+      updateProgress();
+    });
+  });
+
+  loadState();
+  updateProgress();
+</script>
+</body>
+</html>

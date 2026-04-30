@@ -41,6 +41,13 @@
   padding: 1.75rem;
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .card-status {
   display: inline-block;
   font-size: 0.68rem;
@@ -52,7 +59,14 @@
   border: 1px solid var(--border-light);
   border-radius: 999px;
   padding: 0.2rem 0.7rem;
-  margin-bottom: 1rem;
+}
+
+.card-number {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  opacity: 0.45;
 }
 
 .card-title {

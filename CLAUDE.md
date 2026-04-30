@@ -28,7 +28,8 @@
   - 4. Data — raw data files (GPX, JSON, CSV, etc.)
   - 5. Styles — standalone CSS files (if not inside HTML)
   - 6. Docs — notes, references, planning files
-- Root of the project folder: only CLAUDE.md, package.json, config files, and dependency folders (node_modules etc.)
+- Root of the project folder: CLAUDE.md, package.json, config files, dependency folders (node_modules etc.), and index.html if the project is deployed via GitHub Pages (GitHub Pages requires index.html at the root)
+- For GitHub Pages projects, 1. HTML/ is used for secondary pages only — the main index.html stays at the root
 - When adding new files mid-project, always place them in the correct subfolder, never dump them in the root
 
 ## Workspace Structure

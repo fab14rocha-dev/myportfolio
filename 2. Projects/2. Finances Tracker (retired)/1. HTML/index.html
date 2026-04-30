@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finances Tracker</title>
+  <link rel="stylesheet" href="../5. Styles/style.css"/>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- Upload Screen -->
+  <div id="upload-screen">
+    <div class="upload-box">
+      <div class="upload-icon">📊</div>
+      <h1>Finances Tracker</h1>
+      <p>Upload your spreadsheet to see your finances at a glance</p>
+      <label for="file-input" class="upload-btn">
+        Choose Excel File
+        <input type="file" id="file-input" accept=".xlsx,.xls" />
+      </label>
+      <p class="upload-note">Your file stays on your device — nothing is uploaded anywhere</p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+
+    <header class="app-header">
+      <h1>Finances Tracker</h1>
+      <label class="reload-btn">
+        Change file
+        <input type="file" id="file-reload" accept=".xlsx,.xls" />
+      </label>
+    </header>
+
+    <!-- Month / Year Tabs -->
+    <nav class="month-tabs" id="month-tabs"></nav>
+
+    <!-- Year Overview -->
+    <section id="view-year" class="view hidden">
+      <h2 class="section-title">Year Overview</h2>
+      <div id="year-chart"></div>
+      <div id="year-table"></div>
+    </section>
+
+    <!-- Monthly View -->
+    <section id="view-month" class="view hidden">
+      <div class="cards" id="summary-cards"></div>
+
+      <div class="panel">
+        <h2 class="section-title">Spending by Category</h2>
+        <div id="category-bars"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Savings Accounts</h2>
+        <div id="savings-cards" class="savings-grid"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Income Breakdown</h2>
+        <div id="income-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Fixed Monthly Costs</h2>
+        <div id="fixed-expenses"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Variable Expenses</h2>
+        <div id="variable-expenses"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script type="module" src="../3. Scripts/main.js"></script>
+</body>
+</html>

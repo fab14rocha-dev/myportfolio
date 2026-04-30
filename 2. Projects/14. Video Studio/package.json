@@ -1,0 +1,20 @@
+{
+  "name": "video-studio",
+  "version": "1.0.0",
+  "description": "Personal video editing studio — Remotion-based workflow for consistent short-form videos",
+  "remotion": {
+    "entryPoint": "src/index.jsx"
+  },
+  "scripts": {
+    "studio": "node node_modules/@remotion/cli/remotion-cli.js studio src/index.jsx",
+    "render": "node node_modules/@remotion/cli/remotion-cli.js render src/index.jsx",
+    "preview": "node node_modules/@remotion/cli/remotion-cli.js studio src/index.jsx"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.450",
+    "@remotion/google-fonts": "^4.0.452",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.450"
+  }
+}

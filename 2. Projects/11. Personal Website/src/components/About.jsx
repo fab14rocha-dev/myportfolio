@@ -26,9 +26,14 @@ export default function About() {
     <section id="about" className="about" ref={ref}>
       <h2 className="section-heading">About</h2>
       <p className="about-text">
-        I'm a builder coming from a language services background, learning to code
-        and shipping real projects along the way. I work with vanilla JS, Firebase,
-        and now React.
+        I spent years in language services, then decided to teach myself to code.
+        Instead of following tutorials, I started building real things and using AI
+        as my pair programmer. Six projects in a few months: two live products, a
+        client build, and an ongoing challenge to help 100 businesses solve real
+        problems for free.
+      </p>
+      <p className="about-text" style={{ marginTop: "1.25rem" }}>
+        I work with vanilla JS, Firebase, React, and whatever else the project needs.
       </p>
     </section>
   );

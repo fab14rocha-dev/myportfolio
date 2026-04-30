@@ -1,0 +1,914 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Martina Rocha Luz — Calligrapher &amp; Engraver, Leeds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Pinyon+Script&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #F9F7F4;
+      --bg2:    #F2EFE9;
+      --border: #E6E0D8;
+      --ink:    #1E1C1A;
+      --mid:    #6B6663;
+      --dim:    #AAA49C;
+    }
+
+    body { background: var(--bg); color: var(--ink); font-family: 'Jost', sans-serif; font-weight: 300; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(249,247,244,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 56px;
+      height: 64px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-family: 'Pinyon Script', cursive; font-size: 1.9rem; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a {
+      font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; font-weight: 300; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-item { position: relative; display: flex; align-items: center; }
+    .nav-dropdown {
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(249,247,244,0.98); backdrop-filter: blur(8px);
+      border: 1px solid var(--border); min-width: 190px;
+      padding-top: 16px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+      z-index: 200;
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; pointer-events: auto; }
+    .nav-dropdown a {
+      display: block; padding: 13px 20px;
+      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; font-weight: 300;
+      border-bottom: 1px solid var(--border); transition: color 0.2s;
+    }
+    .nav-dropdown a:last-child { border-bottom: none; }
+    .nav-dropdown a:hover { color: var(--ink); background: var(--bg2); }
+    .nav-right a {
+      font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink); text-decoration: none;
+      border-bottom: 1px solid var(--ink); padding-bottom: 1px;
+    }
+
+    /* ── HERO ── */
+    .hero { width: 100%; height: calc(100vh - 64px); overflow: hidden; position: relative; }
+    .hero video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,28,26,0.52) 0%, rgba(30,28,26,0.08) 60%, transparent 100%);
+      display: flex; flex-direction: column;
+      justify-content: flex-end; align-items: flex-start;
+      padding: 64px 72px;
+    }
+    .hero-overlay .eyebrow {
+      color: rgba(249,247,244,0.6); margin-bottom: 14px;
+    }
+    .hero-overlay h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3.6rem);
+      font-weight: 400; font-style: italic;
+      color: #F9F7F4; line-height: 1.15;
+      max-width: 620px; margin-bottom: 28px;
+    }
+    .btn-light {
+      display: inline-block; font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #F9F7F4; text-decoration: none;
+      border-bottom: 1px solid rgba(249,247,244,0.6); padding-bottom: 2px;
+      transition: opacity 0.25s;
+    }
+    .btn-light:hover { opacity: 0.55; }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 18px; font-weight: 400;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block; font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--ink); text-decoration: none;
+      border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+      transition: opacity 0.25s;
+    }
+    .btn:hover { opacity: 0.45; }
+
+    /* ── BRANDS TICKER ── */
+    .brands { padding: 56px 0; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .brands-ticker-label {
+      text-align: center; margin-bottom: 28px;
+    }
+    .ticker-wrap {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+    .ticker-track {
+      display: flex; align-items: center;
+      width: max-content;
+      animation: ticker 32s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    .ticker-item {
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      padding: 0 64px;
+      border-right: 1px solid var(--border);
+    }
+    .ticker-item img {
+      height: 60px; max-width: 260px; width: auto;
+      object-fit: contain;
+      opacity: 0.85;
+      transition: opacity 0.3s;
+    }
+    .ticker-track:hover .ticker-item img { opacity: 1; }
+    .ticker-item span { display: none; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SERVICES ── */
+    .services { padding: 96px 0; border-bottom: 1px solid var(--border); }
+    .sec-head {
+      max-width: 1200px; margin: 0 auto 48px; padding: 0 56px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 400; font-style: italic;
+      margin-top: 10px;
+    }
+    .sec-link {
+      font-size: 0.62rem; letter-spacing: 0.14em; color: var(--ink);
+      text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px;
+      transition: opacity 0.2s; font-weight: 400;
+    }
+    .sec-link:hover { opacity: 0.45; }
+    .svc-grid {
+      max-width: 1200px; margin: 0 auto; padding: 0 56px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .svc-item { cursor: pointer; text-decoration: none; color: inherit; display: block; }
+    .svc-img { width: 100%; aspect-ratio: 3/4; overflow: hidden; margin-bottom: 16px; }
+    .svc-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .svc-item:hover .svc-img img { transform: scale(1.03); }
+    .svc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 400; font-style: italic; margin-bottom: 8px;
+    }
+    .svc-desc { font-size: 0.8rem; color: var(--mid); line-height: 1.8; margin-bottom: 10px; }
+    .svc-price { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--dim); }
+
+    /* ── CASE STUDIES ── */
+    .case-studies { padding: 88px 0; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .case-studies-wrap { max-width: 1200px; margin: 0 auto; padding: 0 56px; }
+    .cs-head {
+      display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 56px;
+    }
+    .cs-track {
+      display: grid;
+      grid-template-columns: repeat(3, 220px);
+      gap: 80px;
+      justify-content: center;
+    }
+    .cs-item {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      text-decoration: none; color: inherit;
+    }
+    .cs-circle {
+      width: 220px; height: 220px; border-radius: 50%; overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.45s ease, box-shadow 0.45s ease;
+    }
+    .cs-item:hover .cs-circle {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(30,28,26,0.12);
+    }
+    .cs-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cs-name {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink); text-align: center;
+    }
+    .cs-service {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem; font-style: italic; color: var(--mid);
+      margin-top: -10px; text-align: center;
+    }
+    .cs-summary {
+      font-size: 0.75rem; color: var(--mid); line-height: 1.7;
+      text-align: center; max-width: 200px;
+    }
+
+    /* ── PORTFOLIO ── */
+    .portfolio { padding: 96px 0; border-bottom: 1px solid var(--border); }
+    .port-head {
+      max-width: 1200px; margin: 0 auto 32px; padding: 0 56px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .port-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 400; font-style: italic;
+      margin-top: 10px;
+    }
+    .port-filters {
+      max-width: 1200px; margin: 0 auto 36px; padding: 0 56px;
+      display: flex; gap: 6px;
+    }
+    .filter-btn {
+      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 7px 18px; background: none; border: 1px solid var(--border);
+      color: var(--mid); cursor: pointer; font-family: 'Jost', sans-serif;
+      font-weight: 300; transition: all 0.2s;
+    }
+    .filter-btn:hover { color: var(--ink); border-color: var(--dim); }
+    .filter-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .port-grid {
+      max-width: 1200px; margin: 0 auto; padding: 0 56px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 280px;
+      grid-auto-flow: dense;
+      gap: 8px;
+    }
+    .p-cell { overflow: hidden; transition: opacity 0.3s; }
+    .p-cell img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .p-cell:hover img { transform: scale(1.03); }
+    .p-cell.tall  { grid-row: span 2; }
+    .p-cell.wide  { grid-column: span 2; }
+    .p-cell.hidden     { display: none; } /* Flip overrides this during animation */
+    .p-cell.over-limit { display: none; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial {
+      padding: 96px 56px; text-align: center;
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .t-slides { position: relative; } /* height set by JS */
+    .t-slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+    }
+    .t-slide.active { pointer-events: auto; }
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 400; font-style: italic;
+      color: var(--ink); line-height: 1.85; max-width: 700px;
+      margin: 24px auto 28px; position: relative;
+    }
+    .t-attr { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); position: relative; }
+    .t-nav {
+      display: flex; align-items: center; justify-content: center;
+      gap: 24px; margin-top: 48px;
+    }
+    .t-arrow {
+      background: none; border: 1px solid var(--border);
+      width: 40px; height: 40px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink); font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .t-arrow:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .t-dots { display: flex; gap: 8px; }
+    .t-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); border: none; cursor: pointer;
+      transition: background 0.3s;
+    }
+    .t-dot.active { background: var(--ink); }
+
+    /* ── BLOG ── */
+    .blog { padding: 96px 0; border-bottom: 1px solid var(--border); }
+    .blog-grid {
+      max-width: 1200px; margin: 0 auto; padding: 0 56px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    }
+    .blog-card { text-decoration: none; color: inherit; }
+    .blog-img { width: 100%; aspect-ratio: 3/2; overflow: hidden; margin-bottom: 20px; }
+    .blog-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .blog-card:hover .blog-img img { transform: scale(1.03); }
+    .blog-cat {
+      font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 10px;
+    }
+    .blog-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 400; font-style: italic;
+      line-height: 1.45; margin-bottom: 12px; color: var(--ink);
+    }
+    .blog-excerpt { font-size: 0.8rem; color: var(--mid); line-height: 1.8; margin-bottom: 16px; }
+    .blog-link {
+      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 1px;
+    }
+
+    /* ── PRESS ── */
+    .press {
+      padding: 48px 56px; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .press-logos { display: flex; justify-content: center; align-items: center; gap: 64px; margin-top: 28px; flex-wrap: wrap; }
+    .press-logos a { display: block; opacity: 0.7; transition: opacity 0.25s; }
+    .press-logos a:hover { opacity: 1; }
+    .press-logos img { height: 40px; width: auto; object-fit: contain; display: block; }
+
+    /* ── FOOTER CTA ── */
+    .footer-cta {
+      padding: 96px 56px; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 400; font-style: italic;
+      margin-bottom: 14px;
+    }
+    .footer-cta p {
+      font-size: 0.86rem; color: var(--mid); max-width: 440px;
+      margin: 0 auto 32px; line-height: 1.9;
+    }
+
+    /* ── FOOTER ── */
+    footer { padding: 56px 56px; }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+    }
+    .footer-brand .logo { display: block; margin-bottom: 10px; }
+    .footer-brand p { font-size: 0.78rem; color: var(--dim); line-height: 1.85; max-width: 240px; }
+    .footer-col h4 {
+      font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a {
+      font-size: 0.8rem; color: var(--mid); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--ink); }
+    .footer-bottom {
+      max-width: 1200px; margin: 36px auto 0; padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom span { font-size: 0.65rem; letter-spacing: 0.08em; color: var(--dim); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">Martina Rocha Luz</a>
+      <div class="nav-links">
+        <div class="nav-item">
+          <a href="services.html">Services</a>
+          <div class="nav-dropdown">
+            <a href="engraving.html">Engraving</a>
+            <a href="calligraphy.html">Calligraphy</a>
+            <a href="corporate-events.html">Corporate Events</a>
+          </div>
+        </div>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="case-studies.html">Case Studies</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="nav-right">
+        <a href="contact.html">Get In Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO — looping video, swap src for final calligraphy footage -->
+  <section class="hero">
+    <video autoplay muted loop playsinline>
+      <source src="../2. Images/hero-video.mp4" type="video/mp4"/>
+    </video>
+    <div class="hero-overlay">
+      <p class="eyebrow">Calligrapher &amp; Engraver — Leeds, UK</p>
+      <h1>Crafting refined beauty,<br>one letter at a time.</h1>
+      <a href="#services" class="btn-light">Explore Services</a>
+    </div>
+  </section>
+
+  <!-- SERVICES — each card will link to its service page later -->
+  <section class="services" id="services">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">What I Do</p>
+        <h2 class="sec-title">Services</h2>
+      </div>
+      <a href="services.html" class="sec-link">View All →</a>
+    </div>
+    <div class="svc-grid">
+      <a href="engraving.html" class="svc-item">
+        <div class="svc-img">
+          <img src="../2. Images/2. Services/3. Engraving/engraving (41).jpg" alt="Engraving"/>
+        </div>
+        <h3 class="svc-name">Engraving</h3>
+        <p class="svc-desc">On-site personalisation for brand activations, corporate events, and private occasions.</p>
+        <p class="svc-price">From £90/hr · 2hr minimum</p>
+      </a>
+      <a href="calligraphy.html" class="svc-item">
+        <div class="svc-img">
+          <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (15).jpg" alt="Calligraphy"/>
+        </div>
+        <h3 class="svc-name">Calligraphy</h3>
+        <p class="svc-desc">Bespoke calligraphy at your event — on paper, branded cards, or directly on products.</p>
+        <p class="svc-price">On-site &amp; in-studio</p>
+      </a>
+      <a href="corporate-events.html" class="svc-item">
+        <div class="svc-img">
+          <img src="../2. Images/2. Services/1. Corporate Events/corporate (8).jpg" alt="Corporate Events"/>
+        </div>
+        <h3 class="svc-name">Corporate Events</h3>
+        <p class="svc-desc">Brand activations, product launches, and corporate gifting — live and in-studio personalisation for your guests.</p>
+        <p class="svc-price">Bespoke packages available</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- TRUSTED BY — ticker loops seamlessly; logos listed twice for the effect -->
+  <section class="brands">
+    <p class="eyebrow brands-ticker-label">Trusted By</p>
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+
+        <!-- Set 1 -->
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/vacheron-constantin.svg" alt="Vacheron Constantin"/>
+          <span>Vacheron Constantin</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/dior-2.svg" alt="Dior"/>
+          <span>Dior</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/maison-francis-kurkdjian-seeklogo.svg" alt="Maison Francis Kurkdjian" style="height:160px;"/>
+          <span>Maison Francis Kurkdjian</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/tedbaker.svg" alt="Ted Baker"/>
+          <span>Ted Baker</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/patron-tequila-seeklogo.svg" alt="Patrón"/>
+          <span>Patrón</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/harvey-nichols-logo-freelogovectors.net_.png" alt="Harvey Nichols"/>
+          <span>Harvey Nichols</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/channel-4.svg" alt="Channel 4"/>
+          <span>Channel 4</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/carmex-seeklogo.svg" alt="Carmex"/>
+          <span>Carmex</span>
+        </div>
+
+        <!-- Set 2 — identical copy for seamless loop -->
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/vacheron-constantin.svg" alt="Vacheron Constantin"/>
+          <span>Vacheron Constantin</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/dior-2.svg" alt="Dior"/>
+          <span>Dior</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/maison-francis-kurkdjian-seeklogo.svg" alt="Maison Francis Kurkdjian" style="height:160px;"/>
+          <span>Maison Francis Kurkdjian</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/tedbaker.svg" alt="Ted Baker"/>
+          <span>Ted Baker</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/patron-tequila-seeklogo.svg" alt="Patrón"/>
+          <span>Patrón</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/harvey-nichols-logo-freelogovectors.net_.png" alt="Harvey Nichols"/>
+          <span>Harvey Nichols</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/channel-4.svg" alt="Channel 4"/>
+          <span>Channel 4</span>
+        </div>
+        <div class="ticker-item">
+          <img src="../2. Images/1. Brands images/svg/carmex-seeklogo.svg" alt="Carmex"/>
+          <span>Carmex</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE STUDIES — images are placeholders, replace with actual activation photos per brand -->
+  <section class="case-studies">
+    <div class="case-studies-wrap">
+      <div class="cs-head">
+        <div>
+          <p class="eyebrow">Selected Projects</p>
+          <h2 class="sec-title">Case Studies</h2>
+        </div>
+        <a href="case-studies.html" class="sec-link">View All →</a>
+      </div>
+      <div class="cs-track">
+
+        <a href="case-study-carmex.html" class="cs-item">
+          <div class="cs-circle">
+            <img src="../2. Images/2. Services/4. Others/carmex 1.jpg" alt="Carmex brand activation"/>
+          </div>
+          <p class="cs-name">Carmex UK</p>
+          <p class="cs-service">Engraving</p>
+          <p class="cs-summary">Live engraving on Carmex lip tins at Somerset House — part of their "Your Lips, Your Story" campaign.</p>
+        </a>
+
+        <a href="case-studies.html" class="cs-item">
+          <div class="cs-circle">
+            <img src="../2. Images/3. Case Studies/1. Vacheron Constantin/IMG_8495.jpg" alt="Vacheron Constantin"/>
+          </div>
+          <p class="cs-name">Vacheron Constantin</p>
+          <p class="cs-service">Calligraphy</p>
+          <p class="cs-summary">Champagne gift boxes personalisation with calligraphy for Vacheron Constantin.</p>
+        </a>
+
+        <a href="case-studies.html" class="cs-item">
+          <div class="cs-circle">
+            <img src="../2. Images/3. Case Studies/3. London Stock Exchange Insight Series/corporate (6).jpg" alt="LSEG Insight Series"/>
+          </div>
+          <p class="cs-name">LSEG Insight Series</p>
+          <p class="cs-service">Corporate Events</p>
+          <p class="cs-summary">Engraving flasks for clients and stakeholders at the London Stock Exchange Group's flagship event.</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="footer-cta">
+    <h2>Ready to create something beautiful?</h2>
+    <p>Whether you're a luxury brand planning your next activation or a corporate event with something to celebrate — I'd love to hear from you.</p>
+    <a href="contact.html" class="btn">Get In Touch</a>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio">
+    <div class="port-head">
+      <div>
+        <p class="eyebrow">Selected Work</p>
+        <h2>Portfolio</h2>
+      </div>
+      <a href="portfolio.html" class="sec-link">View All Work →</a>
+    </div>
+
+    <div class="port-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="engraving">Engraving</button>
+      <button class="filter-btn" data-filter="calligraphy">Calligraphy</button>
+      <button class="filter-btn" data-filter="corporate">Corporate Events</button>
+    </div>
+
+    <div class="port-grid">
+
+      <!-- Engraving -->
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (1).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (2).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (3).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (4).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (5).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (6).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (7).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (8).jpg" alt="Engraving"/>
+      </div>
+      <div class="p-cell" data-cat="engraving">
+        <img src="../2. Images/2. Services/3. Engraving/engraving (9).jpg" alt="Engraving"/>
+      </div>
+
+      <!-- Calligraphy -->
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (1).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (2).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (3).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (4).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (5).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (6).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (7).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (8).jpg" alt="Calligraphy"/>
+      </div>
+      <div class="p-cell" data-cat="calligraphy">
+        <img src="../2. Images/2. Services/2. Calligraphy/calligraphy (9).jpg" alt="Calligraphy"/>
+      </div>
+
+      <!-- Corporate Events -->
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (1).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (2).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (3).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (4).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (5).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (6).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (7).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (8).jpg" alt="Corporate event"/>
+      </div>
+      <div class="p-cell" data-cat="corporate">
+        <img src="../2. Images/2. Services/1. Corporate Events/corporate (9).jpg" alt="Corporate event"/>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL — add more slides as needed, logo paths point to existing SVGs -->
+  <section class="testimonial">
+    <p class="eyebrow">What Clients Say</p>
+    <div class="t-slides">
+
+      <div class="t-slide active">
+        <blockquote>"Martina always goes above and beyond, taking care and time to ensure everything looks perfect. A true perfectionist, 10/10."</blockquote>
+        <p class="t-attr">Fiona M. &nbsp;·&nbsp; Vacheron Constantin</p>
+      </div>
+
+      <div class="t-slide">
+        <blockquote>"The engraving setup added such brilliant theatre to the experience, and Martina delivered it all with incredible professionalism and warmth."</blockquote>
+        <p class="t-attr">Ashley Watton &nbsp;·&nbsp; Ted Baker London</p>
+      </div>
+
+      <div class="t-slide">
+        <blockquote>"She designed our place cards, mirror signage, table numbers, seating chart and welcome sign and all were more stunning than I ever could have dreamt for!"</blockquote>
+        <p class="t-attr">Katie E. &nbsp;·&nbsp; Bride</p>
+      </div>
+      <div class="t-slide">
+        <blockquote>"She was keen to get it just right and nothing was too much trouble. She was communicative and very efficient. Highly recommend."</blockquote>
+        <p class="t-attr">Alison M. &nbsp;·&nbsp; Private Client</p>
+      </div>
+      <div class="t-slide">
+        <blockquote>"Right from the start, it was evident that Martina has great attention to detail — responding to my requests in such a professional way."</blockquote>
+        <p class="t-attr">Parminder C. &nbsp;·&nbsp; Wedding Calligraphy Client</p>
+      </div>
+
+    </div>
+    <div class="t-nav">
+      <button class="t-arrow" id="t-prev">&#8592;</button>
+      <div class="t-dots">
+        <button class="t-dot active"></button>
+        <button class="t-dot"></button>
+        <button class="t-dot"></button>
+        <button class="t-dot"></button>
+        <button class="t-dot"></button>
+      </div>
+      <button class="t-arrow" id="t-next">&#8594;</button>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="blog">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">From the Studio</p>
+        <h2 class="sec-title">Latest Posts</h2>
+      </div>
+      <a href="blog.html" class="sec-link">View All →</a>
+    </div>
+    <div class="blog-grid">
+      <a href="blog-vacheron.html" class="blog-card">
+        <div class="blog-img">
+          <img src="../2. Images/2. Services/4. Others/Vacheron Constantin Event Extra Special 2.jpg" alt="Vacheron Constantin event"/>
+        </div>
+        <p class="blog-cat">Calligraphy</p>
+        <h3 class="blog-title">How Live Calligraphy Made This Vacheron Constantin Event Extra Special</h3>
+        <p class="blog-excerpt">Personalising Louis Roederer champagne boxes with gold ink at a private Vacheron Constantin event in Leeds.</p>
+        <span class="blog-link">Read More</span>
+      </a>
+      <a href="blog-why-engraving.html" class="blog-card">
+        <div class="blog-img">
+          <img src="../2. Images/2. Services/4. Others/Why Live Engraving Is Perfect for Luxury Events 1.jpg" alt="Live engraving at luxury event"/>
+        </div>
+        <p class="blog-cat">Engraving</p>
+        <h3 class="blog-title">Why Live Engraving Is Perfect for Luxury Events</h3>
+        <p class="blog-excerpt">From brand identity to social media moments — five reasons live engraving is becoming a must-have for high-end events.</p>
+        <span class="blog-link">Read More</span>
+      </a>
+      <a href="blog-engraving-guide.html" class="blog-card">
+        <div class="blog-img">
+          <img src="../2. Images/2. Services/4. Others/What You Need to Know 1.jpg" alt="Live engraving guide"/>
+        </div>
+        <p class="blog-cat">Engraving</p>
+        <h3 class="blog-title">Live Engraving for Events: What You Need to Know</h3>
+        <p class="blog-excerpt">What live engraving is, why it works for events, and everything you need to consider before booking.</p>
+        <span class="blog-link">Read More</span>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta">
+    <h2>Ready to create something beautiful?</h2>
+    <p>Whether you're a luxury brand planning your next activation or a corporate event with something to celebrate — I'd love to hear from you.</p>
+    <a href="contact.html" class="btn">Get In Touch</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">Martina Rocha Luz</a>
+        <p>Professional calligrapher and engraver. Based in Leeds, Yorkshire — available nationwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="engraving.html">Engraving</a></li>
+          <li><a href="calligraphy.html">Calligraphy</a></li>
+          <li><a href="corporate-events.html">Corporate Events</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Martina Rocha Luz</span>
+      <span>Leeds, UK</span>
+      <span><a href="mailto:fab14rocha@gmail.com" style="color:var(--dim); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--mid)'" onmouseout="this.style.color='var(--dim)'">Site by Fabricio</a></span>
+    </div>
+  </footer>
+
+  <!-- GSAP + ScrollTrigger + Flip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger, Flip);
+
+    // ── Testimonial carousel — true crossfade ──
+    const slides    = Array.from(document.querySelectorAll('.t-slide'));
+    const dots      = Array.from(document.querySelectorAll('.t-dot'));
+    const tContainer = document.querySelector('.t-slides');
+    let current  = 0;
+    let animating = false;
+
+    // Measure tallest slide to fix container height (all slides are position:absolute)
+    gsap.set(slides, { opacity: 1, position: 'relative' });
+    tContainer.style.height = Math.max(...slides.map(s => s.offsetHeight)) + 'px';
+    gsap.set(slides, { position: 'absolute', opacity: 0 });
+    gsap.set(slides[0], { opacity: 1 });
+
+    function goTo(next) {
+      if (animating || next === current) return;
+      animating = true;
+      const prev = current;
+      current = next;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+      // Simultaneous crossfade — old out, new in at the same time
+      gsap.to(slides[prev], { opacity: 0, duration: 0.7, ease: 'power1.inOut',
+        onComplete: () => { slides[prev].classList.remove('active'); }
+      });
+      slides[next].classList.add('active');
+      gsap.fromTo(slides[next],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: 'power1.inOut',
+          onComplete: () => { animating = false; }
+        }
+      );
+    }
+
+    document.getElementById('t-next').addEventListener('click', () => goTo((current + 1) % slides.length));
+    document.getElementById('t-prev').addEventListener('click', () => goTo((current - 1 + slides.length) % slides.length));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+    setInterval(() => goTo((current + 1) % slides.length), 5000);
+
+    // ── Portfolio lightbox — wrap images as gallery links ──
+    document.querySelectorAll('.p-cell img').forEach(img => {
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.className = 'glightbox';
+      a.dataset.gallery = 'portfolio';
+      img.parentNode.insertBefore(a, img);
+      a.appendChild(img);
+    });
+    GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, closeButton: true });
+
+    // ── Portfolio: shuffle then limit to 9 for "All" view ──
+    const grid     = document.querySelector('.port-grid');
+    const allCells = Array.from(grid.querySelectorAll('.p-cell'));
+    allCells.sort(() => Math.random() - 0.5).forEach(cell => grid.appendChild(cell));
+    allCells.forEach((cell, i) => { if (i >= 9) cell.classList.add('over-limit'); });
+
+    // ── Portfolio filter — whole-grid crossfade ──
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let filterBusy   = false;
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (filterBusy) return;
+        filterBusy = true;
+
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.filter;
+
+        gsap.to(grid, {
+          opacity: 0, duration: 0.4, ease: 'power1.inOut',
+          onComplete: () => {
+            allCells.forEach((cell, i) => {
+              if (cat === 'all') {
+                cell.classList.remove('hidden');
+                cell.classList.toggle('over-limit', i >= 9);
+              } else {
+                cell.classList.remove('over-limit');
+                cell.classList.toggle('hidden', cell.dataset.cat !== cat);
+              }
+            });
+
+            gsap.to(grid, {
+              opacity: 1, duration: 0.5, ease: 'power1.inOut',
+              onComplete: () => { filterBusy = false; }
+            });
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

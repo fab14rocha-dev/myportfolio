@@ -701,6 +701,14 @@ const NOTES = [
     source: "IRL-Quests project — firestore.rules"
   },
   {
+    title: "iOS Safari File Input Fix",
+    topic: "HTML-CSS",
+    summary: "File pickers on iPhone can silently fail if the accept type isn't set correctly, or if the click is triggered twice.",
+    learned: "Two things break file inputs on iOS Safari:\n1. Using only `accept=\".gpx\"` — iOS doesn't always recognise file extensions alone. Add the mime type too: `accept=\".gpx,application/gpx+xml\"`.\n2. Having both a `<label for=\"file-input\">` AND a JS `fileInput.click()` on the parent — this double-triggers the picker on iOS and it silently does nothing. Fix: skip the programmatic click if the user tapped the label.",
+    example: `<!-- HTML: add mime type to accept -->\n<input type="file" id="file-input" accept=".gpx,application/gpx+xml,application/octet-stream" hidden>\n\n// JS: don't double-trigger when clicking the label\ndropZone.addEventListener('click', e => {\n  if (e.target.closest('label')) return;\n  fileInput.click();\n});`,
+    source: "MyRaceCard project — GPX file picker not working on iPhone 17"
+  },
+  {
     title: "CSS Variables (Custom Properties)",
     topic: "HTML-CSS",
     summary: "Store values like colors or sizes in one place and reuse them across your whole stylesheet. Change once, updates everywhere.",
@@ -723,6 +731,14 @@ const NOTES = [
     learned: "You need this because browsers block certain features (like JS modules) when you just double-click an HTML file. Running a local server fixes that. Node.js can do this with just built-in tools — no extra installs needed.",
     example: `// server.js — the key part\nconst server = http.createServer((req, res) => {\n  const filePath = path.join(DIR,\n    req.url === '/' ? 'index.html' : req.url);\n  // reads the file and sends it to the browser\n});\n\nserver.listen(8080);\n// open: http://localhost:8080`,
     source: "IRL-Quests project — server.js"
+  },
+  {
+    title: "EmailJS — Email Notifications from a Static Site",
+    topic: "Tools",
+    summary: "EmailJS lets you send emails directly from the browser with no backend — useful for getting notified when someone submits a form on a static site.",
+    learned: "Add the EmailJS CDN, initialise it with your public key, then call emailjs.send() with your service ID, template ID, and a data object matching your template's variable names (e.g. {{contact_name}}). Use .catch() so a failed email doesn't break the user flow — the form submission should succeed regardless. Free plan = 200 emails/month.",
+    example: `// In <head>\n<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>\n<script>emailjs.init('YOUR_PUBLIC_KEY');</script>\n\n// After form submission\nemailjs.send('service_id', 'template_id', {\n  contact_name:  formData.contactName,\n  contact_email: formData.contactEmail,\n  message:       formData.timeDrain\n}).catch(err => console.warn('Email failed:', err));`,
+    source: "AI for Business project — form.js"
   },
   {
     title: "VS Code — Workspace Customisation",

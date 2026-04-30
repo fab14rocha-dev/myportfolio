@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Design 10 — The Complete</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Pinyon+Script&family=Jost:wght@100;200;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #FDFAF6;
+      --warm:  #F5EFE5;
+      --warm2: #EDE5D8;
+      --ink:   #1A1714;
+      --mid:   #7A7268;
+      --dim:   #AAA49C;
+      --gold:  #A8844A;
+      --teal:  #2E5048;
+    }
+
+    body { background: var(--paper); color: var(--ink); font-family: 'Jost', sans-serif; font-weight: 300; }
+
+    /* ── CONTAINER ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 56px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,250,246,0.96); backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--warm2);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 56px;
+      height: 64px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-family: 'Pinyon Script', cursive; font-size: 2rem; }
+    .nav-mid { display: flex; gap: 36px; }
+    .nav-mid a {
+      font-size: 0.68rem; letter-spacing: 0.14em; color: var(--mid);
+      text-decoration: none; font-weight: 300;
+    }
+    .nav-mid a:hover { color: var(--ink); }
+    .nav-right a {
+      font-size: 0.65rem; letter-spacing: 0.14em; color: var(--teal);
+      text-decoration: none; font-weight: 400; border-bottom: 1px solid var(--teal); padding-bottom: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      height: calc(100vh - 64px);
+      border-bottom: 1px solid var(--warm2);
+      overflow: hidden;
+      display: flex; justify-content: center;
+    }
+    .hero-grid {
+      max-width: 1100px; width: 100%; padding: 0 56px;
+      display: flex; gap: 64px;
+    }
+    .hero-left {
+      flex: 3; padding: 56px 0;
+      display: flex; flex-direction: column; justify-content: center; gap: 32px;
+    }
+    .hero-tag {
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+    }
+    .hero-main h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem); font-style: italic; font-weight: 400;
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero-main p {
+      font-size: 0.92rem; line-height: 1.9; color: var(--mid); max-width: 400px; margin-bottom: 28px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-fill {
+      padding: 12px 32px; background: var(--teal); color: #fff;
+      font-size: 0.65rem; letter-spacing: 0.14em; text-decoration: none; font-weight: 300;
+      transition: background 0.3s;
+    }
+    .btn-fill:hover { background: var(--gold); }
+    .btn-ghost {
+      padding: 12px 32px; border: 1px solid var(--warm2); color: var(--mid);
+      font-size: 0.65rem; letter-spacing: 0.14em; text-decoration: none; font-weight: 300;
+      transition: border-color 0.3s;
+    }
+    .btn-ghost:hover { border-color: var(--mid); color: var(--ink); }
+    .hero-right {
+      flex: 2;
+      background-size: cover; background-position: center 20%;
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      border-bottom: 1px solid var(--warm2);
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 56px;
+      display: flex; gap: 0;
+    }
+    .stat-item {
+      flex: 1; padding: 28px 0; display: flex; align-items: center; gap: 16px;
+      border-right: 1px solid var(--warm2);
+    }
+    .stat-item:last-child { border-right: none; padding-left: 40px; }
+    .stat-item:not(:first-child) { padding-left: 40px; }
+    .stat-n {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem;
+      font-style: italic; font-weight: 400; line-height: 1; color: var(--ink);
+    }
+    .stat-label { font-size: 0.6rem; letter-spacing: 0.14em; color: var(--dim); line-height: 1.5; }
+
+    /* ── BRANDS ── */
+    .brands { background: var(--ink); border-bottom: 1px solid #222; }
+    .brands-inner {
+      max-width: 1100px; margin: 0 auto; padding: 28px 56px;
+      display: flex; align-items: center; gap: 0;
+    }
+    .brands-label {
+      font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); flex-shrink: 0; padding-right: 32px;
+      border-right: 1px solid #2A2420; margin-right: 32px;
+    }
+    .brands-scroll { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; }
+    .brands-scroll img {
+      height: 22px; width: auto; object-fit: contain;
+      filter: brightness(0) invert(1); opacity: 0.25; transition: opacity 0.2s;
+    }
+    .brands-scroll img:hover { opacity: 0.55; }
+
+    /* ── SERVICES ── */
+    .services { padding: 96px 0; border-bottom: 1px solid var(--warm2); }
+    .sec-header { margin-bottom: 52px; }
+    .sec-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-style: italic; font-weight: 400;
+    }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .svc { background: var(--warm); padding: 36px 32px; }
+    .svc-n { font-size: 0.56rem; letter-spacing: 0.25em; color: var(--dim); margin-bottom: 20px; }
+    .svc-img { height: 200px; margin-bottom: 24px; overflow: hidden; }
+    .svc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .svc h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      font-style: italic; margin-bottom: 10px;
+    }
+    .svc p { font-size: 0.84rem; line-height: 1.85; color: var(--mid); margin-bottom: 12px; }
+    .svc-price { font-size: 0.58rem; letter-spacing: 0.12em; color: var(--gold); }
+    .svc a { display: block; margin-top: 18px; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--teal); text-decoration: none; }
+
+    /* ── ABOUT ── */
+    .about { padding: 96px 0; border-bottom: 1px solid var(--warm2); }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .about-text h2 {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-style: italic; font-weight: 400; line-height: 1.3; margin-bottom: 24px;
+    }
+    .about-text p { font-size: 0.9rem; line-height: 1.95; color: var(--mid); margin-bottom: 12px; }
+    .about-text a {
+      display: inline-block; margin-top: 20px; font-size: 0.63rem; letter-spacing: 0.14em;
+      color: var(--teal); text-decoration: none; border-bottom: 1px solid var(--teal); padding-bottom: 2px;
+    }
+    .about-img { overflow: hidden; aspect-ratio: 4/5; }
+    .about-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+    /* ── PORTFOLIO ── */
+    .portfolio { padding: 96px 0; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-style: italic;
+    }
+    .section-header a { font-size: 0.63rem; letter-spacing: 0.12em; color: var(--mid); text-decoration: none; }
+    .port-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 220px 180px; gap: 6px;
+    }
+    .p-cell { overflow: hidden; }
+    .p-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+    .p-cell:hover img { transform: scale(1.04); }
+    .p-cell.r2 { grid-row: span 2; }
+    .p-cell.c2 { grid-column: span 2; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial { background: var(--teal); padding: 96px 0; }
+    .testimonial-inner { max-width: 760px; }
+    .t-tag { font-size: 0.56rem; letter-spacing: 0.28em; color: rgba(255,255,255,0.35); margin-bottom: 24px; }
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+      font-style: italic; color: #fff; line-height: 1.75; margin-bottom: 28px;
+    }
+    .t-author { display: flex; align-items: center; gap: 16px; }
+    .t-dot { width: 28px; height: 1px; background: rgba(255,255,255,0.25); }
+    .t-author span { font-size: 0.6rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.45); }
+
+    /* ── FOOTER GRID ── */
+    .footer-band { border-top: 1px solid var(--warm2); }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto; padding: 64px 56px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    }
+    .press-col h3 {
+      font-family: 'Playfair Display', serif; font-size: 0.88rem; font-style: italic;
+      color: var(--dim); margin-bottom: 20px;
+    }
+    .press-names { display: flex; flex-direction: column; gap: 10px; }
+    .press-names span { font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--warm2); }
+    .cta-col h3 {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-style: italic; margin-bottom: 12px; line-height: 1.3;
+    }
+    .cta-col p { font-size: 0.86rem; line-height: 1.85; color: var(--mid); margin-bottom: 24px; }
+    .cta-col a {
+      display: inline-block; padding: 12px 36px; background: var(--teal); color: #fff;
+      font-size: 0.63rem; letter-spacing: 0.14em; text-decoration: none; transition: background 0.3s;
+    }
+    .cta-col a:hover { background: var(--gold); }
+
+    .design-label {
+      text-align: center; padding: 16px; background: var(--ink);
+      color: #444; font-size: 0.6rem; letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">Martina Rocha Luz</div>
+      <div class="nav-mid">
+        <a href="#">Services</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Blog</a>
+        <a href="#">About</a>
+      </div>
+      <div class="nav-right">
+        <a href="#">Get In Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <span class="hero-tag">Calligrapher &amp; Engraver — Leeds, UK</span>
+        <div class="hero-main">
+          <h1>Crafting refined beauty, one letter at a time.</h1>
+          <p>I work with luxury brands to provide calligraphy and engraving services for brand activations, live events, and special occasions. My style is elegant and minimalistic — I believe less is more.</p>
+          <div class="hero-btns">
+            <a href="#" class="btn-fill">Let's Work Together</a>
+            <a href="#" class="btn-ghost">View Portfolio</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right" style="background-image: url('assets/hero-martina.jpg')"></div>
+    </div>
+  </section>
+
+
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-n">4+</span>
+        <span class="stat-label">Years in<br>Business</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-n">10+</span>
+        <span class="stat-label">Luxury<br>Brands</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-n">Leeds</span>
+        <span class="stat-label">Yorkshire<br>&amp; Beyond</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="brands">
+    <div class="brands-inner">
+      <span class="brands-label">Trusted By</span>
+      <div class="brands-scroll">
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Vacheron.png" alt="Vacheron Constantin"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Dior.png" alt="Dior"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/MFK.png" alt="Maison Francis Kurkdjian"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Berrys.png" alt="Berry's Jewellers"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/4.png" alt="Channel 4"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/03/Ted-Baker-London-logo-1024x576.png" alt="Ted Baker"/>
+        <img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Harvey-Nichols.png" alt="Harvey Nichols"/>
+      </div>
+    </div>
+  </div>
+
+  <section class="services">
+    <div class="wrap">
+      <div class="sec-header">
+        <p class="sec-eyebrow">What I Do</p>
+        <h2 class="sec-title">Services</h2>
+      </div>
+      <div class="svc-grid">
+        <div class="svc">
+          <div class="svc-n">01 / 03</div>
+          <div class="svc-img"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg" alt="Live Engraving"/></div>
+          <h3>Live Engraving</h3>
+          <p>On-site personalisation for fragrances, beauty, wine and spirits. For brand activations, corporate and private events — and in-studio too.</p>
+          <p class="svc-price">From £90/hr · 2hr minimum · travel may apply</p>
+          <a href="#">Enquire →</a>
+        </div>
+        <div class="svc">
+          <div class="svc-n">02 / 03</div>
+          <div class="svc-img"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Calligraphy-Name-Card.jpg" alt="Live Calligraphy"/></div>
+          <h3>Live Calligraphy</h3>
+          <p>A bespoke calligrapher at your event. On paper, branded cards, or directly on products. Captivating to watch, shareable, and personal.</p>
+          <p class="svc-price">Available on-site &amp; in-studio</p>
+          <a href="#">Enquire →</a>
+        </div>
+        <div class="svc">
+          <div class="svc-n">03 / 03</div>
+          <div class="svc-img"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Personalised-Bride-Gift.jpg" alt="Wedding Calligraphy"/></div>
+          <h3>Wedding &amp; Events</h3>
+          <p>Place cards, envelopes, table plans, and bespoke stationery crafted with care. I only take on a limited number of wedding clients per year.</p>
+          <p class="svc-price">Limited availability</p>
+          <a href="#">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="wrap">
+      <div class="about-inner">
+        <div class="about-text">
+          <p class="about-eyebrow">About Martina</p>
+          <h2>Professional calligrapher and engraver based in Leeds.</h2>
+          <p>I opened my calligraphy studio in 2022. Over time, I realised I wanted to offer fewer services, of outstanding quality, and that's when I started to specialise in traditional calligraphy and engraving.</p>
+          <p>I've had the privilege of working with amazing world-renowned brands such as Dior, Vacheron Constantin, Channel 4, and Maison Francis Kurkdjian.</p>
+          <p>My style is elegant and minimalistic — I believe less is more. My business is my greatest passion.</p>
+          <a href="#">My Full Story →</a>
+        </div>
+        <div class="about-img">
+          <img src="https://martinarochaluz.com/wp-content/uploads/2023/09/photo_2023-09-15_14-07-39-jpg.webp" alt="Martina at a brand event"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="wrap">
+      <div class="section-header">
+        <h2>Portfolio</h2>
+        <a href="#">View All Work →</a>
+      </div>
+      <div class="port-grid">
+        <div class="p-cell r2"><img src="https://martinarochaluz.com/wp-content/uploads/2024/04/17.png" alt="Portfolio"/></div>
+        <div class="p-cell"><img src="https://martinarochaluz.com/wp-content/uploads/2024/04/2.png" alt="Portfolio"/></div>
+        <div class="p-cell"><img src="https://martinarochaluz.com/wp-content/uploads/2024/04/24.png" alt="Portfolio"/></div>
+        <div class="p-cell c2"><img src="https://martinarochaluz.com/wp-content/uploads/2025/01/Brand-Activation-Leeds.jpg" alt="Portfolio"/></div>
+        <div class="p-cell"><img src="https://martinarochaluz.com/wp-content/uploads/2024/04/1.png" alt="Portfolio"/></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="wrap">
+      <div class="testimonial-inner">
+        <p class="t-tag">Client Testimonial</p>
+        <blockquote>"Martina has worked on several creative projects now for Vacheron Constantin and Berry's Jewellers, writing in her beautiful calligraphy style on Christmas cards, invitations and table name settings. She always goes above and beyond. When doing live events in the boutique, Martina is so polite and professional and always looks impeccable. I couldn't recommend her enough."</blockquote>
+        <div class="t-author">
+          <div class="t-dot"></div>
+          <span>Fiona M. &nbsp;·&nbsp; Vacheron Constantin</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-band">
+    <div class="footer-inner">
+      <div class="press-col">
+        <h3>As seen in...</h3>
+        <div class="press-names">
+          <span>Save The Date</span>
+          <span>Rock My Wedding</span>
+          <span>Yorkshire Guide</span>
+        </div>
+      </div>
+      <div class="cta-col">
+        <h3>Ready to create something beautiful?</h3>
+        <p>Whether you're a luxury brand planning your next activation, or a couple planning your perfect day — I'd love to hear from you.</p>
+        <a href="#">Get In Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="design-label">Design 10 — The Complete &nbsp;|&nbsp; Teal · Gold · Playfair Display · Full Page</div>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+  </script>
+
+</body>
+</html>

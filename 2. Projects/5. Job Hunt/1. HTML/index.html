@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Hunt — Fabricio</title>
+  <link rel="stylesheet" href="../5. Styles/style.css"/>
+</head>
+<body>
+
+  <header>
+    <h1>Job Hunt</h1>
+    <p class="subtitle">Your personal job search dashboard</p>
+  </header>
+
+  <!-- STATS BAR -->
+  <section class="stats-bar">
+    <div class="stat"><span id="stat-total">0</span><label>Applied</label></div>
+    <div class="stat"><span id="stat-interview">0</span><label>Interviews</label></div>
+    <div class="stat"><span id="stat-offer">0</span><label>Offers</label></div>
+    <div class="stat"><span id="stat-rejected">0</span><label>Rejected</label></div>
+  </section>
+
+  <main class="dashboard">
+
+    <!-- SECTION: APPLICATION TRACKER -->
+    <section class="card full-width" id="tracker-section">
+      <div class="card-header">
+        <h2>Applications</h2>
+        <button class="btn-primary" id="open-add-modal">+ Add Application</button>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filter-status">
+          <option value="all">All statuses</option>
+          <option value="Applied">Applied</option>
+          <option value="Interview">Interview</option>
+          <option value="Offer">Offer</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Saved">Saved</option>
+        </select>
+        <input type="text" id="filter-search" placeholder="Search company or role..."/>
+      </div>
+
+      <table id="applications-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="applications-body"></tbody>
+      </table>
+      <p class="empty-state" id="empty-state">No applications yet. Add your first one above.</p>
+    </section>
+
+    <!-- SECTION: JOB BOARD LINKS -->
+    <section class="card" id="links-section">
+      <div class="card-header"><h2>Job Boards</h2></div>
+      <p class="section-note" id="links-note">Click a role in the Role Explorer to filter these searches. Remote · UK-based hiring.</p>
+      <ul class="link-list" id="job-board-links"></ul>
+    </section>
+
+    <!-- SECTION: ROLE EXPLORER -->
+    <section class="card" id="explorer-section">
+      <div class="card-header"><h2>Role Explorer</h2></div>
+      <p class="section-note">Roles that fit your background — even ones you might not have considered.</p>
+      <p class="section-note">Click a role to update the Job Boards section with matching searches.</p>
+      <div class="roles-grid">
+        <div class="role-card" data-role="localization-pm">
+          <h3>Localisation Program Manager (Tech company)</h3>
+          <p>You've managed hundreds of localisation projects and led LSP ops from the inside — exactly the background tech companies (Google, Canva, Shopify, Revolut) look for. Analytical, process-heavy, almost always remote.</p>
+          <div class="tags"><span class="tag">Language Services</span><span class="tag">Operations</span><span class="tag">Tech</span></div>
+        </div>
+        <div class="role-card" data-role="head-of-localisation">
+          <h3>Head of Localisation (In-house)</h3>
+          <p>Enterprise companies with global content needs hire director-level localisation leads. You know both the ops side (Phrase, Trados, QA Distiller) and the commercial side (£2m+ portfolios, C-suite comms) — that combination is rare.</p>
+          <div class="tags"><span class="tag">Language Services</span><span class="tag">Director</span><span class="tag">Remote</span></div>
+        </div>
+        <div class="role-card" data-role="vendor-manager">
+          <h3>Vendor Manager (Language / Translation)</h3>
+          <p>You've worked inside two LSPs (translate plus and thebigword) — you know how they think, how they price, and where they cut corners. That insider view is exactly what enterprise buyers want when managing LSP relationships.</p>
+          <div class="tags"><span class="tag">Language Services</span><span class="tag">Procurement</span><span class="tag">Operations</span></div>
+        </div>
+        <div class="role-card" data-role="revenue-ops">
+          <h3>Revenue Operations Manager</h3>
+          <p>You track £2m+ portfolios, deliver QBRs with performance metrics, and work across sales and ops. RevOps is that same analytical muscle applied to improving how a company's revenue engine works — less pitching, more systems.</p>
+          <div class="tags"><span class="tag">Sales</span><span class="tag">Analytics</span><span class="tag">Power BI</span></div>
+        </div>
+        <div class="role-card" data-role="customer-success">
+          <h3>Customer Success Director</h3>
+          <p>Your Account Director role is nearly identical to Customer Success — you managed key accounts, drove renewals, ran QBRs, and handled escalations. At a SaaS company this pays well and is far less sales-pressure-heavy.</p>
+          <div class="tags"><span class="tag">Account Management</span><span class="tag">SaaS</span><span class="tag">Remote</span></div>
+        </div>
+        <div class="role-card" data-role="operations-director">
+          <h3>Operations Director (Scale-up)</h3>
+          <p>You've managed 7-person global teams, built processes across time zones, and escalated to C-level. Many fast-growing companies need exactly this — someone who can run multi-team ops without being a pure tech person.</p>
+          <div class="tags"><span class="tag">Operations</span><span class="tag">Director</span><span class="tag">Remote</span></div>
+        </div>
+        <div class="role-card" data-role="university-he">
+          <h3>University / Higher Education (Professional Services)</h3>
+          <p>Universities are large, complex organisations with language centres, international offices, and professional services teams that need exactly your kind of background. Leeds Beckett, University of Leeds, Bradford, and York are all nearby and regularly hire for operations, programme management, and language-related roles. Note: HE salaries are set on national pay scales and typically cap at £35k–£45k for manager-level roles — likely a step back from your current package. Worth exploring at senior/director level only.</p>
+          <div class="tags"><span class="tag">Higher Education</span><span class="tag">Operations</span><span class="tag">Leeds</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: PROFILE -->
+    <section class="card full-width" id="profile-section">
+      <div class="card-header">
+        <h2>My Profile</h2>
+        <button class="btn-secondary" id="save-profile">Save</button>
+      </div>
+      <p class="section-note">Your background and preferences. Used to tailor resumes and filter roles.</p>
+      <div class="profile-grid">
+        <div class="profile-field">
+          <label>Current role</label>
+          <input type="text" id="profile-role" placeholder="e.g. Language Services Director"/>
+        </div>
+        <div class="profile-field">
+          <label>Current company</label>
+          <input type="text" id="profile-company" placeholder="e.g. Publicis Production"/>
+        </div>
+        <div class="profile-field">
+          <label>Years of experience</label>
+          <input type="text" id="profile-years" placeholder="e.g. 10+"/>
+        </div>
+        <div class="profile-field">
+          <label>Target salary</label>
+          <input type="text" id="profile-salary" placeholder="e.g. €80,000+"/>
+        </div>
+        <div class="profile-field full">
+          <label>Key skills</label>
+          <textarea id="profile-skills" rows="3" placeholder="e.g. Team management, vendor management, localization workflows, sales, operations, data analysis..."></textarea>
+        </div>
+        <div class="profile-field full">
+          <label>What I'm looking for</label>
+          <textarea id="profile-looking" rows="3" placeholder="e.g. 100% remote, analytical work, less pure sales, tech-adjacent, similar or better salary..."></textarea>
+        </div>
+        <div class="profile-field full">
+          <label>My resume (paste here)</label>
+          <textarea id="profile-resume" rows="10" placeholder="Paste your current resume text here. It will be used as the base for tailoring."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: RESUME TAILORER -->
+    <section class="card full-width" id="tailor-section">
+      <div class="card-header"><h2>Resume Tailorer</h2></div>
+      <p class="section-note">Paste a job description. Then copy the generated prompt into Claude to get a tailored resume.</p>
+      <div class="tailor-grid">
+        <div class="tailor-col">
+          <label>Job description</label>
+          <textarea id="tailor-jd" rows="14" placeholder="Paste the full job description here..."></textarea>
+        </div>
+        <div class="tailor-col">
+          <label>Prompt to copy into Claude</label>
+          <textarea id="tailor-output" rows="14" readonly placeholder="Your prompt will appear here after you click Generate."></textarea>
+        </div>
+      </div>
+      <div class="tailor-actions">
+        <button class="btn-primary" id="generate-prompt">Generate Prompt</button>
+        <button class="btn-secondary" id="copy-prompt">Copy to Clipboard</button>
+        <span class="copy-confirm" id="copy-confirm">Copied!</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ADD / EDIT APPLICATION MODAL -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Application</h3>
+        <button class="modal-close" id="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label>Company *</label>
+          <input type="text" id="form-company" placeholder="Company name"/>
+        </div>
+        <div class="form-field">
+          <label>Role *</label>
+          <input type="text" id="form-role" placeholder="Job title"/>
+        </div>
+        <div class="form-field">
+          <label>Date applied</label>
+          <input type="date" id="form-date"/>
+        </div>
+        <div class="form-field">
+          <label>Status</label>
+          <select id="form-status">
+            <option value="Saved">Saved (not applied yet)</option>
+            <option value="Applied" selected>Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Job URL</label>
+          <input type="url" id="form-url" placeholder="https://..."/>
+        </div>
+        <div class="form-field">
+          <label>Application URL</label>
+          <input type="url" id="form-apply-url" placeholder="URL of the page where you applied..."/>
+        </div>
+        <div class="form-field">
+          <label>CV used</label>
+          <input type="text" id="form-cv" placeholder="e.g. cv-tandem.pdf"/>
+        </div>
+        <div class="form-field">
+          <label>Salary expectation submitted</label>
+          <input type="text" id="form-salary" placeholder="e.g. £50,000"/>
+        </div>
+        <div class="form-field">
+          <label>Salary in role</label>
+          <select id="form-salary-in-role">
+            <option value="not-listed">Not listed</option>
+            <option value="listed">Listed in the role</option>
+            <option value="asked">They asked for my expectation</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Application method</label>
+          <select id="form-app-method">
+            <option value="portal">Company portal</option>
+            <option value="linkedin">LinkedIn Easy Apply</option>
+            <option value="email">Email</option>
+            <option value="recruiter">Via recruiter</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Notes</label>
+          <textarea id="form-notes" rows="3" placeholder="Anything worth remembering about this role..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-modal">Cancel</button>
+        <button class="btn-primary" id="save-application">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW / EDIT APPLICATION MODAL -->
+  <div class="modal-overlay hidden" id="detail-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="detail-title">Application Details</h3>
+        <button class="modal-close" id="close-detail">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="detail-hint">Click any field to edit it.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Company</span>
+            <input type="text" id="detail-company" class="detail-input"/>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Role</span>
+            <input type="text" id="detail-role" class="detail-input"/>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date Applied</span>
+            <input type="date" id="detail-date" class="detail-input"/>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Status</span>
+            <select id="detail-status" class="detail-input">
+              <option value="Saved">Saved</option>
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">CV Used</span>
+            <input type="text" id="detail-cv" class="detail-input"/>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Salary Submitted</span>
+            <input type="text" id="detail-salary" class="detail-input"/>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Salary in Role</span>
+            <select id="detail-salary-in-role" class="detail-input">
+              <option value="not-listed">Not listed</option>
+              <option value="listed">Listed in the role</option>
+              <option value="asked">They asked for my expectation</option>
+            </select>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Applied Via</span>
+            <select id="detail-app-method" class="detail-input">
+              <option value="portal">Company portal</option>
+              <option value="linkedin">LinkedIn Easy Apply</option>
+              <option value="email">Email</option>
+              <option value="recruiter">Via recruiter</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="detail-item full">
+            <span class="detail-label">Job Posting URL</span>
+            <input type="url" id="detail-url" class="detail-input"/>
+          </div>
+          <div class="detail-item full">
+            <span class="detail-label">Application URL</span>
+            <input type="url" id="detail-apply-url" class="detail-input"/>
+          </div>
+          <div class="detail-item full">
+            <span class="detail-label">Notes</span>
+            <textarea id="detail-notes" class="detail-input" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="close-detail-btn">Close</button>
+        <button class="btn-primary" id="save-detail">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../3. Scripts/main.js"></script>
+</body>
+</html>

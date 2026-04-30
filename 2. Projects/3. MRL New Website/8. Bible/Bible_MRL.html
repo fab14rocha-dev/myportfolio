@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Bible — Martina Rocha Luz</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      padding: 60px 24px;
+      max-width: 860px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 56px;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #555;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tab-btn:hover { color: #aaa; }
+
+    .tab-btn.active {
+      color: #A8844A;
+      border-bottom-color: #A8844A;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    header {
+      border-bottom: 1px solid #1e1e1e;
+      padding-bottom: 32px;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    header p { font-size: 14px; color: #555; }
+
+    .meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item { font-size: 12px; color: #555; letter-spacing: 0.06em; }
+    .meta-item strong { color: #888; }
+
+    /* Section */
+    .section { margin-bottom: 64px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #A8844A;
+      margin-bottom: 14px;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #161616;
+      margin: 56px 0;
+    }
+
+    /* Cards */
+    .card {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.7;
+    }
+
+    .card strong { color: #e0e0e0; }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Info list */
+    .info-list { list-style: none; }
+
+    .info-list li {
+      font-size: 14px;
+      color: #bbb;
+      padding: 10px 0;
+      border-bottom: 1px solid #161616;
+      display: flex;
+      gap: 12px;
+    }
+
+    .info-list li:last-child { border-bottom: none; }
+
+    .info-list li::before {
+      content: '◆';
+      font-size: 7px;
+      color: #A8844A;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .badge.done    { background: #1e3a2f; color: #4caf87; }
+    .badge.open    { background: #2d2416; color: #c4892a; }
+    .badge.pending { background: #1e1e1e; color: #666; }
+
+    /* Status rows */
+    .q-block {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-left: 3px solid #555;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 20px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    /* Reference cards */
+    .ref-card {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 10px;
+      padding: 28px 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .ref-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 16px;
+    }
+
+    .ref-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .ref-url {
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .ref-url:hover { color: #A8844A; }
+
+    .ref-desc {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .ref-takeaway {
+      border-left: 3px solid #A8844A;
+      padding: 14px 18px;
+      background: #0e0e0e;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: #888;
+      line-height: 1.65;
+    }
+
+    .ref-takeaway strong { color: #A8844A; }
+
+    .ref-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .fact {
+      background: #0e0e0e;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .fact-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    .fact-value { font-size: 13px; color: #ccc; }
+
+    /* Palette swatches */
+    .palette {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .swatch { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    .swatch-block {
+      width: 52px;
+      height: 52px;
+      border-radius: 6px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .swatch-label {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: #444;
+      text-align: center;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Project Bible — Martina Rocha Luz</h1>
+    <p>A shared overview of the project — what we're building, design decisions, and where we're headed.</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Started:</strong> April 2026</div>
+      <div class="meta-item"><strong>Status:</strong> In development</div>
+      <div class="meta-item"><strong>Type:</strong> Static site — goes live</div>
+    </div>
+  </header>
+
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('project')">Project</button>
+    <button class="tab-btn" onclick="switchTab('design')">Design</button>
+    <button class="tab-btn" onclick="switchTab('references')">References</button>
+    <button class="tab-btn" onclick="switchTab('content')">Content</button>
+  </div>
+
+
+  <!-- TAB: PROJECT -->
+  <div class="tab-panel active" id="tab-project">
+
+    <div class="section">
+      <div class="section-label">The Business</div>
+      <h2>About Martina</h2>
+      <ul class="info-list">
+        <li>Professional calligrapher and engraver based in Leeds, UK</li>
+        <li>Opened her studio in 2022 — moved to specialising in calligraphy and engraving over time</li>
+        <li>Services: Live Engraving, Live Calligraphy, Wedding & Event Calligraphy</li>
+        <li>Pricing: from £90/hr · 2hr minimum · travel may apply · limited wedding availability</li>
+        <li>Tagline: "Crafting Refined Beauty One Letter at a Time"</li>
+      </ul>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Clients & Press</div>
+      <h2>Who she's worked with</h2>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Luxury Brand Clients</div>
+          Vacheron Constantin · Dior · Maison Francis Kurkdjian · Burberry · Berry's Jewellers · Channel 4 · Harvey Nichols · Ted Baker
+        </div>
+        <div class="card">
+          <div class="card-title">Press Features</div>
+          Save The Date · Rock My Wedding · Yorkshire Guide
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Pages to Build</div>
+      <h2>Site structure & status</h2>
+
+      <div class="q-block"><span class="badge open">In progress</span> &nbsp; Home — hero, stats, brands, services, about, portfolio, testimonial, footer</div>
+      <div class="q-block"><span class="badge pending">Not started</span> &nbsp; Services — sub-pages for Engraving, Calligraphy, Live Events</div>
+      <div class="q-block"><span class="badge pending">Not started</span> &nbsp; Portfolio — image grid</div>
+      <div class="q-block"><span class="badge pending">Not started</span> &nbsp; Blog — static HTML posts, no CMS</div>
+      <div class="q-block"><span class="badge pending">Not started</span> &nbsp; About — Martina's story</div>
+      <div class="q-block"><span class="badge pending">Not started</span> &nbsp; Contact — enquiry form (free service TBD)</div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Technical</div>
+      <h2>Stack & open items</h2>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">Frontend</div>Vanilla HTML · CSS · JavaScript · No frameworks</div>
+        <div class="card"><div class="card-title">Animations</div>GSAP 3.12.5 + ScrollTrigger — loaded, not yet built. Reference: XPerience main.js</div>
+        <div class="card"><div class="card-title">Contact Form</div>Free service not yet chosen — options: Formspree, Web3Forms, EmailJS</div>
+        <div class="card"><div class="card-title">Hosting</div>TBD — free tier (GitHub Pages / Netlify / Firebase Hosting)</div>
+      </div>
+
+      <div class="card" style="margin-top:12px; border-left:3px solid #c4892a;">
+        <div class="card-title" style="color:#c4892a;">Before go-live</div>
+        All images are currently hotlinked from martinarochaluz.com (WordPress). They need to be downloaded and stored locally before launch.
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- TAB: DESIGN -->
+  <div class="tab-panel" id="tab-design">
+
+    <div class="section">
+      <div class="section-label">Chosen Direction</div>
+      <h2>Design 10 — The Complete</h2>
+      <div class="card">
+        The homepage was built through 7 design explorations (designs 10–16, all in <code style="color:#A8844A;">designs/</code>). Design 10 was chosen. It lives in <code style="color:#A8844A;">index.html</code> and is the direction we're going with. The others are reference only.
+      </div>
+      <div class="card" style="margin-top:0;">
+        <div class="card-title">Design feel</div>
+        Luxury · Minimalist · Elegant — less is more. The target audience is high-end brands, event planners, and brides. Tone is professional but warm. Imagery does the heavy lifting.
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Colour Palette</div>
+      <h2>Colours in use</h2>
+      <div class="palette">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#FDFAF6;"></div>
+          <div class="swatch-label">Paper<br>#FDFAF6</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#F5EFE5;"></div>
+          <div class="swatch-label">Warm<br>#F5EFE5</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#EDE5D8;"></div>
+          <div class="swatch-label">Warm 2<br>#EDE5D8</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#1A1714;"></div>
+          <div class="swatch-label">Ink<br>#1A1714</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#A8844A;"></div>
+          <div class="swatch-label">Gold<br>#A8844A</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#2E5048;"></div>
+          <div class="swatch-label">Teal<br>#2E5048</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#7A7268;"></div>
+          <div class="swatch-label">Mid<br>#7A7268</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Typography</div>
+      <h2>Fonts</h2>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">Playfair Display</div>Headings, section titles, blockquotes · Italic weight used throughout for elegance</div>
+        <div class="card"><div class="card-title">Pinyon Script</div>Logo only — "Martina Rocha Luz" in the nav</div>
+        <div class="card"><div class="card-title">Jost</div>Body copy, nav links, labels, buttons · Weight 300 (light) for the minimal feel</div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- TAB: REFERENCES -->
+  <div class="tab-panel" id="tab-references">
+
+    <div class="section">
+      <div class="section-label">Design References</div>
+      <h2>Sites shared by Martina</h2>
+      <p style="font-size:14px; color:#555; margin-bottom:32px;">Reference sites to study for layout feel, interaction patterns, and how luxury brands present themselves online.</p>
+
+      <div class="ref-card">
+        <div class="ref-header">
+          <div class="ref-name">Studio McGee</div>
+          <a class="ref-url" href="https://studio-mcgee.com/" target="_blank">studio-mcgee.com</a>
+        </div>
+        <p class="ref-desc">Interior design studio with a refined, editorial web presence. Large photography, generous white space, minimal typography. Premium but approachable — never cold.</p>
+        <div class="ref-facts">
+          <div class="fact"><div class="fact-label">Industry</div><div class="fact-value">Interior Design</div></div>
+          <div class="fact"><div class="fact-label">Audience</div><div class="fact-value">Luxury homeowners, design lovers</div></div>
+          <div class="fact"><div class="fact-label">Feel</div><div class="fact-value">Warm luxury · editorial · spacious</div></div>
+          <div class="fact"><div class="fact-label">Key strength</div><div class="fact-value">Photography-first layout</div></div>
+        </div>
+        <div class="ref-takeaway">
+          <strong>What to borrow:</strong> How photography does the heavy lifting. The balance between warmth and luxury. Clean section layouts that don't feel sterile.
+        </div>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-header">
+          <div class="ref-name">McGee & Co</div>
+          <a class="ref-url" href="https://www.mcgeeandco.com/" target="_blank">mcgeeandco.com</a>
+        </div>
+        <p class="ref-desc">The retail/shop counterpart to Studio McGee. Product-focused but with the same elevated, warm-luxury aesthetic. Strong grid layouts and clear visual hierarchy throughout.</p>
+        <div class="ref-facts">
+          <div class="fact"><div class="fact-label">Industry</div><div class="fact-value">Luxury Home & Furniture</div></div>
+          <div class="fact"><div class="fact-label">Audience</div><div class="fact-value">Luxury shoppers, interior enthusiasts</div></div>
+          <div class="fact"><div class="fact-label">Feel</div><div class="fact-value">Warm · product-forward · elevated</div></div>
+          <div class="fact"><div class="fact-label">Key strength</div><div class="fact-value">Grid composition & CTAs</div></div>
+        </div>
+        <div class="ref-takeaway">
+          <strong>What to borrow:</strong> Grid-based portfolio/product presentation. How they handle CTAs without being pushy. The warmth in the overall palette and spacing.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Existing Site</div>
+      <h2>Current WordPress site</h2>
+
+      <div class="ref-card">
+        <div class="ref-header">
+          <div class="ref-name">martinarochaluz.com</div>
+          <a class="ref-url" href="https://martinarochaluz.com" target="_blank">martinarochaluz.com</a>
+        </div>
+        <p class="ref-desc">The live WordPress site this project is replacing. Notes and screenshots in <code style="color:#A8844A;">1. Reference files/current-website-notes.md</code>. All images are currently hotlinked from this domain and need to be downloaded before launch.</p>
+        <div class="ref-takeaway">
+          <strong>Note:</strong> Use this for content reference (copy, imagery) only. The new site should feel completely different in terms of design.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- TAB: CONTENT -->
+  <div class="tab-panel" id="tab-content">
+
+    <div class="section">
+      <div class="section-label">Copy Notes</div>
+      <h2>Voice & tone</h2>
+      <ul class="info-list">
+        <li>Professional but warm — Martina is the face of the brand, it should feel personal</li>
+        <li>Minimal and direct — no filler copy, every sentence earns its place</li>
+        <li>Elegant phrasing — words like "crafted", "bespoke", "refined" fit the brand</li>
+        <li>First person where appropriate — she speaks directly to her audience</li>
+      </ul>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Testimonials</div>
+      <h2>Client quotes</h2>
+
+      <div class="ref-card">
+        <div class="ref-header">
+          <div class="ref-name">Fiona M.</div>
+          <span style="font-size:12px; color:#A8844A;">Vacheron Constantin</span>
+        </div>
+        <p class="ref-desc" style="font-style:italic;">"Martina has worked on several creative projects now for Vacheron Constantin and Berry's Jewellers, writing in her beautiful calligraphy style on Christmas cards, invitations and table name settings. She always goes above and beyond. When doing live events in the boutique, Martina is so polite and professional and always looks impeccable. I couldn't recommend her enough."</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <div class="section-label">Images Needed</div>
+      <h2>Assets to collect</h2>
+      <div class="card" style="border-left:3px solid #c4892a;">
+        <div class="card-title" style="color:#c4892a;">Action required before go-live</div>
+        All images are currently hotlinked from WordPress. Need to download and store locally in <code style="color:#A8844A;">assets/</code>. This includes hero image, service images, portfolio images, and Martina's about photo.
+      </div>
+      <div class="card" style="margin-top:0;">
+        <div class="card-title">Brand logos (Trusted By section)</div>
+        Vacheron · Dior · MFK · Berry's · Channel 4 · Ted Baker · Harvey Nichols — currently hotlinked. Download into <code style="color:#A8844A;">assets/brands/</code>.
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

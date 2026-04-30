@@ -45,9 +45,12 @@ export default function ProjectDetail({ project, onClose }) {
                   ✕
                 </motion.button>
 
-                <motion.div layoutId={`card-status-${project.id}`} className="card-status">
-                  {project.status}
-                </motion.div>
+                <div className="card-header">
+                  <motion.div layoutId={`card-status-${project.id}`} className="card-status">
+                    {project.status}
+                  </motion.div>
+                  <div className="card-number">#{project.number}</div>
+                </div>
 
                 <motion.h2 layoutId={`card-title-${project.id}`} className="detail-title">
                   {project.title}
@@ -64,15 +67,14 @@ export default function ProjectDetail({ project, onClose }) {
                   <p className="detail-description">{project.description}</p>
                 </motion.div>
 
-                {/* Visit button — before tags */}
-                {project.link && project.link !== "#" && (
-                  <motion.div
-                    custom={1}
-                    variants={contentVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  >
+                <motion.div
+                  custom={1}
+                  variants={contentVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  {project.link && project.link !== "#" ? (
                     <a
                       href={project.link}
                       target="_blank"
@@ -81,8 +83,10 @@ export default function ProjectDetail({ project, onClose }) {
                     >
                       Visit project →
                     </a>
-                  </motion.div>
-                )}
+                  ) : (
+                    <span className="detail-link detail-link--soon">Link coming soon</span>
+                  )}
+                </motion.div>
 
                 {/* Tags — bottom */}
                 <motion.div

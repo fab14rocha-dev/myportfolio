@@ -102,7 +102,7 @@ export default function FactSheet({ project, onClose }) {
           <div className="fs-stats">
             {[
               { label: "Time spent",      value: facts.timeSpent },
-              { label: "Damage (so far)", value: facts.cost      },
+              { label: "Cost",            value: facts.cost      },
               { label: "Started",         value: facts.started   },
             ].map((stat, i) => (
               <motion.div key={stat.label} className="fs-stat" variants={item(i + 1)} initial="hidden" animate="visible">
@@ -126,8 +126,8 @@ export default function FactSheet({ project, onClose }) {
             <p className="fs-fun-text">"{facts.funFact}"</p>
           </motion.div>
 
-          {project.link && project.link !== "#" && (
-            <motion.div variants={item(6)} initial="hidden" animate="visible">
+          <motion.div variants={item(6)} initial="hidden" animate="visible">
+            {project.link && project.link !== "#" ? (
               <a
                 href={project.link}
                 className="fs-link"
@@ -135,8 +135,10 @@ export default function FactSheet({ project, onClose }) {
               >
                 Visit project →
               </a>
-            </motion.div>
-          )}
+            ) : (
+              <span className="fs-link fs-link--soon">Link coming soon</span>
+            )}
+          </motion.div>
         </motion.div>
       </div>
     </AnimatePresence>

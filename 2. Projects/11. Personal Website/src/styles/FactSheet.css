@@ -210,6 +210,15 @@
 }
 .fs-link:hover { opacity: 0.85; }
 
+.fs-link--soon {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-dim);
+  cursor: default;
+  opacity: 0.6;
+}
+.fs-link--soon:hover { opacity: 0.6; }
+
 @media (max-width: 500px) {
   .fs-portal { padding: 1rem; }
   .fs-panel { max-height: 88vh; }
