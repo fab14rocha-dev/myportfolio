@@ -83,14 +83,14 @@ export const projects = [
     id: "project-100",
     number: 5,
     title: "Project 100",
-    tagline: "100 businesses. 100 free solutions. Built with AI.",
+    tagline: "100 people. 100 free solutions. Built with AI.",
     description:
-      "A personal challenge to help 100 business owners solve a real problem, free of charge. Businesses submit their problem through a multi-step typeform-style intake. Behind the scenes, a custom CRM dashboard lets me track every lead from first contact through to completion.",
+      "A personal challenge to help 100 people solve a real problem, free of charge. People submit their problem through a multi-step typeform-style intake. Behind the scenes, a custom CRM dashboard lets me track every lead from first contact through to completion.",
     tags: ["Vanilla JS", "Firebase", "GSAP", "EmailJS"],
     status: "In Progress",
     link: "https://project100.dev",
     facts: {
-      whatIsIt: "A landing page and intake system for a challenge to help 100 businesses for free. The multi-step form collects the problem, the backend CRM tracks every lead with tabs for New, Qualified, and Archived.",
+      whatIsIt: "A landing page and intake system for a challenge to help 100 people for free. The multi-step form collects the problem, the backend CRM tracks every lead with tabs for New, Qualified, and Archived.",
       whyBuilt: "I wanted to do real work for real people while learning to build. Helping 100 businesses felt like a good constraint: specific enough to start, big enough to matter.",
       timeSpent: "~30 hours so far",
       cost: "Free",
