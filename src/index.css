@@ -1,0 +1,39 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent: #e08a3c;
+  --accent-dim: rgba(224, 138, 60, 0.12);
+  --accent-border: rgba(224, 138, 60, 0.25);
+  --accent-text: #1a1410;
+  --bg: #1a1410;
+  --bg-card: #221b14;
+  --bg-card-hover: #2a2119;
+  --border: rgba(240, 230, 210, 0.14);
+  --border-light: rgba(240, 230, 210, 0.2);
+  --text: #f0e6d2;
+  --text-muted: #a99d88;
+  --text-dim: #8a7e6b;
+
+  font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+}

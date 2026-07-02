@@ -1,0 +1,18 @@
+export const toolDescriptions = {
+  "Firebase":       "Google's free platform for hosting and databases",
+  "Firestore":      "A live database that updates instantly without refreshing the page",
+  "Node.js":        "Runs JavaScript outside the browser, used for scripts and servers",
+  "Vanilla JS":     "Plain JavaScript with no extra libraries or frameworks",
+  "CDN Auth":       "User login loaded directly from Google's servers, no setup needed",
+  "Canvas API":     "Built-in browser tool for drawing shapes, images, and graphics",
+  "GPX Parser":     "Reads GPS route files exported from running watches and apps",
+  "html2canvas":    "Takes a screenshot of part of a webpage and saves it as an image",
+  "React":          "A popular library that makes building interactive web pages easier",
+  "Vite":           "A fast tool that compiles and runs React projects locally",
+  "GSAP":           "A professional animation library used by major studios and brands",
+  "Framer Motion":  "Makes React elements animate and transition smoothly",
+  "Lenis":          "Makes the page scroll buttery smooth instead of jumping",
+  "VS Code":        "The free code editor used to write all the code",
+  "Claude Code":    "AI coding assistant by Anthropic, helped build, debug, and ship faster",
+  "SheetJS":        "Reads Excel files directly in the browser, no server needed",
+};
